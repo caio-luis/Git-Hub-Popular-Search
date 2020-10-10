@@ -28,6 +28,8 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
 
+    implementation project(":domain")
+
     //Test
     testImplementation TestDependencies.assertJ
     androidTestImplementation TestDependencies.jUnit
@@ -39,4 +41,6 @@ dependencies {
     //Other dependencies
     kapt Dependencies.roomCompiler
     implementation Dependencies.roomKtx
+    implementation Dependencies.retrofit
+    implementation Dependencies.gson
 }

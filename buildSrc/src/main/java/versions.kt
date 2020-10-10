@@ -16,8 +16,10 @@ internal object DesignVersions {
     const val constraintLayoutVersion = "2.0.1"
 }
 
-internal object RoomVersion {
+internal object Versions {
     const val room = "2.2.5"
+    const val retrofit = "2.9.0"
+    const val gson = "2.8.6"
 }
 
 internal object TestVersions {
