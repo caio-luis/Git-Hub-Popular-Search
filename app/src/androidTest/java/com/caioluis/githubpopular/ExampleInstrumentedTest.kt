@@ -1,4 +1,4 @@
-package com.caioluis.myapplication
+package com.caioluis.githubpopular
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

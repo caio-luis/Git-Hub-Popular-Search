@@ -1,4 +1,4 @@
-package com.caioluis.myapplication
+package com.caioluis.githubpopular
 
 import org.junit.Test
 

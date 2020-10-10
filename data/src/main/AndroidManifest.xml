@@ -1,5 +1,1 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.caioluis.data">
-
-    /
-</manifest>
+<manifest package="com.caioluis.data" />

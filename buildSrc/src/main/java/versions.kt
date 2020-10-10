@@ -16,6 +16,10 @@ internal object DesignVersions {
     const val constraintLayoutVersion = "2.0.1"
 }
 
+internal object RoomVersion {
+    const val room = "2.2.5"
+}
+
 internal object TestVersions {
     const val assertJ = "3.11.1"
     const val androidxJunit = "1.1.1"

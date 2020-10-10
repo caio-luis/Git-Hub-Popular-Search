@@ -24,6 +24,10 @@ object TestDependencies {
 
 object Dependencies {
     const val constraintLayout = "androidx.constraintlayout:constraintlayout:${DesignVersions.constraintLayoutVersion}"
+
+    const val  roomRunTime = "androidx.room:room-runtime:${RoomVersion.room}"
+    const val  roomKtx = "androidx.room:room-ktx:${RoomVersion.room}"
+    const val  roomCompiler = "androidx.room:room-compiler:${RoomVersion.room}"
 }
 
 
