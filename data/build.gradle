@@ -41,6 +41,12 @@ dependencies {
     //Other dependencies
     kapt Dependencies.roomCompiler
     implementation Dependencies.roomKtx
+    implementation Dependencies.roomRunTime
+
+    implementation Dependencies.retrofitGsonConverter
     implementation Dependencies.retrofit
     implementation Dependencies.gson
+
+    implementation Dependencies.koin
+    implementation Dependencies.koinAndroid
 }

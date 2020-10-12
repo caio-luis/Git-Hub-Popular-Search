@@ -1,0 +1,26 @@
+package com.caioluis.githubpopular
+
+import android.app.Application
+import com.caioluis.data.dataModule
+import com.caioluis.domain.domainModule
+import org.koin.core.context.startKoin
+
+/**
+ * Created by Caio Luis (@caio.luis) on 10/10/20
+ */
+class MyApplication : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+
+        startKoin {
+            modules(
+                listOf(
+                    dataModule,
+                    viewModelModule,
+                    domainModule
+                )
+            )
+        }
+    }
+}

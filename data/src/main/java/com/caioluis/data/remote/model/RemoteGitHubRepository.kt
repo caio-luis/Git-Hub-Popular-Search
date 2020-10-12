@@ -4,21 +4,21 @@ import com.google.gson.annotations.SerializedName
 
 data class RemoteGitHubRepository(
 
-	val id: Int,
-	val name: String,
+	val id: Int?,
+	val name: String?,
 
 	@SerializedName("full_name")
-	val fullName: String,
+	val fullName: String?,
 
-	val owner: RemoteRepositoryOwner,
-	val description: String,
+	val owner: RemoteRepositoryOwner?,
+	val description: String?,
 
 	@SerializedName("pulls_url")
-	val pullsUrl: String,
+	val pullsUrl: String?,
 
 	@SerializedName("stargazers_count")
-	val stargazersCount: Int,
+	val stargazersCount: Int?,
 
 	@SerializedName("forks_count")
-	val forksCount: Int
+	val forksCount: Int?
 )

@@ -30,7 +30,18 @@ object Dependencies {
     const val  roomCompiler = "androidx.room:room-compiler:${Versions.room}"
 
     const val  retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
+    const val  retrofitGsonConverter = "com.squareup.retrofit2:converter-gson:${Versions.retrofit}"
+
     const val  gson = "com.google.code.gson:gson:${Versions.gson}"
+
+    const val koin = "org.koin:koin-core:${Versions.koin}"
+    const val koinAndroid = "org.koin:koin-android:${Versions.koin}"
+    const val koinViewModel = "org.koin:koin-androidx-viewmodel:${Versions.koin}"
+
+    const val  coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
+
+    const val  lifeCycle = "androidx.lifecycle:lifecycle-extensions:${Versions.lifecycle}"
+    const val  lifeCycleKapt = "androidx.lifecycle:lifecycle-compiler:${Versions.lifecycle}"
+    const val  lifeCycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleKtx}"
+    const val  lifeCycleViewModel = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
 }
-
-

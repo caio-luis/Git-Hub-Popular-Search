@@ -1,10 +1,20 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
+
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
     defaultConfig {
         applicationId "com.caioluis.myapplication"
@@ -45,4 +55,15 @@ dependencies {
 
     //Other dependencies
     implementation Dependencies.constraintLayout
+
+    implementation Dependencies.koin
+    implementation Dependencies.koinAndroid
+    implementation Dependencies.koinViewModel
+
+    implementation Dependencies.coroutines
+
+    implementation Dependencies.lifeCycleViewModel
+    implementation Dependencies.lifeCycleKtx
+    implementation Dependencies.lifeCycle
+    kapt Dependencies.lifeCycleKapt
 }

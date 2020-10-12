@@ -14,21 +14,21 @@ import com.caioluis.domain.entity.DomainRepositoryOwner
 //Remote
 fun RemoteGitHubRepository.toDomain() =
     DomainGitHubRepository(
-        id = id,
-        name = name,
-        fullName = fullName,
-        owner = owner.toDomain(),
-        description = description,
-        pullsUrl = pullsUrl,
-        stargazersCount = stargazersCount,
-        forksCount = forksCount
+        id = id ?: 0,
+        name = name ?: "",
+        fullName = fullName ?: "",
+        owner = owner?.toDomain() ?: DomainRepositoryOwner(),
+        description = description ?: "",
+        pullsUrl = pullsUrl ?: "",
+        stargazersCount = stargazersCount ?: 0,
+        forksCount = forksCount ?: 0
     )
 
 fun RemoteRepositoryOwner.toDomain() =
     DomainRepositoryOwner(
-        id = id,
-        login = login,
-        avatarUrl = avatarUrl
+        id = id ?: 0,
+        login = login ?: "",
+        avatarUrl = avatarUrl ?: ""
     )
 
 // Local
@@ -53,24 +53,6 @@ fun LocalRepositoryOwner.toDomain() =
     )
 
 // Domain
-fun DomainGitHubRepository.toRemote() =
-    RemoteGitHubRepository(
-        id = id,
-        name = name,
-        fullName = fullName,
-        owner = owner.toRemote(),
-        description = description,
-        pullsUrl = pullsUrl,
-        stargazersCount = stargazersCount,
-        forksCount = forksCount
-    )
-
-fun DomainRepositoryOwner.toRemote() =
-    RemoteRepositoryOwner(
-        id = id,
-        login = login,
-        avatarUrl = avatarUrl
-    )
 
 fun DomainGitHubRepository.toLocal() =
     LocalGitHubRepository(
