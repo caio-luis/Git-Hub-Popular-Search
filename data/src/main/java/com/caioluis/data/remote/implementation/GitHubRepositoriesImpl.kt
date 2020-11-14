@@ -1,7 +1,7 @@
 package com.caioluis.data.remote.implementation
 
 import com.caioluis.data.mappers.toDomain
-import com.caioluis.data.remote.GitHubRepositoriesService
+import com.caioluis.data.remote.service.GitHubRepositoriesService
 import com.caioluis.domain.entity.DomainGitHubRepository
 import com.caioluis.domain.repository.GitHubReposRepository
 

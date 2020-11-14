@@ -1,4 +1,4 @@
-package com.caioluis.data.remote
+package com.caioluis.data.base
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

@@ -1,4 +1,4 @@
-package com.caioluis.data.remote
+package com.caioluis.data.remote.service
 
 import com.caioluis.data.remote.model.RemoteGitHubRepositories
 import retrofit2.http.GET

@@ -8,13 +8,12 @@ import com.caioluis.githubpopular.model.UiGitHubRepository
 import com.caioluis.githubpopular.viewmodel.GitHubRepositoriesViewModel
 import org.koin.android.ext.android.inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private val gitHubRepositoriesViewModel: GitHubRepositoriesViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
 
         gitHubRepositoriesViewModel.fetchRepositories()
 
@@ -25,7 +24,7 @@ class MainActivity : AppCompatActivity() {
                     onLoading = {
                         //todo start loading state on activity
                     },
-                    onSuccess = { handleSuccessResponse(repositories = it) },
+                    onSuccess = ::handleSuccessResponse,
                     onFailure = {
                         //todo show failure error state on activity
                     }
