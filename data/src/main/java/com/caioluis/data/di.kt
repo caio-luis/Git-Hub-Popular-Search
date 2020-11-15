@@ -16,7 +16,7 @@ import org.koin.dsl.module
 val dataModule = module {
     // Remote
     single { ServiceBuilder<GitHubRepositoriesService>(BaseConstants.baseUrl) }
-    factory<GitHubReposRepository> { GitHubRepositoriesImpl(get()) }
+    factory<GitHubReposRepository> { GitHubRepositoriesImpl(get(), get()) }
 
     // Local
     single { GitHubReposDataBase.getInstance(context = androidContext()) }

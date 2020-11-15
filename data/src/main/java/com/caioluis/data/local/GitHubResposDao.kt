@@ -14,6 +14,9 @@ interface GitHubRepositoriesDao {
     @Insert
     suspend fun saveRepositories(gitHubRepositories: List<LocalGitHubRepository>)
 
+    @Query("SELECT * FROM GitHubRepositories")
+    suspend fun getAllRepositories(): List<LocalGitHubRepository>
+
     @Query("DELETE FROM GitHubRepositories")
     suspend fun deleteAllGitHubRepositories()
 }
