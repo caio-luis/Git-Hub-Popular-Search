@@ -21,6 +21,8 @@ import com.caioluis.data.local.type_converter.RepositoryOwnerConverter
 @TypeConverters(RepositoryOwnerConverter::class)
 abstract class GitHubReposDataBase : RoomDatabase() {
 
+    abstract fun gitHubRepositoriesDao() : GitHubRepositoriesDao
+
     companion object {
 
         private var INSTANCE: GitHubReposDataBase? = null

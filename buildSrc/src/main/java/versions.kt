@@ -24,6 +24,10 @@ internal object Versions {
     const val coroutines = "1.3.7"
     const val lifecycle = "2.2.0"
     const val lifecycleKtx = "2.2.0"
+    const val recyclerView = "1.1.0"
+    const val cardView = "1.0.0"
+    const val swipeRefreshLayout = "1.0.0"
+    const val glide = "4.11.0"
 }
 
 internal object TestVersions {

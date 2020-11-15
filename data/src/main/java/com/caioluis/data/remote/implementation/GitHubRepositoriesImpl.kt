@@ -7,6 +7,7 @@ import com.caioluis.data.remote.model.RemoteGitHubRepository
 import com.caioluis.data.remote.service.GitHubRepositoriesService
 import com.caioluis.domain.entity.DomainGitHubRepository
 import com.caioluis.domain.repository.GitHubReposRepository
+import java.lang.Exception
 
 /**
  * Created by Caio Luis (@caio.luis) on 11/10/20
@@ -19,18 +20,26 @@ class GitHubRepositoriesImpl(
 
     override suspend fun getGitHubRepositories(page: Int): List<DomainGitHubRepository> {
 
-        var repositories = fetchFromRemote(page).map { it.toDomain() }
+        var fetchError: Exception? = null
 
-        if (repositories.isNullOrEmpty()) {
-            repositories = gitHubRepositoriesDao.getAllRepositories().map { it.toDomain() }
-        } else {
+        val repositories = try {
+            fetchFromRemote(page).map { it.toDomain() }
+        } catch (exception: Exception){
+            fetchError = exception
+            gitHubRepositoriesDao.getAllRepositories().map { it.toDomain() }
+        }
+
+        if (!repositories.isNullOrEmpty()) {
             saveOnLocalCache(repositories)
+        } else if (fetchError != null) {
+            throw fetchError
         }
 
         return repositories
     }
 
     private suspend fun saveOnLocalCache(repositories: List<DomainGitHubRepository>) {
+        gitHubRepositoriesDao.deleteAllGitHubRepositories()
         gitHubRepositoriesDao.saveRepositories(repositories.map { it.toLocal() })
     }
 

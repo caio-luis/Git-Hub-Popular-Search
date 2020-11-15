@@ -66,4 +66,11 @@ dependencies {
     implementation Dependencies.lifeCycleKtx
     implementation Dependencies.lifeCycle
     kapt Dependencies.lifeCycleKapt
+
+    implementation Dependencies.recyclerView
+    implementation Dependencies.cardView
+    implementation Dependencies.swipeRefreshLayout
+
+    implementation Dependencies.glide
+    kapt Dependencies.glideCompiler
 }

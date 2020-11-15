@@ -3,6 +3,7 @@ package com.caioluis.githubpopular
 import android.app.Application
 import com.caioluis.data.dataModule
 import com.caioluis.domain.domainModule
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 /**
@@ -14,11 +15,12 @@ class MyApplication : Application() {
         super.onCreate()
 
         startKoin {
+            androidContext(this@MyApplication)
             modules(
                 listOf(
                     dataModule,
-                    viewModelModule,
-                    domainModule
+                    domainModule,
+                    viewModelModule
                 )
             )
         }

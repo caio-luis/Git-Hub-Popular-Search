@@ -26,7 +26,6 @@ class GetRepositoriesUseCase(
             }
 
             send(response)
-            send(Response.Completed)
         }
     }
 }

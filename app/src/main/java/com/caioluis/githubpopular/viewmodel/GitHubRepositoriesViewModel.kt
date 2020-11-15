@@ -31,15 +31,12 @@ class GitHubRepositoriesViewModel(
                 gitHubReposLiveData.postValue(Response.Success(uiResponse))
             },
 
-            onFailure = { gitHubReposLiveData.postValue(Response.Failure(it)) },
-
-            onCompleted = { gitHubReposLiveData.postValue(Response.Completed) }
+            onFailure = { gitHubReposLiveData.postValue(Response.Failure(it)) }
         )
     }
 
     fun fetchRepositories() {
         getRepositoriesUseCase.invoke(pageNumber)
-        pageNumber++
     }
 
     override fun onCleared() {
