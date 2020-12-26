@@ -16,7 +16,9 @@ class PaginationEventFilter(val scope: CoroutineScope, val onConsumed: () -> Uni
     private val channel = BroadcastChannel<Int>(1)
 
     init {
-        scope.launch { consume() }
+        scope.launch {
+            consume()
+        }
     }
 
     fun sendEvent(element: Int) {
