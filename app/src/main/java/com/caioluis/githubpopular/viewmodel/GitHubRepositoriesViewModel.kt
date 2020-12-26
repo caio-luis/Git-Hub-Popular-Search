@@ -15,32 +15,35 @@ class GitHubRepositoriesViewModel(
     private val getRepositoriesUseCase: GetRepositoriesUseCase
 ) : BaseViewModel<List<DomainGitHubRepository>>(getRepositoriesUseCase.receiveChannel) {
 
-    var pageNumber = 1
-
     private val gitHubReposLiveData: MutableLiveData<Response<List<UiGitHubRepository>>> =
         MutableLiveData()
     val observeGitHubReposLiveData = gitHubReposLiveData
 
     override fun handle(response: Response<List<DomainGitHubRepository>>) {
 
-        response.handleResponse(
-            onLoading = { gitHubReposLiveData.postValue(Response.Loading) },
+        gitHubReposLiveData.apply {
 
-            onSuccess = { domainRepositories ->
-                val uiResponse = domainRepositories.map { it.toUi() }
-                gitHubReposLiveData.postValue(Response.Success(uiResponse))
-            },
+            response.handleResponse(
+                onLoading = { postValue(Response.Loading) },
 
-            onFailure = { gitHubReposLiveData.postValue(Response.Failure(it)) }
-        )
+                onSuccess = { domainRepositories ->
+                    val uiResponse = domainRepositories.map { it.toUi() }
+                    postValue(Response.Success(uiResponse))
+                },
+
+                onFailure = {
+                    postValue(Response.Failure(it))
+                }
+            )
+        }
     }
 
-    fun fetchRepositories() {
-        getRepositoriesUseCase.invoke(pageNumber)
+    fun loadList(isReloading: Boolean) {
+        getRepositoriesUseCase(isReloading)
     }
 
     override fun onCleared() {
         super.onCleared()
-        pageNumber = 1
+        getRepositoriesUseCase.clear()
     }
 }

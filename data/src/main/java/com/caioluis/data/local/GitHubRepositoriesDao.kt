@@ -15,7 +15,7 @@ interface GitHubRepositoriesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveRepositories(gitHubRepositories: List<LocalGitHubRepository>)
 
-    @Query("SELECT * FROM GitHubRepositories")
+    @Query("SELECT * FROM GitHubRepositories order by stargazersCount desc")
     suspend fun getAllRepositories(): List<LocalGitHubRepository>
 
     @Query("DELETE FROM GitHubRepositories")

@@ -8,5 +8,5 @@ import org.koin.dsl.module
  */
 
 val domainModule = module {
-    factory { GetRepositoriesUseCase(get()) }
+    single { GetRepositoriesUseCase(get()) }
 }

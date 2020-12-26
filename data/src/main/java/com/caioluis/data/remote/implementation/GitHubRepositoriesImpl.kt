@@ -7,7 +7,6 @@ import com.caioluis.data.remote.model.RemoteGitHubRepository
 import com.caioluis.data.remote.service.GitHubRepositoriesService
 import com.caioluis.domain.entity.DomainGitHubRepository
 import com.caioluis.domain.repository.GitHubReposRepository
-import java.lang.Exception
 
 /**
  * Created by Caio Luis (@caio.luis) on 11/10/20
@@ -19,27 +18,26 @@ class GitHubRepositoriesImpl(
 ) : GitHubReposRepository {
 
     override suspend fun getGitHubRepositories(page: Int): List<DomainGitHubRepository> {
+        //TODO implement pagination with network and room persistance
 
-        var fetchError: Exception? = null
+        return fetchFromRemote(page).map { it.toDomain() }
 
-        val repositories = try {
-            fetchFromRemote(page).map { it.toDomain() }
-        } catch (exception: Exception){
-            fetchError = exception
-            gitHubRepositoriesDao.getAllRepositories().map { it.toDomain() }
-        }
+//        val repositories = gitHubRepositoriesDao.getAllRepositories().map { it.toDomain() }
+//
+//        return if (repositories.isEmpty()) {
+//            val remoteRepositories = fetchFromRemote(page).map { it.toDomain() }
+//            saveOnLocalCache(remoteRepositories)
+//            gitHubRepositoriesDao.getAllRepositories().map { it.toDomain() }
+//        } else {
+//            repositories
+//        }
+    }
 
-        if (!repositories.isNullOrEmpty()) {
-            saveOnLocalCache(repositories)
-        } else if (fetchError != null) {
-            throw fetchError
-        }
-
-        return repositories
+    override suspend fun deleteRepositories() {
+        gitHubRepositoriesDao.deleteAllGitHubRepositories()
     }
 
     private suspend fun saveOnLocalCache(repositories: List<DomainGitHubRepository>) {
-        gitHubRepositoriesDao.deleteAllGitHubRepositories()
         gitHubRepositoriesDao.saveRepositories(repositories.map { it.toLocal() })
     }
 
