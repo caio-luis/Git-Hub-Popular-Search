@@ -9,7 +9,7 @@ import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
 
 /**
- * Created by Caio Luis (@caio.luis) on 11/10/20
+ * Created by Caio Luis (caio-luis) on 11/10/20
  */
 
 abstract class BaseViewModel<T>(

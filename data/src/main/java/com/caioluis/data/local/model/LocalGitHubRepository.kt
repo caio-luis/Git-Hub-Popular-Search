@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey
 import com.caioluis.data.base.BaseConstants.GIT_HUB_REPOSITORIES_TABLE_NAME
 
 /**
- * Created by Caio Luis (@caio.luis) on 10/10/20
+ * Created by Caio Luis (caio-luis) on 10/10/20
  */
 
 @Entity(tableName = GIT_HUB_REPOSITORIES_TABLE_NAME)

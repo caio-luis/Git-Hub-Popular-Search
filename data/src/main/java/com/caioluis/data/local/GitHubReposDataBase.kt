@@ -9,7 +9,7 @@ import com.caioluis.data.local.model.LocalGitHubRepository
 import com.caioluis.data.local.type_converter.RepositoryOwnerConverter
 
 /**
- * Created by Caio Luis (@caio.luis) on 12/10/20
+ * Created by Caio Luis (caio-luis) on 12/10/20
  */
 
 @Database(

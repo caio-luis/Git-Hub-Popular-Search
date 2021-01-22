@@ -10,7 +10,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 /**
- * Created by Caio Luis (@caio.luis) on 10/10/20
+ * Created by Caio Luis (caio-luis) on 10/10/20
  */
 
 val dataModule = module {

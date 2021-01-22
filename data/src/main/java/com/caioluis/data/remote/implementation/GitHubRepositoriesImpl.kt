@@ -9,7 +9,7 @@ import com.caioluis.domain.entity.DomainGitHubRepository
 import com.caioluis.domain.repository.GitHubReposRepository
 
 /**
- * Created by Caio Luis (@caio.luis) on 11/10/20
+ * Created by Caio Luis (caio-luis) on 11/10/20
  */
 
 class GitHubRepositoriesImpl(

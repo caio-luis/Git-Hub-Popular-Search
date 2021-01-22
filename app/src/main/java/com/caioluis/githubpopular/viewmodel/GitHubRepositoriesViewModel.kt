@@ -8,7 +8,7 @@ import com.caioluis.githubpopular.mapper.toUi
 import com.caioluis.githubpopular.model.UiGitHubRepository
 
 /**
- * Created by Caio Luis (@caio.luis) on 11/10/20
+ * Created by Caio Luis (caio-luis) on 11/10/20
  */
 
 class GitHubRepositoriesViewModel(

@@ -8,7 +8,7 @@ import com.caioluis.githubpopular.R
 import com.caioluis.githubpopular.model.UiGitHubRepository
 
 /**
- * Created by Caio Luis (@caio.luis) on 15/11/20
+ * Created by Caio Luis (caio-luis) on 15/11/20
  */
 
 class GitHubRepositoriesAdapter : RecyclerView.Adapter<GitHubReposViewHolder>() {

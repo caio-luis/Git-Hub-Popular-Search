@@ -1,5 +1,5 @@
 /**
- * Created by Caio Luis (@caio.luis) on 03/10/20
+ * Created by Caio Luis (caio-luis) on 03/10/20
  */
 
 object CoreDependencies {

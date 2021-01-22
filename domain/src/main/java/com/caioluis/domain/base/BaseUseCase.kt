@@ -5,6 +5,9 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlin.coroutines.CoroutineContext
 
+/**
+ * Created by Caio Luis (caio-luis) on 12/10/20
+ */
 abstract class BaseUseCase<in S : Any, T> : CoroutineScope {
 
     private val parentJob = SupervisorJob()

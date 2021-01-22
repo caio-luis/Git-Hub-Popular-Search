@@ -5,6 +5,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
+/**
+ * Created by Caio Luis (caio-luis) on 12/10/20
+ */
 interface ServiceBuilder {
     companion object {
         inline operator fun <reified S> invoke(baseUrl: String): S {

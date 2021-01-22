@@ -7,7 +7,7 @@ import com.caioluis.githubpopular.model.UiGitHubRepository
 import com.caioluis.githubpopular.model.UiRepositoryOwner
 
 /**
- * Created by Caio Luis (@caio.luis) on 12/10/20
+ * Created by Caio Luis (caio-luis) on 12/10/20
  */
 
 fun DomainGitHubRepository.toUi() =

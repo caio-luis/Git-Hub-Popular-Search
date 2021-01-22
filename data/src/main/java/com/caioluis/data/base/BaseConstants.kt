@@ -1,7 +1,7 @@
 package com.caioluis.data.base
 
 /**
- * Created by Caio Luis (@caio.luis) on 10/10/20
+ * Created by Caio Luis (caio-luis) on 10/10/20
  */
 
 object BaseConstants {

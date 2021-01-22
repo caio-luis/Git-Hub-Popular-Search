@@ -1,7 +1,7 @@
 package com.caioluis.githubpopular.model
 
 /**
- * Created by Caio Luis (@caio.luis) on 12/10/20
+ * Created by Caio Luis (caio-luis) on 12/10/20
  */
 open class UiGitHubRepository(
     val id: Int = 0,

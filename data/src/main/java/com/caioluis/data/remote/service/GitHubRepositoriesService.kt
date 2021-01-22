@@ -5,7 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 /**
- * Created by Caio Luis (@caio.luis) on 10/10/20
+ * Created by Caio Luis (caio-luis) on 10/10/20
  */
 interface GitHubRepositoriesService {
 
