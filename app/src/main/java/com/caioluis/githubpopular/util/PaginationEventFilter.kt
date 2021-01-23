@@ -14,8 +14,8 @@ import kotlinx.coroutines.launch
 
 class PaginationEventFilter(private val scope: CoroutineScope, val onConsumed: () -> Unit) {
 
-    private val channel = BroadcastChannel<Int>(1)
-    var retry = 0
+    private var channel = BroadcastChannel<Int>(1)
+    private var retry = 0
 
     init {
         scope.launch { consume() }
@@ -41,6 +41,12 @@ class PaginationEventFilter(private val scope: CoroutineScope, val onConsumed: (
             .debounce(TIMEOUT_MILLISECONDS)
             .distinctUntilChanged()
             .collect { onConsumed() }
+    }
+
+    fun resetChannel() {
+        channel.cancel()
+        channel = BroadcastChannel<Int>(1)
+        scope.launch { consume() }
     }
 
     companion object {
