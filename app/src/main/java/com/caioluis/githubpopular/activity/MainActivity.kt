@@ -24,18 +24,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private val repositoriesAdapter: GitHubRepositoriesAdapter by lazy { GitHubRepositoriesAdapter() }
     private val gitHubRepositoriesViewModel: GitHubRepositoriesViewModel by inject()
     private var hadLoadingProblem = false
+    private var isReloadingList = true
 
-    var isReloadingList = true
-
-    private val lastItemOnListThrottler = PaginationEventFilter(
+    private val paginationEvent = PaginationEventFilter(
         lifecycleScope,
         ::doOnListEndReached
     )
-
-    private fun doOnListEndReached() {
-        isReloadingList = false
-        loadList(isReloadingList)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +44,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         ghRecyclerView.addOnScrollListener(
             repositoriesAdapter.addPagination {
-                lastItemOnListThrottler.sendEvent(it, hadLoadingProblem)
+                paginationEvent.sendEvent(it, hadLoadingProblem)
             }
         )
     }
@@ -59,8 +53,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         refreshLayout.setOnRefreshListener {
             isReloadingList = true
             loadList(isReloadingList)
-            lastItemOnListThrottler.resetChannel()
+            paginationEvent.resetChannel()
         }
+    }
+
+    private fun loadList(isReloading: Boolean) {
+        gitHubRepositoriesViewModel.loadList(isReloading)
     }
 
     private fun observeGitHubRepositories() {
@@ -75,16 +73,21 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 })
     }
 
+    private fun handleSuccessResponse(repositories: List<UiGitHubRepository>) {
+        hadLoadingProblem = false
+        setSwipeLoadedState()
+        repositoriesAdapter.populateList(repositories, isReloadingList)
+    }
+
     private fun handleFailureResponse(error: Throwable) {
         showShortToast(error.message.toString())
         hadLoadingProblem = true
         setSwipeLoadedState()
     }
 
-    private fun handleSuccessResponse(repositories: List<UiGitHubRepository>) {
-        hadLoadingProblem = false
-        setSwipeLoadedState()
-        repositoriesAdapter.populateList(repositories, isReloadingList)
+    private fun doOnListEndReached() {
+        isReloadingList = false
+        loadList(isReloadingList)
     }
 
     private fun setSwipeLoadingState() {
@@ -95,9 +98,5 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private fun setSwipeLoadedState() {
         if (refreshLayout.isRefreshing)
             refreshLayout.isRefreshing = false
-    }
-
-    private fun loadList(isReloading: Boolean) {
-        gitHubRepositoriesViewModel.loadList(isReloading)
     }
 }
