@@ -35,9 +35,9 @@ object Dependencies {
 
     const val gson = "com.google.code.gson:gson:${Versions.gson}"
 
-    const val koin = "org.koin:koin-core:${Versions.koin}"
-    const val koinAndroid = "org.koin:koin-android:${Versions.koin}"
-    const val koinViewModel = "org.koin:koin-androidx-viewmodel:${Versions.koin}"
+    const val koin = "io.insert-koin:koin-core:${Versions.koin}"
+    const val koinAndroid = "io.insert-koin:koin-android:${Versions.koin}"
+    const val koinViewModel = "io.insert-koin:koin-androidx-viewmodel:${Versions.koin}"
 
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
 

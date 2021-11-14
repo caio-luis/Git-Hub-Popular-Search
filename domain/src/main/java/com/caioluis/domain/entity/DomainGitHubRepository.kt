@@ -11,5 +11,6 @@ data class DomainGitHubRepository(
     val description: String = "",
     val pullsUrl: String = "",
     val stargazersCount: Int = 0,
-    val forksCount: Int = 0
+    val forksCount: Int = 0,
+    val page: Int = 0
 )

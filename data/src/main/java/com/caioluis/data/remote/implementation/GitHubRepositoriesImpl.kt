@@ -18,27 +18,60 @@ class GitHubRepositoriesImpl(
 ) : GitHubReposRepository {
 
     override suspend fun getGitHubRepositories(page: Int): List<DomainGitHubRepository> {
-        //TODO implement pagination with network and room persistance
 
-        return fetchFromRemote(page).map { it.toDomain() }
+        var exception: java.lang.Exception? = null
 
-//        val repositories = gitHubRepositoriesDao.getAllRepositories().map { it.toDomain() }
-//
-//        return if (repositories.isEmpty()) {
-//            val remoteRepositories = fetchFromRemote(page).map { it.toDomain() }
-//            saveOnLocalCache(remoteRepositories)
-//            gitHubRepositoriesDao.getAllRepositories().map { it.toDomain() }
-//        } else {
-//            repositories
-//        }
+        val remoteRepositories: List<DomainGitHubRepository>? = try {
+            fetchFromRemote(page).map { it.toDomain(page) }
+        } catch (ex: Exception) {
+            exception = ex
+            null
+        }
+
+        return getReposBasedOnRemoteResponse(remoteRepositories, page, exception)
+    }
+
+    private suspend fun getReposBasedOnRemoteResponse(
+        remoteRepositories: List<DomainGitHubRepository>?,
+        page: Int,
+        exception: java.lang.Exception?
+    ): List<DomainGitHubRepository> {
+        return when {
+            remoteRepositories.isNullOrEmpty() -> {
+                val localRepositories = gitHubRepositoriesDao.getAllRepositories(page)
+                    .map { it.toDomain() }
+
+                if (localRepositories.isNullOrEmpty()) {
+                    throw exception!!
+                } else {
+                    localRepositories
+                }
+            }
+            page <= 1 -> {
+                saveOnLocalCache(
+                    repositories = remoteRepositories,
+                    deletePrevious = true
+                )
+            }
+            else -> {
+                saveOnLocalCache(remoteRepositories.orEmpty())
+            }
+        }
+    }
+
+    private suspend fun saveOnLocalCache(
+        repositories: List<DomainGitHubRepository>,
+        deletePrevious: Boolean = false
+    ): List<DomainGitHubRepository> {
+        if (deletePrevious)
+            deleteRepositories()
+        gitHubRepositoriesDao.saveRepositories(repositories.map { it.toLocal() })
+
+        return repositories
     }
 
     override suspend fun deleteRepositories() {
         gitHubRepositoriesDao.deleteAllGitHubRepositories()
-    }
-
-    private suspend fun saveOnLocalCache(repositories: List<DomainGitHubRepository>) {
-        gitHubRepositoriesDao.saveRepositories(repositories.map { it.toLocal() })
     }
 
     private suspend fun fetchFromRemote(page: Int): List<RemoteGitHubRepository> {

@@ -10,3 +10,4 @@ buildSrc/build/*
 /captures
 .externalNativeBuild
 .cxx
+X#

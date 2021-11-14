@@ -5,7 +5,7 @@ apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     kotlinOptions {
         jvmTarget = '1.8'
@@ -58,7 +58,7 @@ dependencies {
 
     implementation Dependencies.koin
     implementation Dependencies.koinAndroid
-    implementation Dependencies.koinViewModel
+//    implementation Dependencies.koinViewModel
 
     implementation Dependencies.coroutines
 
