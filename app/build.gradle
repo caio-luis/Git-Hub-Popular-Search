@@ -1,42 +1,13 @@
 apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+apply from: "$rootDir/buildSrc/android-config.gradle"
 
 android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.3"
-
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-
     defaultConfig {
         applicationId "com.caioluis.myapplication"
-        minSdkVersion 21
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
     }
 }
 
 dependencies {
-    implementation fileTree(dir: "libs", include: ["*.jar"])
-
     implementation project(":data")
     implementation project(":domain")
 
@@ -58,13 +29,12 @@ dependencies {
 
     implementation Dependencies.koin
     implementation Dependencies.koinAndroid
-//    implementation Dependencies.koinViewModel
 
     implementation Dependencies.coroutines
 
     implementation Dependencies.lifeCycleViewModel
-    implementation Dependencies.lifeCycleKtx
-    implementation Dependencies.lifeCycle
+    implementation Dependencies.lifeCycleRuntime
+    implementation Dependencies.lifeCycleExtensions
     kapt Dependencies.lifeCycleKapt
 
     implementation Dependencies.recyclerView
