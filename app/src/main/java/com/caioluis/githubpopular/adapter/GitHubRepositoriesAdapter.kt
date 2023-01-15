@@ -1,5 +1,6 @@
 package com.caioluis.githubpopular.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,6 +34,7 @@ class GitHubRepositoriesAdapter : RecyclerView.Adapter<GitHubReposViewHolder>() 
         if (isReloading) refreshList(list) else insertMoreItems(list)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun refreshList(list: List<UiGitHubRepository>) {
         gitHubRepositories.clear()
         gitHubRepositories.addAll(list)
@@ -41,7 +43,7 @@ class GitHubRepositoriesAdapter : RecyclerView.Adapter<GitHubReposViewHolder>() 
 
     private fun insertMoreItems(list: List<UiGitHubRepository>) {
         gitHubRepositories.addAll(list)
-        notifyDataSetChanged()
+        notifyItemRangeInserted(gitHubRepositories.lastIndex, list.size)
     }
 
     fun addPagination(action: (lastVisibleItemPosition: Int) -> Unit = {}): RecyclerView.OnScrollListener {
