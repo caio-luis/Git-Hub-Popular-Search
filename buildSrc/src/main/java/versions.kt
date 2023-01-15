@@ -3,31 +3,31 @@
  */
 
 internal object KotlinCoreVersions {
-    const val ktxCoreVersion = "1.3.2"
-    const val kotlinVersion = "1.5.31"
-    const val appCompatVersion = "1.2.0"
+    const val ktxCoreVersion = "1.9.0"
+    const val kotlinVersion = "1.6.21"
+    const val appCompatVersion = "1.6.0"
 }
 
 internal object BuildVersions {
-    const val androidGradle = "4.0.1"
+    const val androidGradle = "7.4.0"
 }
 
 internal object DesignVersions {
-    const val constraintLayoutVersion = "2.0.1"
+    const val constraintLayoutVersion = "2.1.4"
 }
 
 internal object Versions {
-    const val room = "2.3.0"
+    const val room = "2.5.0"
     const val retrofit = "2.9.0"
-    const val gson = "2.8.6"
-    const val koin = "3.0.1"
-    const val coroutines = "1.3.7"
-    const val lifecycle = "2.2.0"
-    const val lifecycleKtx = "2.2.0"
-    const val recyclerView = "1.1.0"
+    const val gson = "2.10.1"
+    const val koin = "3.3.2"
+    const val coroutines = "1.6.4"
+    const val lifecycleExtensions = "2.2.0"
+    const val lifecycleKtx = "2.5.1"
+    const val recyclerView = "1.2.1"
     const val cardView = "1.0.0"
-    const val swipeRefreshLayout = "1.0.0"
-    const val glide = "4.11.0"
+    const val swipeRefreshLayout = "1.1.0"
+    const val glide = "4.14.2"
 }
 
 internal object TestVersions {

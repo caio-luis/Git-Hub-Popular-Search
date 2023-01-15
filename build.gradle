@@ -5,6 +5,7 @@ buildscript {
         google()
         mavenCentral()
     }
+
     dependencies {
         classpath CoreDependencies.gradleAndroid
         classpath CoreDependencies.gradleKotlin

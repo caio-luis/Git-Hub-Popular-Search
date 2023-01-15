@@ -37,15 +37,14 @@ object Dependencies {
 
     const val koin = "io.insert-koin:koin-core:${Versions.koin}"
     const val koinAndroid = "io.insert-koin:koin-android:${Versions.koin}"
-    const val koinViewModel = "io.insert-koin:koin-androidx-viewmodel:${Versions.koin}"
 
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
 
-    const val lifeCycle = "androidx.lifecycle:lifecycle-extensions:${Versions.lifecycle}"
-    const val lifeCycleKapt = "androidx.lifecycle:lifecycle-compiler:${Versions.lifecycle}"
-    const val lifeCycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleKtx}"
+    const val lifeCycleExtensions = "androidx.lifecycle:lifecycle-extensions:${Versions.lifecycleExtensions}"
+    const val lifeCycleKapt = "androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycleKtx}"
+    const val lifeCycleRuntime = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleKtx}"
     const val lifeCycleViewModel =
-        "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycle}"
+        "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleKtx}"
 
     const val recyclerView = "androidx.recyclerview:recyclerview:${Versions.recyclerView}"
     const val glide = "com.github.bumptech.glide:glide:${Versions.glide}"
