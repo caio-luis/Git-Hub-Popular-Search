@@ -9,8 +9,10 @@ import retrofit2.http.Query
  */
 interface GitHubRepositoriesService {
 
-    @GET("search/repositories?q=language:Kotlin&sort=stars")
+    @GET("search/repositories")
     suspend fun getGitHubRepositories(
-        @Query("page") page: Int
+        @Query("q") language: String = "language:Kotlin",
+        @Query("sort") sort: String = "stars",
+        @Query("page") page: Int,
     ): RemoteGitHubRepositories
 }
