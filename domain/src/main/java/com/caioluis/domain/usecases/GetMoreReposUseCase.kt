@@ -6,15 +6,10 @@ import com.caioluis.domain.base.Response
 import com.caioluis.domain.entity.DomainGitHubRepository
 import com.caioluis.domain.repository.GitHubReposRepository
 import com.caioluis.domain.usecases.ActualPage.pageNumber
-import kotlinx.coroutines.channels.trySendBlocking
-import kotlinx.coroutines.launch
 
-/**
- * Created by Caio Luis (@caio.luis) on 10/10/20
- */
-class GetRepositoriesUseCase(
+class GetMoreReposUseCase(
     private val gitHubReposRepository: GitHubReposRepository,
-) : BaseUseCase<Int, List<DomainGitHubRepository>>(InvokeMode.LAUNCH) {
+) : BaseUseCase<Int, List<DomainGitHubRepository>>(InvokeMode.LOCKING) {
 
     private suspend fun loadRepositories(page: Int): List<DomainGitHubRepository>? {
         return gitHubReposRepository.getGitHubRepositories(page = page)
@@ -22,7 +17,6 @@ class GetRepositoriesUseCase(
 
     override suspend fun run(parameters: Int?) {
         responseChannel.run {
-            pageNumber = parameters ?: 1
             send(Response.Loading)
             loadRepositories(page = pageNumber)
                 ?.let {

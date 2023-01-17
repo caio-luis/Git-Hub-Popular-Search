@@ -14,5 +14,5 @@ interface GitHubRepositoriesService {
         @Query("q") language: String = "language:Kotlin",
         @Query("sort") sort: String = "stars",
         @Query("page") page: Int,
-    ): RemoteGitHubRepositories
+    ): RemoteGitHubRepositories?
 }

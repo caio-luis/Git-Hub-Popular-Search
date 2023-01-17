@@ -14,69 +14,50 @@ import com.caioluis.domain.repository.GitHubReposRepository
 
 class GitHubRepositoriesImpl(
     private val gitHubRepositoriesService: GitHubRepositoriesService,
-    private val gitHubRepositoriesDao: GitHubRepositoriesDao
+    private val gitHubRepositoriesDao: GitHubRepositoriesDao,
 ) : GitHubReposRepository {
 
-    override suspend fun getGitHubRepositories(page: Int): List<DomainGitHubRepository> {
+    override suspend fun getGitHubRepositories(page: Int): List<DomainGitHubRepository>? {
+        var exception: Throwable? = null
 
-        var exception: java.lang.Exception? = null
-
-        val remoteRepositories: List<DomainGitHubRepository>? = try {
-            fetchFromRemote(page).map { it.toDomain(page) }
-        } catch (ex: Exception) {
-            exception = ex
+        val remoteResult = try {
+            fetchFromRemote(page)
+        } catch (e: Exception) {
+            exception = e
             null
         }
 
-        return getReposBasedOnRemoteResponse(remoteRepositories, page, exception)
-    }
-
-    private suspend fun getReposBasedOnRemoteResponse(
-        remoteRepositories: List<DomainGitHubRepository>?,
-        page: Int,
-        exception: java.lang.Exception?
-    ): List<DomainGitHubRepository> {
-        return when {
-            remoteRepositories.isNullOrEmpty() -> {
-                val localRepositories = gitHubRepositoriesDao.getAllRepositories(page)
-                    .map { it.toDomain() }
-
-                if (localRepositories.isNullOrEmpty()) {
-                    throw exception!!
-                } else {
-                    localRepositories
-                }
-            }
-            page <= 1 -> {
+        return remoteResult
+            ?.mapNotNull { it?.toDomain(page) }
+            ?.takeIf { it.isNotEmpty() }
+            ?.let {
                 saveOnLocalCache(
-                    repositories = remoteRepositories,
-                    deletePrevious = true
+                    repositories = it,
+                    deletePrevious = page <= 1
                 )
             }
-            else -> {
-                saveOnLocalCache(remoteRepositories.orEmpty())
-            }
-        }
+            ?: run {
+                gitHubRepositoriesDao
+                    .getAllRepositories(page)
+                    ?.map { it.toDomain() }
+            }?.takeIf { it.isNotEmpty() }
+            ?: exception?.let { throw it }
     }
 
     private suspend fun saveOnLocalCache(
         repositories: List<DomainGitHubRepository>,
-        deletePrevious: Boolean = false
+        deletePrevious: Boolean = false,
     ): List<DomainGitHubRepository> {
         if (deletePrevious)
-            deleteRepositories()
+            gitHubRepositoriesDao.deleteAllGitHubRepositories()
         gitHubRepositoriesDao.saveRepositories(repositories.map { it.toLocal() })
 
         return repositories
     }
 
-    override suspend fun deleteRepositories() {
-        gitHubRepositoriesDao.deleteAllGitHubRepositories()
-    }
-
-    private suspend fun fetchFromRemote(page: Int): List<RemoteGitHubRepository> {
+    private suspend fun fetchFromRemote(page: Int): List<RemoteGitHubRepository?>? {
         return gitHubRepositoriesService
             .getGitHubRepositories(page = page)
-            .repositories
+            ?.repositories
     }
 }

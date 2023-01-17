@@ -16,7 +16,7 @@ interface GitHubRepositoriesDao {
     suspend fun saveRepositories(gitHubRepositories: List<LocalGitHubRepository>)
 
     @Query("SELECT * FROM GitHubRepositories where page=:page order by stargazersCount desc")
-    suspend fun getAllRepositories(page: Int): List<LocalGitHubRepository>
+    suspend fun getAllRepositories(page: Int): List<LocalGitHubRepository>?
 
     @Query("DELETE FROM GitHubRepositories")
     suspend fun deleteAllGitHubRepositories()
