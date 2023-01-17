@@ -26,6 +26,10 @@ class GitHubReposViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         stars.text = itemInfo.stargazersCount.toString()
         userName.text = itemInfo.owner.login
 
-        Glide.with(itemView.context).load(itemInfo.owner.avatarUrl).into(userIcon)
+        Glide
+            .with(itemView.context)
+            .load(itemInfo.owner.avatarUrl)
+            .centerCrop()
+            .into(userIcon)
     }
 }

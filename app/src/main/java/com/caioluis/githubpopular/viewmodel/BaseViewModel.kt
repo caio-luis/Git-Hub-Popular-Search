@@ -24,7 +24,6 @@ abstract class BaseViewModel<T>(
 
     override fun onCleared() {
         receiveChannel.cancel()
-        viewModelScope.cancel()
         super.onCleared()
     }
 }

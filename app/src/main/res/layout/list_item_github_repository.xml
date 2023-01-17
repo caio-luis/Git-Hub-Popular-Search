@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="5dp"
     android:layout_marginStart="8dp"
+    android:layout_marginTop="5dp"
     android:layout_marginEnd="8dp"
     android:layout_marginBottom="5dp"
     android:foreground="?android:attr/selectableItemBackground"
@@ -21,7 +21,6 @@
             android:id="@+id/ghRepositoryUserImage"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            app:layout_constraintBottom_toTopOf="@+id/ghRepositoryUserName"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/ic_star" />
@@ -36,17 +35,18 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/ghRepositoryUserImage"
             app:layout_constraintStart_toStartOf="@+id/ghRepositoryUserImage"
+            app:layout_constraintTop_toBottomOf="@+id/ghRepositoryUserImage"
             tools:text="User Name" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/ghRepositoryTitle"
             android:layout_width="0dp"
-            android:textSize="16sp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:ellipsize="end"
             android:gravity="center_horizontal"
             android:maxLines="1"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ghRepositoryUserImage"

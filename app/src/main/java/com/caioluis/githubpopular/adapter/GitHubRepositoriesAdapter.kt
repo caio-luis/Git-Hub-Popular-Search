@@ -12,6 +12,8 @@ import com.caioluis.githubpopular.model.UiGitHubRepository
  * Created by Caio Luis (caio-luis) on 15/11/20
  */
 
+const val VISIBLE_THRESHOLD = 5
+
 class GitHubRepositoriesAdapter : RecyclerView.Adapter<GitHubReposViewHolder>() {
 
     private var gitHubRepositories: MutableList<UiGitHubRepository> = mutableListOf()
@@ -30,9 +32,7 @@ class GitHubRepositoriesAdapter : RecyclerView.Adapter<GitHubReposViewHolder>() 
 
     override fun getItemCount(): Int = gitHubRepositories.count()
 
-    fun populateList(list: List<UiGitHubRepository>, isReloading: Boolean = true) {
-        if (isReloading) refreshList(list) else insertMoreItems(list)
-    }
+    fun populateList(list: List<UiGitHubRepository>) = refreshList(list)
 
     @SuppressLint("NotifyDataSetChanged")
     private fun refreshList(list: List<UiGitHubRepository>) {
@@ -41,20 +41,24 @@ class GitHubRepositoriesAdapter : RecyclerView.Adapter<GitHubReposViewHolder>() 
         notifyDataSetChanged()
     }
 
-    private fun insertMoreItems(list: List<UiGitHubRepository>) {
+    fun insertMoreItems(list: List<UiGitHubRepository>) {
         gitHubRepositories.addAll(list)
         notifyItemRangeInserted(gitHubRepositories.lastIndex, list.size)
     }
 
-    fun addPagination(action: (lastVisibleItemPosition: Int) -> Unit = {}): RecyclerView.OnScrollListener {
+    fun addPagination(action: () -> Unit = {}): RecyclerView.OnScrollListener {
         return object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-                val totalItemCount = layoutManager.itemCount
-                val lastVisibleItem = layoutManager.findLastVisibleItemPosition()
+                if (dy < 0) return
 
-                if (dy > 0 && lastVisibleItem >= totalItemCount - 1)
-                    action.invoke(lastVisibleItem)
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+
+                val visibleItemCount = recyclerView.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
+
+                if (totalItemCount - visibleItemCount <= firstVisibleItem + VISIBLE_THRESHOLD)
+                    action()
             }
         }
     }

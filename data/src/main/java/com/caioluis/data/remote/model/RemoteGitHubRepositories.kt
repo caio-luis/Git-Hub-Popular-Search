@@ -7,5 +7,5 @@ import com.google.gson.annotations.SerializedName
  */
 data class RemoteGitHubRepositories(
 	@SerializedName("items")
-	val repositories: List<RemoteGitHubRepository>
+	val repositories: List<RemoteGitHubRepository?>? = null
 )
