@@ -1,10 +1,9 @@
 package com.caioluis.githubpopular.adapter
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import com.caioluis.githubpopular.R
 import com.caioluis.githubpopular.model.UiGitHubRepository
 
@@ -12,11 +11,8 @@ import com.caioluis.githubpopular.model.UiGitHubRepository
  * Created by Caio Luis (caio-luis) on 15/11/20
  */
 
-const val VISIBLE_THRESHOLD = 5
 
-class GitHubRepositoriesAdapter : RecyclerView.Adapter<GitHubReposViewHolder>() {
-
-    private var gitHubRepositories: MutableList<UiGitHubRepository> = mutableListOf()
+class GitHubRepositoriesAdapter : ListAdapter<UiGitHubRepository, GitHubReposViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GitHubReposViewHolder {
 
@@ -27,39 +23,38 @@ class GitHubRepositoriesAdapter : RecyclerView.Adapter<GitHubReposViewHolder>() 
     }
 
     override fun onBindViewHolder(holder: GitHubReposViewHolder, position: Int) {
-        holder.bindView(gitHubRepositories[position])
+        holder.bindView(currentList[position])
     }
 
-    override fun getItemCount(): Int = gitHubRepositories.count()
-
-    fun populateList(list: List<UiGitHubRepository>) = refreshList(list)
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun refreshList(list: List<UiGitHubRepository>) {
-        gitHubRepositories.clear()
-        gitHubRepositories.addAll(list)
-        notifyDataSetChanged()
+    fun refreshList(list: List<UiGitHubRepository>) {
+        submitList(null)
+        submitList(list)
     }
 
     fun insertMoreItems(list: List<UiGitHubRepository>) {
-        gitHubRepositories.addAll(list)
-        notifyItemRangeInserted(gitHubRepositories.lastIndex, list.size)
+        val newList = currentList.toMutableList()
+        newList.addAll(list)
+        submitList(newList)
     }
 
-    fun addPagination(action: () -> Unit = {}): RecyclerView.OnScrollListener {
-        return object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy < 0) return
+    companion object {
+        val diffUtil = object : DiffUtil.ItemCallback<UiGitHubRepository>() {
+            override fun areItemsTheSame(
+                oldItem: UiGitHubRepository,
+                newItem: UiGitHubRepository,
+            ): Boolean = oldItem.id == newItem.id
 
-                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-
-                val visibleItemCount = recyclerView.childCount
-                val totalItemCount = layoutManager.itemCount
-                val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
-
-                if (totalItemCount - visibleItemCount <= firstVisibleItem + VISIBLE_THRESHOLD)
-                    action()
-            }
+            override fun areContentsTheSame(
+                oldItem: UiGitHubRepository,
+                newItem: UiGitHubRepository,
+            ): Boolean = oldItem.id == newItem.id &&
+                    oldItem.description == newItem.description &&
+                    oldItem.name == newItem.name &&
+                    oldItem.owner == newItem.owner &&
+                    oldItem.fullName == newItem.fullName &&
+                    oldItem.forksCount == newItem.forksCount &&
+                    oldItem.pullsUrl == newItem.pullsUrl &&
+                    oldItem.stargazersCount == newItem.stargazersCount
         }
     }
 }

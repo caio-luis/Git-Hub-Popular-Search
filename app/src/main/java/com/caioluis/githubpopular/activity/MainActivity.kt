@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.caioluis.githubpopular.adapter.EndlessScrollListener
 import com.caioluis.githubpopular.R
 import com.caioluis.githubpopular.adapter.GitHubRepositoriesAdapter
 import com.caioluis.githubpopular.extensions.showShortToast
@@ -38,11 +40,15 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private fun configureRecyclerView() {
         ghRecyclerView.adapter = repositoriesAdapter
 
-        ghRecyclerView.addOnScrollListener(
-            repositoriesAdapter.addPagination {
+        val endlessScrollListener = object : EndlessScrollListener(
+            ghRecyclerView.layoutManager as LinearLayoutManager
+        ) {
+            override fun onLoadMoreItems() {
                 moreReposViewModel.loadMore()
             }
-        )
+        }
+
+        ghRecyclerView.addOnScrollListener(endlessScrollListener)
     }
 
     private fun initOnRefreshListener() {
@@ -77,7 +83,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private fun handleSuccessResponse(repositories: List<UiGitHubRepository>) {
         setSwipeLoadedState()
-        repositoriesAdapter.populateList(repositories)
+        repositoriesAdapter.refreshList(repositories)
     }
 
     private fun handleFailureResponse(error: Throwable?) {
