@@ -4,11 +4,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.caioluis.githubpopular.adapter.EndlessScrollListener
 import com.caioluis.githubpopular.R
+import com.caioluis.githubpopular.adapter.EndlessScrollListener
 import com.caioluis.githubpopular.adapter.GitHubRepositoriesAdapter
 import com.caioluis.githubpopular.extensions.showShortToast
 import com.caioluis.githubpopular.model.UiGitHubRepository
@@ -38,16 +39,17 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun configureRecyclerView() {
-        ghRecyclerView.adapter = repositoriesAdapter
-
         val endlessScrollListener = object : EndlessScrollListener(
-            ghRecyclerView.layoutManager as LinearLayoutManager
+            layoutManager = ghRecyclerView.layoutManager as LinearLayoutManager,
+            coroutineScope = lifecycleScope
         ) {
             override fun onLoadMoreItems() {
                 moreReposViewModel.loadMore()
             }
         }
 
+        endlessScrollListener.startListeningToEvents()
+        ghRecyclerView.adapter = repositoriesAdapter
         ghRecyclerView.addOnScrollListener(endlessScrollListener)
     }
 
