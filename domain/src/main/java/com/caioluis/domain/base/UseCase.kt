@@ -8,9 +8,6 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlin.coroutines.CoroutineContext
 
-/**
- * Created by Caio Luis (caio-luis) on 12/10/20
- */
 abstract class UseCase<in S : Any, T>(private val invokeMode: InvokeMode) : CoroutineScope {
 
     private val coroutineName = CoroutineName(this::class.java.name)

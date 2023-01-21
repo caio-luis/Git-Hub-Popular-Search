@@ -1,7 +1,3 @@
-/**
- * Created by Caio Luis (caio-luis) on 03/10/20
- */
-
 object CoreDependencies {
     const val ktxCore = "androidx.core:core-ktx:${KotlinCoreVersions.ktxCoreVersion}"
     const val kotlinStdLib =
@@ -40,7 +36,8 @@ object Dependencies {
 
     const val coroutines = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutines}"
 
-    const val lifeCycleExtensions = "androidx.lifecycle:lifecycle-extensions:${Versions.lifecycleExtensions}"
+    const val lifeCycleExtensions =
+        "androidx.lifecycle:lifecycle-extensions:${Versions.lifecycleExtensions}"
     const val lifeCycleKapt = "androidx.lifecycle:lifecycle-common-java8:${Versions.lifecycleKtx}"
     const val lifeCycleRuntime = "androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleKtx}"
     const val lifeCycleViewModel =

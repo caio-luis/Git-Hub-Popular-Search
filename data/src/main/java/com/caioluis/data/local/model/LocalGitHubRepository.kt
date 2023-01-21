@@ -4,10 +4,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.caioluis.data.base.BaseConstants.GIT_HUB_REPOSITORIES_TABLE_NAME
 
-/**
- * Created by Caio Luis (caio-luis) on 10/10/20
- */
-
 @Entity(tableName = GIT_HUB_REPOSITORIES_TABLE_NAME)
 data class LocalGitHubRepository(
     @PrimaryKey(autoGenerate = false)
@@ -19,5 +15,5 @@ data class LocalGitHubRepository(
     val pullsUrl: String,
     val stargazersCount: Int,
     val forksCount: Int,
-    val page: Int
+    val page: Int,
 )

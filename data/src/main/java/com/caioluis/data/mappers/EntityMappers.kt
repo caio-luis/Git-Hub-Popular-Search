@@ -7,10 +7,6 @@ import com.caioluis.data.remote.model.RemoteRepositoryOwner
 import com.caioluis.domain.entity.DomainGitHubRepository
 import com.caioluis.domain.entity.DomainRepositoryOwner
 
-/**
- * Created by Caio Luis (caio-luis) on 10/10/20
- */
-
 //Remote
 fun RemoteGitHubRepository.toDomain(page: Int) =
     DomainGitHubRepository(
