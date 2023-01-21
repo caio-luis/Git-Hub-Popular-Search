@@ -6,9 +6,6 @@ import com.caioluis.domain.domainModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
-/**
- * Created by Caio Luis (caio-luis) on 10/10/20
- */
 class GitHubPopularApplication : Application() {
 
     override fun onCreate() {

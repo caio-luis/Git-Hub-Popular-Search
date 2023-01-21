@@ -8,10 +8,6 @@ import com.caioluis.data.remote.service.GitHubRepositoriesService
 import com.caioluis.domain.entity.DomainGitHubRepository
 import com.caioluis.domain.repository.GitHubReposRepository
 
-/**
- * Created by Caio Luis (caio-luis) on 11/10/20
- */
-
 class GitHubRepositoriesImpl(
     private val gitHubRepositoriesService: GitHubRepositoriesService,
     private val gitHubRepositoriesDao: GitHubRepositoriesDao,

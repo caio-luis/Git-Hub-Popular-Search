@@ -1,7 +1,3 @@
-/**
- * Created by Caio Luis (caio-luis) on 03/10/20
- */
-
 internal object KotlinCoreVersions {
     const val ktxCoreVersion = "1.9.0"
     const val kotlinVersion = "1.6.21"

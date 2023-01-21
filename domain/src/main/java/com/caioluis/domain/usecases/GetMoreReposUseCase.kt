@@ -1,8 +1,8 @@
 package com.caioluis.domain.usecases
 
-import com.caioluis.domain.base.UseCase
 import com.caioluis.domain.base.InvokeMode
 import com.caioluis.domain.base.Response
+import com.caioluis.domain.base.UseCase
 import com.caioluis.domain.entity.DomainGitHubRepository
 import com.caioluis.domain.repository.GitHubReposRepository
 import com.caioluis.domain.usecases.ActualPage.pageNumber

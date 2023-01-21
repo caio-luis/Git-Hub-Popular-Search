@@ -7,11 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import com.caioluis.githubpopular.R
 import com.caioluis.githubpopular.model.UiGitHubRepository
 
-/**
- * Created by Caio Luis (caio-luis) on 15/11/20
- */
-
-
 class GitHubRepositoriesAdapter : ListAdapter<UiGitHubRepository, GitHubReposViewHolder>(diffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GitHubReposViewHolder {

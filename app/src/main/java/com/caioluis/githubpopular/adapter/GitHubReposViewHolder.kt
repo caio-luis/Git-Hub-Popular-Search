@@ -8,9 +8,6 @@ import com.bumptech.glide.Glide
 import com.caioluis.githubpopular.R
 import com.caioluis.githubpopular.model.UiGitHubRepository
 
-/**
- * Created by Caio Luis (caio-luis) on 26/12/20
- */
 class GitHubReposViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun bindView(itemInfo: UiGitHubRepository) {
         val title = itemView.findViewById<AppCompatTextView>(R.id.ghRepositoryTitle)

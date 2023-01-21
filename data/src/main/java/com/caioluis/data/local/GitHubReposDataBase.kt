@@ -8,10 +8,6 @@ import androidx.room.TypeConverters
 import com.caioluis.data.local.model.LocalGitHubRepository
 import com.caioluis.data.local.type_converter.RepositoryOwnerConverter
 
-/**
- * Created by Caio Luis (caio-luis) on 12/10/20
- */
-
 @Database(
     entities = [LocalGitHubRepository::class],
     version = 1,
@@ -21,7 +17,7 @@ import com.caioluis.data.local.type_converter.RepositoryOwnerConverter
 @TypeConverters(RepositoryOwnerConverter::class)
 abstract class GitHubReposDataBase : RoomDatabase() {
 
-    abstract fun gitHubRepositoriesDao() : GitHubRepositoriesDao
+    abstract fun gitHubRepositoriesDao(): GitHubRepositoriesDao
 
     companion object {
 

@@ -17,9 +17,6 @@ import com.caioluis.githubpopular.viewmodel.GitHubRepositoriesViewModel
 import com.caioluis.githubpopular.viewmodel.MoreReposViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-/**
- * Created by Caio Luis (caio-luis) on 12/10/20
- */
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private val refreshLayout: SwipeRefreshLayout get() = findViewById(R.id.ghSwipeRefreshLayout)
