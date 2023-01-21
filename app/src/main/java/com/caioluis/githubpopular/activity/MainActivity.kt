@@ -30,12 +30,25 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private val gitHubRepositoriesViewModel: GitHubRepositoriesViewModel by viewModel()
     private val moreReposViewModel: MoreReposViewModel by viewModel()
 
+    private val endlessScrollListener: EndlessScrollListener by lazy { getEndlessListener() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         configureRecyclerView()
         initOnRefreshListener()
         loadList()
         observeGitHubRepositories()
+    }
+
+    private fun getEndlessListener(): EndlessScrollListener {
+        return object : EndlessScrollListener(
+            layoutManager = ghRecyclerView.layoutManager as LinearLayoutManager,
+            coroutineScope = lifecycleScope
+        ) {
+            override fun onLoadMoreItems() {
+                moreReposViewModel.loadMore()
+            }
+        }
     }
 
     private fun configureRecyclerView() {
@@ -120,8 +133,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             progressBar.visibility = View.GONE
     }
 
-    override fun onPause() {
-        super.onPause()
-        setSwipeLoadedState()
+    override fun onDestroy() {
+        endlessScrollListener.dispose()
+        super.onDestroy()
     }
 }

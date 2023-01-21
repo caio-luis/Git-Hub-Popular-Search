@@ -43,7 +43,7 @@ class GitHubRepositoriesViewModel(
     }
 
     override fun onCleared() {
-        super.onCleared()
         getRepositoriesUseCase.clear()
+        super.onCleared()
     }
 }

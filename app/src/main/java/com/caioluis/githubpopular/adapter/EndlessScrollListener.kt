@@ -2,10 +2,10 @@ package com.caioluis.githubpopular.adapter
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.caioluis.data.base.throttleFirst
+import com.caioluis.domain.base.throttleFirst
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.BufferOverflow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 const val VISIBLE_THRESHOLD = 5
@@ -17,14 +17,12 @@ abstract class EndlessScrollListener(
 ) :
     RecyclerView.OnScrollListener() {
 
-    private val output = MutableSharedFlow<Unit>(
-        onBufferOverflow = BufferOverflow.DROP_LATEST,
-        extraBufferCapacity = 1
-    )
+    private val output = Channel<Unit>()
 
     fun startListeningToEvents() {
         coroutineScope.launch {
             output
+                .receiveAsFlow()
                 .throttleFirst(DEBOUNCE_TIMEOUT_MILLIS)
                 .collect { onLoadMoreItems() }
         }
@@ -38,8 +36,10 @@ abstract class EndlessScrollListener(
         val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
 
         if (totalItemCount - visibleItemCount <= firstVisibleItem + VISIBLE_THRESHOLD)
-            output.tryEmit(Unit)
+            output.trySend(Unit)
     }
 
     abstract fun onLoadMoreItems()
+
+    fun dispose() = output.close()
 }

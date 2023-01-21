@@ -1,4 +1,4 @@
-package com.caioluis.data.base
+package com.caioluis.domain.base
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
