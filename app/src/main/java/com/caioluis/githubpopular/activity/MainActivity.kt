@@ -49,15 +49,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun configureRecyclerView() {
-        val endlessScrollListener = object : EndlessScrollListener(
-            layoutManager = ghRecyclerView.layoutManager as LinearLayoutManager,
-            coroutineScope = lifecycleScope
-        ) {
-            override fun onLoadMoreItems() {
-                moreReposViewModel.loadMore()
-            }
-        }
-
         endlessScrollListener.startListeningToEvents()
         ghRecyclerView.adapter = repositoriesAdapter
         ghRecyclerView.addOnScrollListener(endlessScrollListener)
