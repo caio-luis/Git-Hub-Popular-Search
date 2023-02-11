@@ -1,12 +1,11 @@
-package com.caioluis.data.remote.implementation
+package com.caioluis.data.local
 
 import android.content.Context
 import android.os.Build
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.caioluis.data.local.GitHubReposDataBase
-import com.caioluis.data.local.GitHubRepositoriesDao
-import com.caioluis.data.remote.implementation.Fixtures.repositories
+import com.caioluis.data.MainDispatcherRule
+import com.caioluis.data.local.Fixtures.repositories
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat

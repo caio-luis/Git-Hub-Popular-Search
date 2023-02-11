@@ -1,6 +1,6 @@
 internal object KotlinCoreVersions {
     const val ktxCoreVersion = "1.9.0"
-    const val kotlinVersion = "1.6.21"
+    const val kotlinVersion = "1.8.10"
     const val appCompatVersion = "1.6.0"
 }
 
@@ -35,5 +35,7 @@ internal object TestVersions {
     const val androidTestRunner = "1.5.2"
     const val coreTesting = "2.1.0"
     const val kotlinxCoroutines = "1.6.4"
+    const val kotlinTest = "1.8.0"
     const val robolectric = "4.6.1"
+    const val mockk = "1.13.4"
 }

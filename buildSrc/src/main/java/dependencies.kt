@@ -16,9 +16,11 @@ object TestDependencies {
     const val androidTestRules = "androidx.test:rules:${TestVersions.androidTestRules}"
     const val espresso = "androidx.test.espresso:espresso-core:${TestVersions.espresso}"
     const val coreTesting = "androidx.arch.core:core-testing:${TestVersions.coreTesting}"
+    const val kotlinTest = "org.jetbrains.kotlin:kotlin-test:${TestVersions.kotlinTest}"
     const val kotlinxCoroutines =
         "org.jetbrains.kotlinx:kotlinx-coroutines-test:${TestVersions.kotlinxCoroutines}"
     const val robolectric = "org.robolectric:robolectric:${TestVersions.robolectric}"
+    const val mockk = "io.mockk:mockk:${TestVersions.mockk}"
 }
 
 object Dependencies {
