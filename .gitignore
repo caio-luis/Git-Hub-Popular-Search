@@ -11,3 +11,6 @@ buildSrc/build/*
 .externalNativeBuild
 .cxx
 X#
+
+fastlane/report.xml
+fastlane/README.md
