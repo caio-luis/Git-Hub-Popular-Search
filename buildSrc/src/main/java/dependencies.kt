@@ -11,11 +11,14 @@ object CoreDependencies {
 object TestDependencies {
     const val jUnit = "androidx.test.ext:junit:${TestVersions.androidxJunit}"
     const val assertJ = "org.assertj:assertj-core:${TestVersions.assertJ}"
-    const val androidTestCore = "androidx.test:core:${TestVersions.androidTestArchCore}"
-    const val androidTestRunner = "androidx.test:runner:${TestVersions.androidTextRunner}"
-    const val androidTestRules = "androidx.test:rules:${TestVersions.androidTextRules}"
+    const val androidTestCore = "androidx.test:core:${TestVersions.androidTestCore}"
+    const val androidTestRunner = "androidx.test:runner:${TestVersions.androidTestRunner}"
+    const val androidTestRules = "androidx.test:rules:${TestVersions.androidTestRules}"
     const val espresso = "androidx.test.espresso:espresso-core:${TestVersions.espresso}"
     const val coreTesting = "androidx.arch.core:core-testing:${TestVersions.coreTesting}"
+    const val kotlinxCoroutines =
+        "org.jetbrains.kotlinx:kotlinx-coroutines-test:${TestVersions.kotlinxCoroutines}"
+    const val robolectric = "org.robolectric:robolectric:${TestVersions.robolectric}"
 }
 
 object Dependencies {

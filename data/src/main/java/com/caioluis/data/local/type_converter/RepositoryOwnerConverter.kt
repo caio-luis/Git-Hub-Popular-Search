@@ -4,10 +4,6 @@ import androidx.room.TypeConverter
 import com.caioluis.data.local.model.LocalRepositoryOwner
 import com.google.gson.Gson
 
-/**
- * Created by Caio Luis (@caio.luis) on 31/10/20
- */
-
 class RepositoryOwnerConverter {
 
     @TypeConverter
