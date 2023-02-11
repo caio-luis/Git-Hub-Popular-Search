@@ -1,4 +1,4 @@
-package com.caioluis.data.remote.implementation
+package com.caioluis.data
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -17,7 +17,9 @@ dependencies {
     testImplementation TestDependencies.androidTestRunner
     testImplementation TestDependencies.kotlinxCoroutines
     testImplementation TestDependencies.robolectric
+    testImplementation TestDependencies.kotlinTest
     testImplementation TestDependencies.assertJ
+    testImplementation TestDependencies.mockk
 
     //Other dependencies
     kapt Dependencies.roomCompiler
