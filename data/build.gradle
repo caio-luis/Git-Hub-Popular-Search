@@ -1,16 +1,23 @@
 apply plugin: 'com.android.library'
 apply from: "$rootDir/buildSrc/android-config.gradle"
 
+android {
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+}
+
 dependencies {
     implementation project(":domain")
 
     //Test
+    testImplementation TestDependencies.androidTestCore
+    testImplementation TestDependencies.androidTestRunner
+    testImplementation TestDependencies.kotlinxCoroutines
+    testImplementation TestDependencies.robolectric
     testImplementation TestDependencies.assertJ
-    androidTestImplementation TestDependencies.jUnit
-    androidTestImplementation TestDependencies.espresso
-    androidTestImplementation TestDependencies.androidTestCore
-    androidTestImplementation TestDependencies.androidTestRules
-    androidTestImplementation TestDependencies.androidTestRunner
 
     //Other dependencies
     kapt Dependencies.roomCompiler
