@@ -18,11 +18,11 @@ dependencies {
 
     //Test
     testImplementation TestDependencies.assertJ
-    androidTestImplementation TestDependencies.jUnit
-    androidTestImplementation TestDependencies.espresso
-    androidTestImplementation TestDependencies.androidTestCore
-    androidTestImplementation TestDependencies.androidTestRules
-    androidTestImplementation TestDependencies.androidTestRunner
+    testImplementation TestDependencies.jUnit
+    testImplementation TestDependencies.androidTestCore
+    testImplementation TestDependencies.androidTestRunner
+    testImplementation TestDependencies.mockk
+
 
     //Other dependencies
     implementation Dependencies.constraintLayout
