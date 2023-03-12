@@ -19,10 +19,12 @@ dependencies {
     //Test
     testImplementation TestDependencies.assertJ
     testImplementation TestDependencies.jUnit
+    testImplementation TestDependencies.mockk
+    testImplementation TestDependencies.coreTesting
+    testImplementation TestDependencies.robolectric
     testImplementation TestDependencies.androidTestCore
     testImplementation TestDependencies.androidTestRunner
-    testImplementation TestDependencies.mockk
-
+    testImplementation TestDependencies.kotlinxCoroutines
 
     //Other dependencies
     implementation Dependencies.constraintLayout
