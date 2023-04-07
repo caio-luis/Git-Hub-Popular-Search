@@ -32,8 +32,8 @@ class MoreReposViewModel(
         }
     }
 
-    fun loadMore() {
-        getMoreReposUseCase()
+    fun loadMore(language: String) {
+        getMoreReposUseCase(language)
     }
 
     override fun onCleared() {

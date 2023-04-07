@@ -9,16 +9,19 @@ import com.caioluis.domain.usecases.ActualPage.pageNumber
 
 class GetMoreReposUseCase(
     private val gitHubReposRepository: GitHubReposRepository,
-) : UseCase<Int, List<DomainGitHubRepository>>(InvokeMode.LOCKING) {
+) : UseCase<String, List<DomainGitHubRepository>>(InvokeMode.LOCKING) {
 
-    private suspend fun loadRepositories(page: Int): List<DomainGitHubRepository>? {
-        return gitHubReposRepository.getGitHubRepositories(page = page)
+    private suspend fun loadRepositories(
+        page: Int,
+        language: String,
+    ): List<DomainGitHubRepository>? {
+        return gitHubReposRepository.getGitHubRepositories(page = page, language)
     }
 
-    override suspend fun run(parameters: Int?) {
+    override suspend fun run(parameters: String?) {
         sendChannel.run {
             send(Response.Loading)
-            loadRepositories(page = pageNumber)
+            loadRepositories(page = pageNumber, parameters.orEmpty())
                 ?.let {
                     pageNumber++
                     send(Response.Success(it))
