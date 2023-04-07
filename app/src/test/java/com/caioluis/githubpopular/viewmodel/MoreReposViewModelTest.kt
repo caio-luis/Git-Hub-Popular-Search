@@ -61,7 +61,7 @@ class MoreReposViewModelTest {
             }
 
             // when
-            viewModel.loadMore()
+            viewModel.loadMore("")
 
             // then
             viewModel.observeMoreReposLiveData.observeForever { response ->
@@ -82,7 +82,7 @@ class MoreReposViewModelTest {
         }
 
         // when
-        viewModel.loadMore()
+        viewModel.loadMore("")
 
         // then
         viewModel.observeMoreReposLiveData.observeForever { response ->
@@ -103,7 +103,7 @@ class MoreReposViewModelTest {
         var loadCalled = false
 
         // when
-        viewModel.loadMore()
+        viewModel.loadMore("")
 
         // then
         viewModel.observeMoreReposLiveData.observeForever { response ->

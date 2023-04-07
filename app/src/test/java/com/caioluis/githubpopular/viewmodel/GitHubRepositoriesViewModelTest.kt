@@ -60,7 +60,7 @@ class GitHubRepositoriesViewModelTest {
             }
 
             // when
-            viewModel.loadList()
+            viewModel.loadList("")
 
             // then
             viewModel.observeGitHubReposLiveData.observeForever { response ->
@@ -81,7 +81,7 @@ class GitHubRepositoriesViewModelTest {
         }
 
         // when
-        viewModel.loadList()
+        viewModel.loadList("")
 
         // then
         viewModel.observeGitHubReposLiveData.observeForever { response ->
@@ -102,7 +102,7 @@ class GitHubRepositoriesViewModelTest {
         var loadCalled = false
 
         // when
-        viewModel.loadList()
+        viewModel.loadList("")
 
         // then
         viewModel.observeGitHubReposLiveData.observeForever { response ->

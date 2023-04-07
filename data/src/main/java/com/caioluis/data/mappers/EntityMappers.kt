@@ -18,14 +18,14 @@ fun RemoteGitHubRepository.toDomain(page: Int) =
         pullsUrl = pullsUrl ?: "",
         stargazersCount = stargazersCount ?: 0,
         forksCount = forksCount ?: 0,
-        page = page
+        page = page,
     )
 
 fun RemoteRepositoryOwner.toDomain() =
     DomainRepositoryOwner(
         id = id ?: 0,
         login = login ?: "",
-        avatarUrl = avatarUrl ?: ""
+        avatarUrl = avatarUrl ?: "",
     )
 
 // Local
@@ -39,14 +39,15 @@ fun LocalGitHubRepository.toDomain() =
         description = description,
         pullsUrl = pullsUrl,
         stargazersCount = stargazersCount,
-        forksCount = forksCount
+        forksCount = forksCount,
+        page = page,
     )
 
 fun LocalRepositoryOwner.toDomain() =
     DomainRepositoryOwner(
         id = id,
         login = login,
-        avatarUrl = avatarUrl
+        avatarUrl = avatarUrl,
     )
 
 // Domain
@@ -61,12 +62,12 @@ fun DomainGitHubRepository.toLocal() =
         pullsUrl = pullsUrl,
         stargazersCount = stargazersCount,
         forksCount = forksCount,
-        page = page
+        page = page,
     )
 
 fun DomainRepositoryOwner.toLocal() =
     LocalRepositoryOwner(
         id = id,
         login = login,
-        avatarUrl = avatarUrl
+        avatarUrl = avatarUrl,
     )

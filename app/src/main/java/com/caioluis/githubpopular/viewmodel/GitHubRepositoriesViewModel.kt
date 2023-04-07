@@ -34,8 +34,8 @@ class GitHubRepositoriesViewModel(
         }
     }
 
-    fun loadList() {
-        getRepositoriesUseCase()
+    fun loadList(language: String) {
+        getRepositoriesUseCase(language)
     }
 
     override fun onCleared() {
