@@ -47,14 +47,14 @@ class GitHubReposRepositoryImplTest {
         } returns remoteGitHubRepositories.repositories
 
         coEvery {
-            localSource.getFromLocalDatabase(any(), any())
+            localSource.saveAndGetFromCache(any(), any())
         } returns domainGitHubRepositories
 
         val result = repositoryImpl.getGitHubRepositories(page, language)
 
         coVerify(exactly = 1) { remoteSource.fetchFromRemote(page, language) }
         coVerify(exactly = 1) {
-            localSource.getFromLocalDatabase(any(), any())
+            localSource.saveAndGetFromCache(any(), any())
         }
 
         assertNotNull(result)
@@ -72,13 +72,13 @@ class GitHubReposRepositoryImplTest {
             } returns remoteGitHubRepositories.repositories
 
             coEvery {
-                localSource.getFromLocalDatabase(any(), any())
+                localSource.saveAndGetFromCache(any(), any())
             } returns domainGitHubRepositories
 
             val result = repositoryImpl.getGitHubRepositories(page, language)
 
             coVerify(exactly = 1) {
-                localSource.getFromLocalDatabase(any(), any())
+                localSource.saveAndGetFromCache(any(), any())
             }
 
             coVerify(exactly = 1) { remoteSource.fetchFromRemote(page, language) }
@@ -94,12 +94,12 @@ class GitHubReposRepositoryImplTest {
             val language = "kotlin"
 
             coEvery { remoteSource.fetchFromRemote(any(), any()) } throws Exception()
-            coEvery { localSource.getFromLocalDatabase(any(), any()) } returns null
+            coEvery { localSource.saveAndGetFromCache(any(), any()) } returns null
 
             repositoryImpl.getGitHubRepositories(page, language)
 
             coVerify(exactly = 1) {
-                localSource.getFromLocalDatabase(any(), any())
+                localSource.saveAndGetFromCache(any(), any())
             }
 
             coVerify(exactly = 1) { remoteSource.fetchFromRemote(page, language) }

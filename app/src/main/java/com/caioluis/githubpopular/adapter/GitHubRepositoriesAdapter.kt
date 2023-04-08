@@ -49,6 +49,7 @@ class GitHubRepositoriesAdapter : ListAdapter<UiGitHubRepository, GitHubReposVie
                     oldItem.fullName == newItem.fullName &&
                     oldItem.forksCount == newItem.forksCount &&
                     oldItem.pullsUrl == newItem.pullsUrl &&
+                    oldItem.htmlUrl == newItem.htmlUrl &&
                     oldItem.stargazersCount == newItem.stargazersCount
         }
     }

@@ -18,6 +18,7 @@ fun RemoteGitHubRepository.toDomain(page: Int) =
         pullsUrl = pullsUrl ?: "",
         stargazersCount = stargazersCount ?: 0,
         forksCount = forksCount ?: 0,
+        htmlUrl = htmlUrl ?: "",
         page = page,
     )
 
@@ -40,6 +41,7 @@ fun LocalGitHubRepository.toDomain() =
         pullsUrl = pullsUrl,
         stargazersCount = stargazersCount,
         forksCount = forksCount,
+        htmlUrl = htmlUrl,
         page = page,
     )
 
@@ -62,6 +64,7 @@ fun DomainGitHubRepository.toLocal() =
         pullsUrl = pullsUrl,
         stargazersCount = stargazersCount,
         forksCount = forksCount,
+        htmlUrl = htmlUrl,
         page = page,
     )
 

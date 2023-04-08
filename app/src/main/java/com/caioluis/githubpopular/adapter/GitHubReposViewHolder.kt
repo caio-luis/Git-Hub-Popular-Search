@@ -6,6 +6,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.caioluis.githubpopular.R
+import com.caioluis.githubpopular.extensions.openBrowserIntent
 import com.caioluis.githubpopular.model.UiGitHubRepository
 
 class GitHubReposViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -16,6 +17,10 @@ class GitHubReposViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val stars = itemView.findViewById<AppCompatTextView>(R.id.ghRepositoryStarsCounter)
         val userName = itemView.findViewById<AppCompatTextView>(R.id.ghRepositoryUserName)
         val userIcon = itemView.findViewById<AppCompatImageView>(R.id.ghRepositoryUserImage)
+
+        itemView.setOnClickListener {
+            itemView.context.openBrowserIntent(itemInfo.htmlUrl)
+        }
 
         title.text = itemInfo.name
         description.text = itemInfo.description

@@ -26,4 +26,7 @@ data class RemoteGitHubRepository(
 
     @SerializedName("forks_count")
     val forksCount: Int?,
+
+    @SerializedName("html_url")
+    val htmlUrl: String?,
 )

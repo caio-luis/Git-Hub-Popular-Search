@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.base
+package com.caioluis.githubpopular
 
 import com.caioluis.githubpopular.viewmodel.GitHubRepositoriesViewModel
 import com.caioluis.githubpopular.viewmodel.MoreReposViewModel

@@ -1,6 +1,6 @@
-package com.caioluis.githubpopular.adapter
+package com.caioluis.githubpopular
 
-object SupportedLanguages {
+object Constants {
     val languages = sortedSetOf(
         "Kotlin",
         "Swift",
