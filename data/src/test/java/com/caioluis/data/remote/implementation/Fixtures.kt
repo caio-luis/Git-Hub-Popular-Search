@@ -23,7 +23,8 @@ object Fixtures {
                 description = "test-description",
                 pullsUrl = "test-pulls-url",
                 stargazersCount = 100,
-                forksCount = 50
+                forksCount = 50,
+                htmlUrl = "test",
             )
         )
     )
@@ -42,7 +43,8 @@ object Fixtures {
             pullsUrl = "test-pulls-url",
             stargazersCount = 100,
             forksCount = 50,
-            page = 1
+            htmlUrl = "test",
+            page = 1,
         )
     )
 
@@ -60,7 +62,8 @@ object Fixtures {
             pullsUrl = "test-pulls-url",
             stargazersCount = 100,
             forksCount = 50,
-            page = 1
+            htmlUrl = "test",
+            page = 1,
         )
     )
 }

@@ -18,7 +18,8 @@ object Fixtures {
             pullsUrl = "http://api.github.com/repos/user1/repo1/pulls",
             stargazersCount = 5,
             forksCount = 3,
-            page = 1
+            htmlUrl = "test",
+            page = 1,
         ),
         LocalGitHubRepository(
             id = 2,
@@ -33,7 +34,8 @@ object Fixtures {
             pullsUrl = "http://api.github.com/repos/user1/repo2/pulls",
             stargazersCount = 10,
             forksCount = 2,
-            page = 1
+            htmlUrl = "test",
+            page = 1,
         ),
         LocalGitHubRepository(
             id = 3,
@@ -48,7 +50,8 @@ object Fixtures {
             pullsUrl = "http://api.github.com/repos/user1/repo2/pulls",
             stargazersCount = 10,
             forksCount = 2,
-            page = 2
+            htmlUrl = "test",
+            page = 2,
         ),
     )
 }

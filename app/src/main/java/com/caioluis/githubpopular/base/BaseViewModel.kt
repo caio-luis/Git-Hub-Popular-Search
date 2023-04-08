@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.viewmodel
+package com.caioluis.githubpopular.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

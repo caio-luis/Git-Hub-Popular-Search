@@ -12,16 +12,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.caioluis.githubpopular.Constants.languages
 import com.caioluis.githubpopular.R
 import com.caioluis.githubpopular.adapter.EndlessScrollListener
 import com.caioluis.githubpopular.adapter.GitHubRepositoriesAdapter
-import com.caioluis.githubpopular.adapter.SupportedLanguages.languages
-import com.caioluis.githubpopular.extensions.showShortToast
+import com.caioluis.githubpopular.extensions.showLongToast
 import com.caioluis.githubpopular.model.UiGitHubRepository
 import com.caioluis.githubpopular.viewmodel.GitHubRepositoriesViewModel
 import com.caioluis.githubpopular.viewmodel.MoreReposViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
@@ -80,15 +79,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun configureRecyclerView() {
-        endlessScrollListener.startListeningToEvents()
+        endlessScrollListener.start()
         ghRecyclerView.adapter = repositoriesAdapter
         ghRecyclerView.addOnScrollListener(endlessScrollListener)
     }
 
     private fun initOnRefreshListener() {
-        refreshLayout.setOnRefreshListener {
-            loadList()
-        }
+        refreshLayout.setOnRefreshListener(::loadList)
     }
 
     private fun loadList() {
@@ -122,7 +119,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private fun handleFailureResponse(error: Throwable?) {
         setSwipeLoadedState()
-        showShortToast(error?.message.toString())
+        showLongToast(error?.message.toString())
     }
 
     private fun handleLoadMoreSuccessResponse(repositories: List<UiGitHubRepository>) {
@@ -132,7 +129,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private fun handleLoadMoreFailure(error: Throwable?) {
         setProgressBarState(show = false)
-        showShortToast(error?.message.toString())
+        showLongToast(error?.message.toString())
     }
 
     private fun setSwipeLoadingState() {

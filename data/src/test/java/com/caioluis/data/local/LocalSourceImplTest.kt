@@ -30,12 +30,12 @@ class LocalSourceImplTest {
             coEvery { daoMock.saveRepositories(any()) } returns Unit
             coEvery { daoMock.getAllRepositories(any()) } returns null
 
-            runBlocking { localSourceImpl.getFromLocalDatabase(domainGitHubRepositories, 1) }
+            runBlocking { localSourceImpl.saveAndGetFromCache(domainGitHubRepositories, 1) }
 
             coVerify(exactly = 1) { daoMock.deleteAllGitHubRepositories() }
             coVerify(exactly = 1) { daoMock.saveRepositories(localGitHubRepositories) }
 
-            val result = localSourceImpl.getFromLocalDatabase(domainGitHubRepositories, 1)
+            val result = localSourceImpl.saveAndGetFromCache(domainGitHubRepositories, 1)
             assertNull(result)
         }
 
@@ -46,12 +46,29 @@ class LocalSourceImplTest {
             coEvery { daoMock.saveRepositories(any()) } returns Unit
             coEvery { daoMock.getAllRepositories(any()) } returns localGitHubRepositories
 
-            localSourceImpl.getFromLocalDatabase(domainGitHubRepositories, 2)
+            localSourceImpl.saveAndGetFromCache(domainGitHubRepositories, 2)
 
             coVerify(exactly = 0) { daoMock.deleteAllGitHubRepositories() }
             coVerify(exactly = 1) { daoMock.saveRepositories(localGitHubRepositories) }
 
-            val result = localSourceImpl.getFromLocalDatabase(domainGitHubRepositories, 2)
+            val result = localSourceImpl.saveAndGetFromCache(domainGitHubRepositories, 2)
+
+            assertNotNull(result)
+            assertEquals(domainGitHubRepositories, result)
+        }
+
+    @Test
+    fun `get from cache should not delete repositories and return saved ones`() =
+        runBlocking {
+            coEvery { daoMock.getAllRepositories(any()) } returns localGitHubRepositories
+
+            localSourceImpl.getFromCache(1)
+
+            coVerify(exactly = 0) { daoMock.deleteAllGitHubRepositories() }
+            coVerify(exactly = 0) { daoMock.saveRepositories(localGitHubRepositories) }
+            coVerify(exactly = 1) { daoMock.getAllRepositories(1) }
+
+            val result = localSourceImpl.getFromCache(1)
 
             assertNotNull(result)
             assertEquals(domainGitHubRepositories, result)

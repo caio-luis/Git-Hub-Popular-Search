@@ -14,12 +14,11 @@ const val DEBOUNCE_TIMEOUT_MILLIS = 2500L
 abstract class EndlessScrollListener(
     private val layoutManager: LinearLayoutManager,
     private val coroutineScope: CoroutineScope,
-) :
-    RecyclerView.OnScrollListener() {
+) : RecyclerView.OnScrollListener() {
 
     private val output = Channel<Unit>()
 
-    fun startListeningToEvents() {
+    fun start() {
         coroutineScope.launch {
             output
                 .receiveAsFlow()

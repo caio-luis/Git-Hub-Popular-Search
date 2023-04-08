@@ -15,5 +15,6 @@ data class LocalGitHubRepository(
     val pullsUrl: String,
     val stargazersCount: Int,
     val forksCount: Int,
+    val htmlUrl: String,
     val page: Int,
 )

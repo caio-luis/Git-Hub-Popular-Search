@@ -26,12 +26,8 @@ class GitHubReposRepositoryImpl(
         return remoteResult
             ?.mapNotNull { it?.toDomain(page) }
             ?.takeIf { it.isNotEmpty() }
-            ?.let {
-                localSource.getFromLocalDatabase(
-                    repositories = it,
-                    page = page,
-                )
-            }?.takeIf { it.isNotEmpty() }
+            ?.let { localSource.saveAndGetFromCache(it, page) }
+            ?: run { localSource.getFromCache(page) }?.takeIf { it.isNotEmpty() }
             ?: exception?.let { throw it }
     }
 }

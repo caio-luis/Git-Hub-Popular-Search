@@ -14,6 +14,7 @@ fun DomainGitHubRepository.toUi() =
         description = description,
         pullsUrl = pullsUrl,
         stargazersCount = stargazersCount,
+        htmlUrl = htmlUrl,
         forksCount = forksCount
     )
 
