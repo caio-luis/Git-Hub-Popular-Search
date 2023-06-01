@@ -5,8 +5,8 @@ import com.caioluis.data.local.model.LocalRepositoryOwner
 import com.caioluis.data.remote.model.RemoteGitHubRepositories
 import com.caioluis.data.remote.model.RemoteGitHubRepository
 import com.caioluis.data.remote.model.RemoteRepositoryOwner
-import com.caioluis.domain.entity.DomainGitHubRepository
-import com.caioluis.domain.entity.DomainRepositoryOwner
+import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
+import com.caioluis.githubpopular.domain.bridge.entity.DomainRepositoryOwner
 
 object Fixtures {
     val remoteGitHubRepositories = RemoteGitHubRepositories(

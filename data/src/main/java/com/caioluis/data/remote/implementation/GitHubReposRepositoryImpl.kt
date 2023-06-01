@@ -2,8 +2,8 @@ package com.caioluis.data.remote.implementation
 
 import com.caioluis.data.local.LocalSource
 import com.caioluis.data.mappers.toDomain
-import com.caioluis.domain.entity.DomainGitHubRepository
-import com.caioluis.domain.repository.GitHubReposRepository
+import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
+import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
 
 class GitHubReposRepositoryImpl(
     private val remoteSource: RemoteSource,

@@ -2,7 +2,7 @@ package com.caioluis.githubpopular.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.caioluis.domain.base.Response
+import com.caioluis.githubpopular.domain.bridge.base.Response
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
