@@ -1,6 +1,6 @@
 package com.caioluis.data.local
 
-import com.caioluis.domain.entity.DomainGitHubRepository
+import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 
 interface LocalSource {
     suspend fun saveAndGetFromCache(

@@ -9,7 +9,8 @@ android {
 
 dependencies {
     implementation project(":data")
-    implementation project(":domain")
+    implementation project(":domain:impl")
+    implementation project(":domain:bridge")
 
     //Core
     implementation CoreDependencies.kotlinStdLib

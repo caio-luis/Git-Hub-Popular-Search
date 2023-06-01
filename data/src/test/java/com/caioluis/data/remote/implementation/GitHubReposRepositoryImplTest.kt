@@ -4,7 +4,7 @@ import com.caioluis.data.MainDispatcherRule
 import com.caioluis.data.local.LocalSource
 import com.caioluis.data.remote.implementation.Fixtures.domainGitHubRepositories
 import com.caioluis.data.remote.implementation.Fixtures.remoteGitHubRepositories
-import com.caioluis.domain.repository.GitHubReposRepository
+import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

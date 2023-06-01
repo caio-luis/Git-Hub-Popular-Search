@@ -1,16 +1,16 @@
 package com.caioluis.githubpopular.mapper
 
-import com.caioluis.domain.entity.DomainGitHubRepository
-import com.caioluis.domain.entity.DomainRepositoryOwner
+import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 import com.caioluis.githubpopular.model.UiGitHubRepository
 import com.caioluis.githubpopular.model.UiRepositoryOwner
 
 object Fixtures {
-    val domainRepositoryOwner = DomainRepositoryOwner(
-        login = "user",
-        id = 123,
-        avatarUrl = "https://example.com/avatar.jpg"
-    )
+    val domainRepositoryOwner =
+        com.caioluis.githubpopular.domain.bridge.entity.DomainRepositoryOwner(
+            login = "user",
+            id = 123,
+            avatarUrl = "https://example.com/avatar.jpg"
+        )
 
     val domainGitHubRepository = DomainGitHubRepository(
         id = 123,

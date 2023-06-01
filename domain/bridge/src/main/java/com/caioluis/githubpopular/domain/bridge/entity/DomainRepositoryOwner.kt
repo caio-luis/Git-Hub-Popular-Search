@@ -1,4 +1,4 @@
-package com.caioluis.domain.entity
+package com.caioluis.githubpopular.domain.bridge.entity
 
 data class DomainRepositoryOwner(
     val login: String = "",

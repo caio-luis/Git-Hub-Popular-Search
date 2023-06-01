@@ -1,13 +1,13 @@
 package com.caioluis.githubpopular.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.caioluis.domain.base.Response
-import com.caioluis.domain.base.Response.Failure
-import com.caioluis.domain.base.Response.Loading
-import com.caioluis.domain.base.Response.Success
-import com.caioluis.domain.entity.DomainGitHubRepository
-import com.caioluis.domain.usecases.GetMoreReposUseCase
 import com.caioluis.githubpopular.MainDispatcherRule
+import com.caioluis.githubpopular.domain.bridge.base.Response
+import com.caioluis.githubpopular.domain.bridge.base.Response.Failure
+import com.caioluis.githubpopular.domain.bridge.base.Response.Loading
+import com.caioluis.githubpopular.domain.bridge.base.Response.Success
+import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
+import com.caioluis.githubpopular.impl.usecases.GetMoreReposUseCase
 import com.caioluis.githubpopular.mapper.Fixtures.domainGitHubRepository
 import com.caioluis.githubpopular.mapper.Fixtures.uiRepository
 import io.mockk.coEvery

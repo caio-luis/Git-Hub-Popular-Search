@@ -2,7 +2,7 @@ package com.caioluis.data.local
 
 import com.caioluis.data.mappers.toDomain
 import com.caioluis.data.mappers.toLocal
-import com.caioluis.domain.entity.DomainGitHubRepository
+import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 
 class LocalSourceImpl(
     private val gitHubRepositoriesDao: GitHubRepositoriesDao

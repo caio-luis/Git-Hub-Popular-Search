@@ -9,7 +9,7 @@ import com.caioluis.data.remote.implementation.GitHubReposRepositoryImpl
 import com.caioluis.data.remote.implementation.RemoteSource
 import com.caioluis.data.remote.implementation.RemoteSourceImpl
 import com.caioluis.data.remote.service.GitHubRepositoriesService
-import com.caioluis.domain.repository.GitHubReposRepository
+import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 

@@ -1,11 +1,11 @@
-package com.caioluis.domain.usecases
+package com.caioluis.githubpopular.impl.usecases
 
-import com.caioluis.domain.base.InvokeMode
-import com.caioluis.domain.base.Response
-import com.caioluis.domain.base.UseCase
-import com.caioluis.domain.entity.DomainGitHubRepository
-import com.caioluis.domain.repository.GitHubReposRepository
-import com.caioluis.domain.usecases.ActualPage.pageNumber
+import com.caioluis.githubpopular.domain.bridge.base.InvokeMode
+import com.caioluis.githubpopular.domain.bridge.base.Response
+import com.caioluis.githubpopular.domain.bridge.base.UseCase
+import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
+import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
+import com.caioluis.githubpopular.impl.usecases.ActualPage.pageNumber
 
 class GetRepositoriesUseCase(
     private val gitHubReposRepository: GitHubReposRepository,

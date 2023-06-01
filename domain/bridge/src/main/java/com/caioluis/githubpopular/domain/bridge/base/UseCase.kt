@@ -1,12 +1,18 @@
-package com.caioluis.domain.base
+package com.caioluis.githubpopular.domain.bridge.base
 
-import kotlinx.coroutines.*
+import com.caioluis.githubpopular.domain.bridge.base.InvokeMode.LOCKING
+import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineName
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import kotlin.coroutines.CoroutineContext
 
 abstract class UseCase<in S : Any, T>(private val invokeMode: InvokeMode) : CoroutineScope {
 
@@ -33,7 +39,7 @@ abstract class UseCase<in S : Any, T>(private val invokeMode: InvokeMode) : Coro
 
     operator fun invoke(params: S? = null) {
         when (invokeMode) {
-            InvokeMode.LOCKING -> runWithLock { run(params) }
+            LOCKING -> runWithLock { run(params) }
             else -> launch(backgroundDispatcher) { run(params) }
         }
     }

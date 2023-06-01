@@ -1,10 +1,10 @@
 package com.caioluis.githubpopular.viewmodel
 
 import androidx.lifecycle.MutableLiveData
-import com.caioluis.domain.base.Response
-import com.caioluis.domain.entity.DomainGitHubRepository
-import com.caioluis.domain.usecases.GetMoreReposUseCase
 import com.caioluis.githubpopular.base.BaseViewModel
+import com.caioluis.githubpopular.domain.bridge.base.Response
+import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
+import com.caioluis.githubpopular.impl.usecases.GetMoreReposUseCase
 import com.caioluis.githubpopular.mapper.toUi
 import com.caioluis.githubpopular.model.UiGitHubRepository
 

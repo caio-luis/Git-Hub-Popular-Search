@@ -4,8 +4,8 @@ import com.caioluis.data.local.model.LocalGitHubRepository
 import com.caioluis.data.local.model.LocalRepositoryOwner
 import com.caioluis.data.remote.model.RemoteGitHubRepository
 import com.caioluis.data.remote.model.RemoteRepositoryOwner
-import com.caioluis.domain.entity.DomainGitHubRepository
-import com.caioluis.domain.entity.DomainRepositoryOwner
+import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
+import com.caioluis.githubpopular.domain.bridge.entity.DomainRepositoryOwner
 
 //Remote
 fun RemoteGitHubRepository.toDomain(page: Int) =
@@ -13,7 +13,8 @@ fun RemoteGitHubRepository.toDomain(page: Int) =
         id = id ?: 0,
         name = name ?: "",
         fullName = fullName ?: "",
-        owner = owner?.toDomain() ?: DomainRepositoryOwner(),
+        owner = owner?.toDomain()
+            ?: DomainRepositoryOwner(),
         description = description ?: "",
         pullsUrl = pullsUrl ?: "",
         stargazersCount = stargazersCount ?: 0,
