@@ -40,12 +40,12 @@ dependencies {
     implementation libs.androidx.lifecycle.viewmodel.ktx
     implementation libs.androidx.lifecycle.runtime
     implementation libs.androidx.lifecycle.extensions
-    kapt libs.androidx.lifecycle.commom
+    ksp libs.androidx.lifecycle.commom
 
     implementation libs.recycler.view
     implementation libs.card.view
     implementation libs.swipe.refresh.layout
 
     implementation libs.glide
-    kapt libs.glide.compiler
+    ksp libs.glide.compiler
 }

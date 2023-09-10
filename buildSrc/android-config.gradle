@@ -1,5 +1,5 @@
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.devtools.ksp'
 apply plugin: 'org.jetbrains.kotlin.android'
 
 android {

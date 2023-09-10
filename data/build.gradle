@@ -24,7 +24,7 @@ dependencies {
     testImplementation libs.mockk
 
     //Other dependencies
-    kapt libs.room.compiler
+    ksp libs.room.compiler
     implementation libs.room.ktx
     implementation libs.room.runtime
 
@@ -34,5 +34,4 @@ dependencies {
 
     implementation libs.koin.core
     implementation libs.koin.android
-
 }
