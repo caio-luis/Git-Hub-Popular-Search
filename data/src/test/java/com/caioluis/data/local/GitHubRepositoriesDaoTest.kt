@@ -19,11 +19,6 @@ import org.robolectric.annotation.Config
 
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
-@Config(
-    manifest = Config.NONE,
-    minSdk = Build.VERSION_CODES.M,
-    maxSdk = Build.VERSION_CODES.TIRAMISU
-)
 class GitHubRepositoriesDaoTest {
 
     @get:Rule
