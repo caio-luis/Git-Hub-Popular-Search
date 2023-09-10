@@ -1,7 +1,7 @@
 apply from: "$rootDir/buildSrc/java-config.gradle"
 
 dependencies {
-    implementation CoreDependencies.kotlinStdLib
-    implementation MyDependencies.coroutines
-    implementation MyDependencies.koin
+    implementation libs.kotlin.stdlib
+    implementation libs.kotlinx.coroutines
+    implementation libs.koin.core
 }

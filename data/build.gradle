@@ -2,35 +2,37 @@ apply plugin: 'com.android.library'
 apply from: "$rootDir/buildSrc/android-config.gradle"
 
 android {
+    namespace 'com.caioluis.data'
+
     testOptions {
         unitTests {
             includeAndroidResources = true
         }
     }
-    namespace 'com.caioluis.data'
 }
 
 dependencies {
     implementation project(":domain:bridge")
 
     //Test
-    testImplementation TestDependencies.androidTestCore
-    testImplementation TestDependencies.androidTestRunner
-    testImplementation TestDependencies.kotlinxCoroutines
-    testImplementation TestDependencies.robolectric
-    testImplementation TestDependencies.kotlinTest
-    testImplementation TestDependencies.assertJ
-    testImplementation TestDependencies.mockk
+    testImplementation libs.android.test.core
+    testImplementation libs.android.test.runner
+    testImplementation libs.kotlin.coroutines.test
+    testImplementation libs.robolectric
+    testImplementation libs.kotlin.test
+    testImplementation libs.assertj
+    testImplementation libs.mockk
 
     //Other dependencies
-    kapt MyDependencies.roomCompiler
-    implementation MyDependencies.roomKtx
-    implementation MyDependencies.roomRunTime
+    kapt libs.room.compiler
+    implementation libs.room.ktx
+    implementation libs.room.runtime
 
-    implementation MyDependencies.retrofitGsonConverter
-    implementation MyDependencies.retrofit
-    implementation MyDependencies.gson
+    implementation libs.retrofit.converter.gson
+    implementation libs.retrofit
+    implementation libs.gson
 
-    implementation MyDependencies.koin
-    implementation MyDependencies.koinAndroid
+    implementation libs.koin.core
+    implementation libs.koin.android
+
 }

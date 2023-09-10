@@ -15,37 +15,37 @@ dependencies {
     implementation project(":domain:bridge")
 
     //Core
-    implementation CoreDependencies.kotlinStdLib
-    implementation CoreDependencies.ktxCore
-    implementation CoreDependencies.appCompat
+    implementation libs.kotlin.stdlib
+    implementation libs.androix.ktx
+    implementation libs.app.compat
 
     //Test
-    testImplementation TestDependencies.assertJ
-    testImplementation TestDependencies.jUnit
-    testImplementation TestDependencies.mockk
-    testImplementation TestDependencies.coreTesting
-    testImplementation TestDependencies.robolectric
-    testImplementation TestDependencies.androidTestCore
-    testImplementation TestDependencies.androidTestRunner
-    testImplementation TestDependencies.kotlinxCoroutines
+    testImplementation libs.assertj
+    testImplementation libs.android.junit
+    testImplementation libs.mockk
+    testImplementation libs.android.test.core
+    testImplementation libs.robolectric
+    testImplementation libs.android.core.testing
+    testImplementation libs.android.test.runner
+    testImplementation libs.kotlin.coroutines.test
 
     //Other dependencies
-    implementation MyDependencies.constraintLayout
+    implementation libs.androix.constraintlayout
 
-    implementation MyDependencies.koin
-    implementation MyDependencies.koinAndroid
+    implementation libs.koin.core
+    implementation libs.koin.android
 
-    implementation MyDependencies.coroutines
+    implementation libs.kotlinx.coroutines
 
-    implementation MyDependencies.lifeCycleViewModel
-    implementation MyDependencies.lifeCycleRuntime
-    implementation MyDependencies.lifeCycleExtensions
-    kapt MyDependencies.lifeCycleKapt
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.androidx.lifecycle.runtime
+    implementation libs.androidx.lifecycle.extensions
+    kapt libs.androidx.lifecycle.commom
 
-    implementation MyDependencies.recyclerView
-    implementation MyDependencies.cardView
-    implementation MyDependencies.swipeRefreshLayout
+    implementation libs.recycler.view
+    implementation libs.card.view
+    implementation libs.swipe.refresh.layout
 
-    implementation MyDependencies.glide
-    kapt MyDependencies.glideCompiler
+    implementation libs.glide
+    kapt libs.glide.compiler
 }
