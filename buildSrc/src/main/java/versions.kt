@@ -5,7 +5,7 @@ internal object KotlinCoreVersions {
 }
 
 internal object BuildVersions {
-    const val androidGradle = "7.4.0"
+    const val androidGradle = "8.1.1"
 }
 
 internal object DesignVersions {

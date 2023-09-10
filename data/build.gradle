@@ -7,6 +7,7 @@ android {
             includeAndroidResources = true
         }
     }
+    namespace 'com.caioluis.data'
 }
 
 dependencies {
@@ -22,14 +23,14 @@ dependencies {
     testImplementation TestDependencies.mockk
 
     //Other dependencies
-    kapt Dependencies.roomCompiler
-    implementation Dependencies.roomKtx
-    implementation Dependencies.roomRunTime
+    kapt MyDependencies.roomCompiler
+    implementation MyDependencies.roomKtx
+    implementation MyDependencies.roomRunTime
 
-    implementation Dependencies.retrofitGsonConverter
-    implementation Dependencies.retrofit
-    implementation Dependencies.gson
+    implementation MyDependencies.retrofitGsonConverter
+    implementation MyDependencies.retrofit
+    implementation MyDependencies.gson
 
-    implementation Dependencies.koin
-    implementation Dependencies.koinAndroid
+    implementation MyDependencies.koin
+    implementation MyDependencies.koinAndroid
 }

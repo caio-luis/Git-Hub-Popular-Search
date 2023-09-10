@@ -23,7 +23,7 @@ object TestDependencies {
     const val mockk = "io.mockk:mockk:${TestVersions.mockk}"
 }
 
-object Dependencies {
+object MyDependencies {
     const val constraintLayout =
         "androidx.constraintlayout:constraintlayout:${DesignVersions.constraintLayoutVersion}"
 
