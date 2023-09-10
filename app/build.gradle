@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 apply from: "$rootDir/buildSrc/android-config.gradle"
 
 android {
+    namespace 'com.caioluis.githubpopular'
+
     defaultConfig {
         applicationId "com.caioluis.myapplication"
     }
@@ -28,22 +30,22 @@ dependencies {
     testImplementation TestDependencies.kotlinxCoroutines
 
     //Other dependencies
-    implementation Dependencies.constraintLayout
+    implementation MyDependencies.constraintLayout
 
-    implementation Dependencies.koin
-    implementation Dependencies.koinAndroid
+    implementation MyDependencies.koin
+    implementation MyDependencies.koinAndroid
 
-    implementation Dependencies.coroutines
+    implementation MyDependencies.coroutines
 
-    implementation Dependencies.lifeCycleViewModel
-    implementation Dependencies.lifeCycleRuntime
-    implementation Dependencies.lifeCycleExtensions
-    kapt Dependencies.lifeCycleKapt
+    implementation MyDependencies.lifeCycleViewModel
+    implementation MyDependencies.lifeCycleRuntime
+    implementation MyDependencies.lifeCycleExtensions
+    kapt MyDependencies.lifeCycleKapt
 
-    implementation Dependencies.recyclerView
-    implementation Dependencies.cardView
-    implementation Dependencies.swipeRefreshLayout
+    implementation MyDependencies.recyclerView
+    implementation MyDependencies.cardView
+    implementation MyDependencies.swipeRefreshLayout
 
-    implementation Dependencies.glide
-    kapt Dependencies.glideCompiler
+    implementation MyDependencies.glide
+    kapt MyDependencies.glideCompiler
 }

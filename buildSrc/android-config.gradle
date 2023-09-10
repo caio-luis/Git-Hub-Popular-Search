@@ -8,8 +8,6 @@ android {
     defaultConfig {
         minSdk 23
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -29,12 +27,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11
+        jvmTarget = JavaVersion.VERSION_17
     }
 
     packagingOptions {
@@ -42,9 +40,4 @@ android {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
-}
-
-dependencies {
-    implementation CoreDependencies.kotlinStdLib
-    implementation CoreDependencies.ktxCore
 }

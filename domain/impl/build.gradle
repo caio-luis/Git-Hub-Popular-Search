@@ -1,14 +1,8 @@
-apply plugin: 'java-library'
-apply plugin: 'org.jetbrains.kotlin.jvm'
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
-}
+apply from: "$rootDir/buildSrc/java-config.gradle"
 
 dependencies {
     implementation project(path: ':domain:bridge')
     implementation CoreDependencies.kotlinStdLib
-    implementation Dependencies.coroutines
-    implementation Dependencies.koin
+    implementation MyDependencies.coroutines
+    implementation MyDependencies.koin
 }
