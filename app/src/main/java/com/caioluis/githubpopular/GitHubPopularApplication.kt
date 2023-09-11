@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.base
+package com.caioluis.githubpopular
 
 import android.app.Application
 import com.caioluis.data.dataModule

@@ -1,36 +1,19 @@
 package com.caioluis.githubpopular.impl.usecases
 
-import com.caioluis.githubpopular.domain.bridge.base.InvokeMode
-import com.caioluis.githubpopular.domain.bridge.base.Response
-import com.caioluis.githubpopular.domain.bridge.base.UseCase
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
 import com.caioluis.githubpopular.impl.usecases.ActualPage.pageNumber
+import kotlinx.coroutines.flow.single
 
 class GetRepositoriesUseCase(
     private val gitHubReposRepository: GitHubReposRepository,
-) : UseCase<String, List<DomainGitHubRepository>>(InvokeMode.LAUNCH) {
-
-    private suspend fun loadRepositories(
-        page: Int,
-        language: String,
-    ): List<DomainGitHubRepository>? {
-        return gitHubReposRepository.getGitHubRepositories(page = page, language)
-    }
-
-    override suspend fun run(parameters: String?) {
-        sendChannel.run {
-            pageNumber = 1
-            send(Response.Loading)
-            loadRepositories(page = pageNumber, language = parameters.orEmpty())
-                ?.let {
-                    pageNumber++
-                    send(Response.Success(it))
-                }
+) {
+    suspend fun loadRepositories(language: String): Result<List<DomainGitHubRepository>?> {
+        return runCatching {
+            ActualPage.reset()
+            gitHubReposRepository
+                .getGitHubRepositories(page = pageNumber, language)
+                .single()
         }
-    }
-
-    override fun onError(throwable: Throwable) {
-        runWithLock { sendChannel.send(Response.Failure(throwable)) }
     }
 }

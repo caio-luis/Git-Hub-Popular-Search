@@ -3,9 +3,6 @@ package com.caioluis.githubpopular.viewmodel
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.caioluis.githubpopular.MainDispatcherRule
 import com.caioluis.githubpopular.domain.bridge.base.Response
-import com.caioluis.githubpopular.domain.bridge.base.Response.Failure
-import com.caioluis.githubpopular.domain.bridge.base.Response.Loading
-import com.caioluis.githubpopular.domain.bridge.base.Response.Success
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 import com.caioluis.githubpopular.impl.usecases.GetMoreReposUseCase
 import com.caioluis.githubpopular.mapper.Fixtures.domainGitHubRepository
@@ -14,11 +11,12 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -27,7 +25,6 @@ import org.junit.Test
 class MoreReposViewModelTest {
     private lateinit var viewModel: MoreReposViewModel
     private lateinit var getMoreRepositoriesUseCase: GetMoreReposUseCase
-    private lateinit var channel: Channel<Response<List<DomainGitHubRepository>>>
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
@@ -38,26 +35,18 @@ class MoreReposViewModelTest {
     @Before
     fun setUp() {
         getMoreRepositoriesUseCase = mockk(relaxed = true)
-        channel = Channel(capacity = 1)
-        coEvery { getMoreRepositoriesUseCase.receiveChannel } returns channel
-
         viewModel = MoreReposViewModel(getMoreRepositoriesUseCase)
-    }
-
-    @After
-    fun tearDown() {
-        channel.close()
     }
 
     @Test
     fun `assert that call loadMore() returns response success`() {
-        runBlocking {
+        runTest {
             // given
             val uiRepos = listOf(uiRepository)
             val domainRepos = listOf(domainGitHubRepository)
 
-            coEvery { getMoreRepositoriesUseCase.invoke(any()) } coAnswers {
-                channel.send(Success(domainRepos))
+            coEvery { getMoreRepositoriesUseCase.loadRepositories(any()) } coAnswers {
+                Result.success(domainRepos)
             }
 
             // when
@@ -74,11 +63,11 @@ class MoreReposViewModelTest {
     }
 
     @Test
-    fun `should handle error when loading list of repositories`() = runBlocking {
+    fun `should handle error when loading list of repositories`() = runTest {
         // given
         val expectedError = Exception("error")
-        coEvery { getMoreRepositoriesUseCase() } coAnswers {
-            channel.send(Failure(expectedError))
+        coEvery { getMoreRepositoriesUseCase.loadRepositories(any()) } coAnswers {
+            Result.failure(expectedError)
         }
 
         // when
@@ -94,13 +83,12 @@ class MoreReposViewModelTest {
     }
 
     @Test
-    fun `should handle onLoading when loading`() = runBlocking {
+    fun `should handle onLoading when loading`() = runTest {
         // given
-        coEvery { getMoreRepositoriesUseCase() } coAnswers {
-            channel.send(Loading)
+        var loadCalled: Boolean
+        coEvery { getMoreRepositoriesUseCase.loadRepositories(any()) } coAnswers {
+            Result.success(listOf(domainGitHubRepository))
         }
-
-        var loadCalled = false
 
         // when
         viewModel.loadMore("")
@@ -108,12 +96,12 @@ class MoreReposViewModelTest {
         // then
         viewModel.observeMoreReposLiveData.observeForever { response ->
             response.handleResponse(
-                onSuccess = { assertNull(it) },
-                onFailure = { assertNull(it) },
-                onLoading = { loadCalled = true }
+                onLoading = {
+                    loadCalled = true
+                    assertTrue(loadCalled)
+                }
             )
 
-            Assert.assertTrue(loadCalled)
         }
     }
 }
