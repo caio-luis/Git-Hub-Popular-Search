@@ -9,6 +9,9 @@ import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 import com.caioluis.githubpopular.domain.bridge.entity.DomainRepositoryOwner
 
 object Fixtures {
+    const val page = 1
+    const val language = "kotlin"
+
     val remoteGitHubRepositories = RemoteGitHubRepositories(
         listOf(
             RemoteGitHubRepository(

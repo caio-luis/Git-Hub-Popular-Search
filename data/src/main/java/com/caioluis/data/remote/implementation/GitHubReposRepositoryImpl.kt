@@ -4,6 +4,9 @@ import com.caioluis.data.local.LocalSource
 import com.caioluis.data.mappers.toDomain
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
 
 class GitHubReposRepositoryImpl(
     private val remoteSource: RemoteSource,
@@ -13,21 +16,21 @@ class GitHubReposRepositoryImpl(
     override suspend fun getGitHubRepositories(
         page: Int,
         language: String,
-    ): List<DomainGitHubRepository>? {
-        var exception: Throwable? = null
-
-        val remoteResult = try {
+    ): Flow<List<DomainGitHubRepository>?> = flow {
+        emit(
             remoteSource.fetchFromRemote(page, language)
-        } catch (e: Exception) {
-            exception = e
-            null
-        }
-
-        return remoteResult
-            ?.mapNotNull { it?.toDomain(page) }
-            ?.takeIf { it.isNotEmpty() }
-            ?.let { localSource.saveAndGetFromCache(it, page) }
-            ?: run { localSource.getFromCache(page) }?.takeIf { it.isNotEmpty() }
-            ?: exception?.let { throw it }
+                ?.mapNotNull { it?.toDomain(page) }
+                ?.takeIf { it.isNotEmpty() }
+                ?.let { localSource.saveAndGetFromCache(it, page) }
+                ?: run { localSource.getFromCache(page) }
+                    ?.takeIf { it.isNotEmpty() }
+                ?: throw Exception("Não tem item para carregar!")
+        )
+    }.catch { previousError ->
+        emit(
+            localSource.getFromCache(page)
+                ?.takeIf { it.isNotEmpty() }
+                ?: throw previousError
+        )
     }
 }
