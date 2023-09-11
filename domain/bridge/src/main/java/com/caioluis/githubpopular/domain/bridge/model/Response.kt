@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.domain.bridge.base
+package com.caioluis.githubpopular.domain.bridge.model
 
 sealed class Response<out T> {
     class Failure(val exception: Throwable? = null) : Response<Nothing>()
