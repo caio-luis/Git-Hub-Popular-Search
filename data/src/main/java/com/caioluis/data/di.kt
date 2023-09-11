@@ -1,6 +1,5 @@
 package com.caioluis.data
 
-import com.caioluis.data.base.BaseConstants
 import com.caioluis.data.base.ServiceBuilder
 import com.caioluis.data.local.GitHubReposDataBase
 import com.caioluis.data.local.LocalSource
@@ -14,7 +13,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 
 val dataModule = module {
-    single { ServiceBuilder<GitHubRepositoriesService>(BaseConstants.baseUrl) }
+    single { ServiceBuilder<GitHubRepositoriesService>(BuildConfig.API_BASE_URL) }
     single { GitHubReposDataBase.getInstance(context = androidContext()) }
     factory { GitHubReposDataBase.getInstance(androidContext()).gitHubRepositoriesDao() }
     factory<RemoteSource> { RemoteSourceImpl(get()) }
