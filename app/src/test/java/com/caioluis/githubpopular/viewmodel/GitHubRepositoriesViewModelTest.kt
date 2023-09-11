@@ -2,7 +2,7 @@ package com.caioluis.githubpopular.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.caioluis.githubpopular.MainDispatcherRule
-import com.caioluis.githubpopular.impl.usecases.GetRepositoriesUseCase
+import com.caioluis.githubpopular.domain.bridge.usecase.GetRepositoriesUseCase
 import com.caioluis.githubpopular.mapper.Fixtures.domainGitHubRepository
 import com.caioluis.githubpopular.mapper.Fixtures.uiRepository
 import io.mockk.coEvery

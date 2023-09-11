@@ -3,9 +3,9 @@ package com.caioluis.githubpopular.viewmodel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.caioluis.githubpopular.domain.bridge.base.Response
+import com.caioluis.githubpopular.domain.bridge.model.Response
+import com.caioluis.githubpopular.domain.bridge.usecase.GetMoreReposUseCase
 import com.caioluis.githubpopular.impl.usecases.ActualPage
-import com.caioluis.githubpopular.impl.usecases.GetMoreReposUseCase
 import com.caioluis.githubpopular.mapper.toUi
 import com.caioluis.githubpopular.model.UiGitHubRepository
 import kotlinx.coroutines.launch

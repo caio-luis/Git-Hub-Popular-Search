@@ -2,7 +2,7 @@ package com.caioluis.githubpopular.adapter
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.caioluis.githubpopular.domain.bridge.base.throttleFirst
+import com.caioluis.githubpopular.extensions.throttleFirst
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow

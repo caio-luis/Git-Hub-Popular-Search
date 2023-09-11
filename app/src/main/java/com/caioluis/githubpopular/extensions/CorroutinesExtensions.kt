@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.domain.bridge.base
+package com.caioluis.githubpopular.extensions
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

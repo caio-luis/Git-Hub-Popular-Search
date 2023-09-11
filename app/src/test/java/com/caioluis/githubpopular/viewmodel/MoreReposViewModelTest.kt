@@ -2,18 +2,13 @@ package com.caioluis.githubpopular.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.caioluis.githubpopular.MainDispatcherRule
-import com.caioluis.githubpopular.domain.bridge.base.Response
-import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
-import com.caioluis.githubpopular.impl.usecases.GetMoreReposUseCase
+import com.caioluis.githubpopular.domain.bridge.usecase.GetMoreReposUseCase
 import com.caioluis.githubpopular.mapper.Fixtures.domainGitHubRepository
 import com.caioluis.githubpopular.mapper.Fixtures.uiRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.test.runTest
-import org.junit.After
-import org.junit.Assert
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
