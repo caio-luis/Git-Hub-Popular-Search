@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.caioluis.githubpopular.Constants.VIEW_MODELS_ERROR_TAG
 import com.caioluis.githubpopular.domain.bridge.model.Response
 import com.caioluis.githubpopular.domain.bridge.usecase.GetMoreReposUseCase
-import com.caioluis.githubpopular.impl.usecases.ActualPage
+import com.caioluis.githubpopular.domain.impl.usecases.ActualPage
 import com.caioluis.githubpopular.mapper.toUi
 import com.caioluis.githubpopular.model.UiGitHubRepository
 import kotlinx.coroutines.launch
