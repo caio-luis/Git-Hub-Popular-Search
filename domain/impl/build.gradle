@@ -5,4 +5,8 @@ dependencies {
     implementation libs.kotlin.stdlib
     implementation libs.kotlinx.coroutines
     implementation libs.koin.core
+
+    testImplementation libs.mockk
+    testImplementation libs.kotlin.coroutines.test
+    testImplementation libs.kotlin.test
 }

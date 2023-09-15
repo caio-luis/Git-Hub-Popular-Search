@@ -2,6 +2,7 @@ package com.caioluis.data.remote.implementation
 
 import com.caioluis.data.local.LocalSource
 import com.caioluis.data.mappers.toDomain
+import com.caioluis.data.remote.NoMoreItemsException
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
 import kotlinx.coroutines.flow.Flow
@@ -19,16 +20,18 @@ class GitHubReposRepositoryImpl(
     ): Flow<List<DomainGitHubRepository>?> = flow {
         emit(
             remoteSource.fetchFromRemote(page, language)
-                ?.mapNotNull { it?.toDomain(page) }
+                ?.mapNotNull { it?.toDomain(page, language) }
                 ?.takeIf { it.isNotEmpty() }
-                ?.let { localSource.saveAndGetFromCache(it, page) }
-                ?: run { localSource.getFromCache(page) }
-                    ?.takeIf { it.isNotEmpty() }
-                ?: throw Exception("Não tem item para carregar!")
+                ?.let {
+                    localSource.saveToLocalCache(it, page, language)
+                    localSource.getFromCache(page, language)
+                }
+                ?.takeIf { it.isNotEmpty() }
+                ?: throw NoMoreItemsException()
         )
     }.catch { previousError ->
         emit(
-            localSource.getFromCache(page)
+            localSource.getFromCache(page, language)
                 ?.takeIf { it.isNotEmpty() }
                 ?: throw previousError
         )

@@ -18,7 +18,7 @@ import com.caioluis.githubpopular.adapter.EndlessScrollListener
 import com.caioluis.githubpopular.adapter.GitHubRepositoriesAdapter
 import com.caioluis.githubpopular.extensions.showLongToast
 import com.caioluis.githubpopular.model.UiGitHubRepository
-import com.caioluis.githubpopular.viewmodel.GitHubRepositoriesViewModel
+import com.caioluis.githubpopular.viewmodel.GetRepositoriesViewModel
 import com.caioluis.githubpopular.viewmodel.MoreReposViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private val progressBar: ProgressBar get() = findViewById(R.id.loading_more_progress_bar)
     private val repositoriesAdapter: GitHubRepositoriesAdapter by lazy { GitHubRepositoriesAdapter() }
 
-    private val gitHubRepositoriesViewModel: GitHubRepositoriesViewModel by viewModel()
+    private val getRepositoriesViewModel: GetRepositoriesViewModel by viewModel()
     private val moreReposViewModel: MoreReposViewModel by viewModel()
 
     private val endlessScrollListener: EndlessScrollListener by lazy { getEndlessListener() }
@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 position: Int,
                 id: Long
             ) {
-                gitHubRepositoriesViewModel.loadList(getSelectedLanguage())
+                getRepositoriesViewModel.loadList(getSelectedLanguage())
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) = Unit
@@ -89,11 +89,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun loadList() {
-        gitHubRepositoriesViewModel.loadList(getSelectedLanguage())
+        getRepositoriesViewModel.loadList(getSelectedLanguage())
     }
 
     private fun observeGitHubRepositories() {
-        gitHubRepositoriesViewModel
+        getRepositoriesViewModel
             .observeGitHubReposLiveData.observe(this) { repositoriesResponse ->
                 repositoriesResponse.handleResponse(
                     onLoading = ::setSwipeLoadingState,

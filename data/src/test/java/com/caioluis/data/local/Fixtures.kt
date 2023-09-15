@@ -20,6 +20,7 @@ object Fixtures {
             forksCount = 3,
             htmlUrl = "test",
             page = 1,
+            language = "kotlin"
         ),
         LocalGitHubRepository(
             id = 2,
@@ -36,6 +37,7 @@ object Fixtures {
             forksCount = 2,
             htmlUrl = "test",
             page = 1,
+            language = "kotlin"
         ),
         LocalGitHubRepository(
             id = 3,
@@ -47,11 +49,29 @@ object Fixtures {
                 avatarUrl = "avatarUrl1"
             ),
             description = "Description3",
-            pullsUrl = "http://api.github.com/repos/user1/repo2/pulls",
+            pullsUrl = "http://api.github.com/repos/user1/repo3/pulls",
             stargazersCount = 10,
             forksCount = 2,
             htmlUrl = "test",
             page = 2,
+            language = "kotlin"
+        ),
+        LocalGitHubRepository(
+            id = 4,
+            name = "Repo4",
+            fullName = "user1/Repo4",
+            owner = LocalRepositoryOwner(
+                id = 1,
+                login = "user1",
+                avatarUrl = "avatarUrl1"
+            ),
+            description = "Description4",
+            pullsUrl = "http://api.github.com/repos/user1/repo4/pulls",
+            stargazersCount = 10,
+            forksCount = 2,
+            htmlUrl = "test",
+            page = 1,
+            language = "c++"
         ),
     )
 }

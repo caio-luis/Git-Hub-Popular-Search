@@ -8,9 +8,9 @@ import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 import com.caioluis.githubpopular.domain.bridge.entity.DomainRepositoryOwner
 
 //Remote
-fun RemoteGitHubRepository.toDomain(page: Int) =
+fun RemoteGitHubRepository.toDomain(page: Int, language: String) =
     DomainGitHubRepository(
-        id = id ?: 0,
+        id = id ?: -1,
         name = name ?: "",
         fullName = fullName ?: "",
         owner = owner?.toDomain()
@@ -21,11 +21,12 @@ fun RemoteGitHubRepository.toDomain(page: Int) =
         forksCount = forksCount ?: 0,
         htmlUrl = htmlUrl ?: "",
         page = page,
+        language = language
     )
 
 fun RemoteRepositoryOwner.toDomain() =
     DomainRepositoryOwner(
-        id = id ?: 0,
+        id = id ?: -1,
         login = login ?: "",
         avatarUrl = avatarUrl ?: "",
     )
@@ -44,6 +45,7 @@ fun LocalGitHubRepository.toDomain() =
         forksCount = forksCount,
         htmlUrl = htmlUrl,
         page = page,
+        language = language,
     )
 
 fun LocalRepositoryOwner.toDomain() =
@@ -67,6 +69,7 @@ fun DomainGitHubRepository.toLocal() =
         forksCount = forksCount,
         htmlUrl = htmlUrl,
         page = page,
+        language = language,
     )
 
 fun DomainRepositoryOwner.toLocal() =

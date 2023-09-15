@@ -8,6 +8,8 @@ import androidx.room.TypeConverters
 import com.caioluis.data.local.model.LocalGitHubRepository
 import com.caioluis.data.local.type_converter.RepositoryOwnerConverter
 
+const val DATABASE_FILE_NAME = "GitHubPopular.db"
+
 @Database(
     entities = [LocalGitHubRepository::class],
     version = 1,
@@ -32,9 +34,11 @@ abstract class GitHubReposDataBase : RoomDatabase() {
         private fun buildDatabase(context: Context) =
             Room.databaseBuilder(
                 context.applicationContext,
-                GitHubReposDataBase::class.java, "GitHubPopular.db"
+                GitHubReposDataBase::class.java,
+                DATABASE_FILE_NAME
             )
                 .fallbackToDestructiveMigration()
+                .fallbackToDestructiveMigrationOnDowngrade()
                 .build()
     }
 }

@@ -40,7 +40,11 @@ class GitHubReposRepositoryImplTest {
         } returns remoteGitHubRepositories.repositories
 
         coEvery {
-            localSource.saveAndGetFromCache(any(), any())
+            localSource.saveToLocalCache(any(), any(), any())
+        } returns Unit
+
+        coEvery {
+            localSource.getFromCache(any(), any())
         } returns domainGitHubRepositories
 
         repositoryImpl
@@ -56,7 +60,7 @@ class GitHubReposRepositoryImplTest {
     fun `when remote source fails and local source has data, should get from local source`(): Unit =
         runTest {
             coEvery { remoteSource.fetchFromRemote(any(), any()) } throws Exception("Remote failed")
-            coEvery { localSource.getFromCache(any()) } returns domainGitHubRepositories
+            coEvery { localSource.getFromCache(any(), any()) } returns domainGitHubRepositories
 
             repositoryImpl
                 .getGitHubRepositories(page, language)
@@ -65,14 +69,14 @@ class GitHubReposRepositoryImplTest {
                     assertEquals(domainGitHubRepositories, this)
                 }
 
-            coVerify(exactly = 0) { localSource.saveAndGetFromCache(any(), page) }
+            coVerify(exactly = 0) { localSource.saveToLocalCache(any(), page, language) }
         }
 
     @Test
     fun `when remote source fails and local source is empty, should throw exception`(): Unit =
         runTest {
             coEvery { remoteSource.fetchFromRemote(any(), any()) } throws Exception("Remote failed")
-            coEvery { localSource.getFromCache(any()) } returns null
+            coEvery { localSource.getFromCache(any(), any()) } returns null
 
             val result = repositoryImpl.getGitHubRepositories(page, language)
             assertFails { result.single() }

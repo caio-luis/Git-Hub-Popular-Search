@@ -7,17 +7,17 @@ import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 class LocalSourceImpl(
     private val gitHubRepositoriesDao: GitHubRepositoriesDao
 ) : LocalSource {
-    override suspend fun saveAndGetFromCache(
+    override suspend fun saveToLocalCache(
         repositories: List<DomainGitHubRepository>,
         page: Int,
-    ): List<DomainGitHubRepository>? {
+        language: String
+    ) {
         if (page <= 1)
-            gitHubRepositoriesDao.deleteAllGitHubRepositories()
+            gitHubRepositoriesDao.deleteReposByLanguage(language)
         gitHubRepositoriesDao.saveRepositories(repositories.map { it.toLocal() })
-        return getFromCache(page)
     }
 
-    override suspend fun getFromCache(page: Int): List<DomainGitHubRepository>? {
-        return gitHubRepositoriesDao.getAllRepositories(page)?.map { it.toDomain() }
+    override suspend fun getFromCache(page: Int, language: String): List<DomainGitHubRepository>? {
+        return gitHubRepositoriesDao.getAllRepositories(page, language)?.map { it.toDomain() }
     }
 }

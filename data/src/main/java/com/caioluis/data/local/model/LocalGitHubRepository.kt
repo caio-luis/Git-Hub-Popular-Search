@@ -17,4 +17,5 @@ data class LocalGitHubRepository(
     val forksCount: Int,
     val htmlUrl: String,
     val page: Int,
+    val language: String
 )

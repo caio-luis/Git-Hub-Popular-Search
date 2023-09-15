@@ -3,10 +3,11 @@ package com.caioluis.data.local
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 
 interface LocalSource {
-    suspend fun saveAndGetFromCache(
+    suspend fun saveToLocalCache(
         repositories: List<DomainGitHubRepository>,
         page: Int,
-    ): List<DomainGitHubRepository>?
+        language: String
+    )
 
-    suspend fun getFromCache(page: Int): List<DomainGitHubRepository>?
+    suspend fun getFromCache(page: Int, language: String): List<DomainGitHubRepository>?
 }
