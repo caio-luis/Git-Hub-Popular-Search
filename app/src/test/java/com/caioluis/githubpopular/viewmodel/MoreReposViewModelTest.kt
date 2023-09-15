@@ -1,12 +1,15 @@
 package com.caioluis.githubpopular.viewmodel
 
+import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.caioluis.githubpopular.MainDispatcherRule
 import com.caioluis.githubpopular.domain.bridge.usecase.GetMoreReposUseCase
 import com.caioluis.githubpopular.mapper.Fixtures.domainGitHubRepository
 import com.caioluis.githubpopular.mapper.Fixtures.uiRepository
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -29,6 +32,9 @@ class MoreReposViewModelTest {
 
     @Before
     fun setUp() {
+        mockkStatic(Log::class)
+        every { Log.e(any(), any()) } returns 0
+
         getMoreRepositoriesUseCase = mockk(relaxed = true)
         viewModel = MoreReposViewModel(getMoreRepositoriesUseCase)
     }

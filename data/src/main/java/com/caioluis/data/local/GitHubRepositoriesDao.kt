@@ -11,9 +11,10 @@ interface GitHubRepositoriesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveRepositories(gitHubRepositories: List<LocalGitHubRepository>)
 
-    @Query("SELECT * FROM GitHubRepositories where page=:page order by stargazersCount desc")
-    suspend fun getAllRepositories(page: Int): List<LocalGitHubRepository>?
+    @Query("SELECT * FROM GitHubRepositories WHERE page=:page AND language=:language " +
+            "COLLATE NOCASE ORDER BY stargazersCount DESC")
+    suspend fun getAllRepositories(page: Int, language: String): List<LocalGitHubRepository>?
 
-    @Query("DELETE FROM GitHubRepositories")
-    suspend fun deleteAllGitHubRepositories()
+    @Query("DELETE FROM GitHubRepositories WHERE language=:language COLLATE NOCASE")
+    suspend fun deleteReposByLanguage(language: String)
 }

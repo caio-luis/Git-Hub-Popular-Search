@@ -5,6 +5,8 @@ object Constants {
         "Kotlin",
         "Swift",
         "Javascript",
+        "Typescript",
+        "Dart",
         "Python",
         "Ruby",
         "Rust",
@@ -12,7 +14,19 @@ object Constants {
         "C",
         "C#",
         "C++",
+        "Cobol",
         "Elixir",
+        "FORTRAN",
+        "Haskell",
+        "Lua",
+        "SQL",
+        "R",
+        "Objective-C",
+        "PHP",
+        "Assembly",
+        "Bash",
         "Java",
     ).toList()
+
+    const val VIEW_MODELS_ERROR_TAG = "ViewModelsTag"
 }

@@ -48,6 +48,7 @@ object Fixtures {
             forksCount = 50,
             htmlUrl = "test",
             page = 1,
+            language = "kotlin"
         )
     )
 
@@ -67,6 +68,7 @@ object Fixtures {
             forksCount = 50,
             htmlUrl = "test",
             page = 1,
+            language = "kotlin"
         )
     )
 }

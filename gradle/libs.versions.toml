@@ -63,7 +63,6 @@ android-test-core = { group = "androidx.test", name = "core", version.ref = "and
 android-core-testing = { group = "androidx.arch.core", name = "core-testing", version.ref = "core-testing" }
 android-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-junit" }
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
-assertj = { group = "org.assertj", name = "assertj-core", version.ref = "assertj" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 
 [plugins]

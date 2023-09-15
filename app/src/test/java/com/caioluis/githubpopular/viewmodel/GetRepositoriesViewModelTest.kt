@@ -1,12 +1,15 @@
 package com.caioluis.githubpopular.viewmodel
 
+import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.caioluis.githubpopular.MainDispatcherRule
 import com.caioluis.githubpopular.domain.bridge.usecase.GetRepositoriesUseCase
 import com.caioluis.githubpopular.mapper.Fixtures.domainGitHubRepository
 import com.caioluis.githubpopular.mapper.Fixtures.uiRepository
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -17,7 +20,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class GitHubRepositoriesViewModelTest {
+class GetRepositoriesViewModelTest {
 
     @get:Rule
     var instantExecutorRule = InstantTaskExecutorRule()
@@ -26,12 +29,15 @@ class GitHubRepositoriesViewModelTest {
     val coroutineRule = MainDispatcherRule()
 
     private lateinit var getRepositoriesUseCase: GetRepositoriesUseCase
-    private lateinit var viewModel: GitHubRepositoriesViewModel
+    private lateinit var viewModel: GetRepositoriesViewModel
 
     @Before
     fun setUp() {
+        mockkStatic(Log::class)
+        every { Log.e(any(), any()) } returns 0
+
         getRepositoriesUseCase = mockk(relaxed = true)
-        viewModel = GitHubRepositoriesViewModel(getRepositoriesUseCase)
+        viewModel = GetRepositoriesViewModel(getRepositoriesUseCase)
     }
 
     @Test

@@ -11,4 +11,5 @@ data class DomainGitHubRepository(
     val forksCount: Int = 0,
     val htmlUrl: String = "",
     val page: Int = 0,
+    val language: String = "",
 )
