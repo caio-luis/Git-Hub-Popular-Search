@@ -1,32 +1,34 @@
 package com.caioluis.githubpopular.data.remote.model
 
-import com.google.gson.annotations.SerializedName
+import com.squareup.moshi.Json
+import com.squareup.moshi.JsonClass
 
+@JsonClass(generateAdapter = true)
 data class RemoteGitHubRepository(
-    @SerializedName("id")
-    val id: Int? = -1,
+    @Json(name = "id")
+    val id: Int? = null,
 
-    @SerializedName("name")
+    @Json(name = "name")
     val name: String? = "",
 
-    @SerializedName("full_name")
+    @Json(name = "full_name")
     val fullName: String? = "",
 
-    @SerializedName("owner")
-    val owner: RemoteRepositoryOwner?,
+    @Json(name = "owner")
+    val owner: RemoteRepositoryOwner? = null,
 
-    @SerializedName("description")
+    @Json(name = "description")
     val description: String? = "",
 
-    @SerializedName("pulls_url")
+    @Json(name = "pulls_url")
     val pullsUrl: String? = "",
 
-    @SerializedName("stargazers_count")
-    val stargazersCount: Int? = 0,
+    @Json(name = "stargazers_count")
+    val stargazersCount: Int? = null,
 
-    @SerializedName("forks_count")
-    val forksCount: Int? = 0,
+    @Json(name = "forks_count")
+    val forksCount: Int? = null,
 
-    @SerializedName("html_url")
+    @Json(name = "html_url")
     val htmlUrl: String? = ""
 )
