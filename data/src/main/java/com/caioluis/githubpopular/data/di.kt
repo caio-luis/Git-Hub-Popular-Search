@@ -1,6 +1,5 @@
 package com.caioluis.githubpopular.data
 
-import com.caioluis.data.BuildConfig
 import com.caioluis.githubpopular.data.base.ServiceBuilder
 import com.caioluis.githubpopular.data.local.GitHubReposDataBase
 import com.caioluis.githubpopular.data.local.LocalSource

@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 apply from: "$rootDir/buildSrc/android-config.gradle"
 
 android {
-    namespace 'com.caioluis.data'
+    namespace 'com.caioluis.githubpopular.data'
 
     testOptions {
         unitTests {
@@ -23,14 +23,14 @@ dependencies {
     testImplementation libs.mockk
 
     //Other dependencies
-    ksp libs.room.compiler
     implementation libs.room.ktx
     implementation libs.room.runtime
-
-    implementation libs.retrofit.converter.gson
+    implementation libs.retrofit.converter.moshi
     implementation libs.retrofit
-    implementation libs.gson
-
-    implementation libs.koin.core
+    implementation libs.moshi
     implementation libs.koin.android
+    implementation libs.koin.core
+
+    ksp libs.room.compiler
+    ksp libs.moshi.codegen
 }

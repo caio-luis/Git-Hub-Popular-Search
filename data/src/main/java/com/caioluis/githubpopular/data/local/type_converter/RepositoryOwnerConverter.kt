@@ -2,17 +2,21 @@ package com.caioluis.githubpopular.data.local.type_converter
 
 import androidx.room.TypeConverter
 import com.caioluis.githubpopular.data.local.model.LocalRepositoryOwner
-import com.google.gson.Gson
+import com.caioluis.githubpopular.data.local.model.LocalRepositoryOwnerJsonAdapter
+import com.squareup.moshi.Moshi
 
 class RepositoryOwnerConverter {
 
+    private val moshi: Moshi = Moshi.Builder().build()
+    private val jsonAdapter = LocalRepositoryOwnerJsonAdapter(moshi)
+
     @TypeConverter
     fun toJson(repoOwner: LocalRepositoryOwner): String {
-        return Gson().toJson(repoOwner)
+        return jsonAdapter.toJson(repoOwner)
     }
 
     @TypeConverter
-    fun fromJson(repoOwnerJson: String): LocalRepositoryOwner {
-        return Gson().fromJson(repoOwnerJson, LocalRepositoryOwner::class.java)
+    fun fromJson(repoOwnerJson: String): LocalRepositoryOwner? {
+        return jsonAdapter.fromJson(repoOwnerJson)
     }
 }
