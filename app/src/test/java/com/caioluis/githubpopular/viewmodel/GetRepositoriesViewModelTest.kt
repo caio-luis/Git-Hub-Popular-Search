@@ -11,6 +11,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -48,7 +49,7 @@ class GetRepositoriesViewModelTest {
             val domainRepos = listOf(domainGitHubRepository)
 
             coEvery { getRepositoriesUseCase.loadRepositories(any()) } coAnswers {
-                Result.success(domainRepos)
+                flowOf(domainRepos)
             }
 
             // when
@@ -68,9 +69,7 @@ class GetRepositoriesViewModelTest {
     fun `should handle error when loading list of repositories`() = runTest {
         // given
         val expectedError = Exception("error")
-        coEvery { getRepositoriesUseCase.loadRepositories(any()) } coAnswers {
-            Result.failure(expectedError)
-        }
+        coEvery { getRepositoriesUseCase.loadRepositories(any()) } throws expectedError
 
         // when
         viewModel.loadList("")
@@ -87,9 +86,9 @@ class GetRepositoriesViewModelTest {
     @Test
     fun `should handle onLoading when loading`() = runTest {
         // given
-        var loadCalled: Boolean
+        var loadCalled = false
         coEvery { getRepositoriesUseCase.loadRepositories(any()) } coAnswers {
-            Result.success(listOf(domainGitHubRepository))
+            flowOf(listOf(domainGitHubRepository))
         }
 
         // when
@@ -100,9 +99,10 @@ class GetRepositoriesViewModelTest {
             response.handleResponse(
                 onLoading = {
                     loadCalled = true
-                    assertTrue(loadCalled)
                 }
             )
+
+            assertTrue(loadCalled)
         }
     }
 }

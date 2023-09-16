@@ -14,10 +14,9 @@ fun Context.showLongToast(message: String) {
 }
 
 fun Context.openBrowserIntent(url: String) {
-    val intent = Intent(Intent.ACTION_VIEW)
-        .setData(Uri.parse(url))
+    val intent = Intent(Intent.ACTION_VIEW).setData(Uri.parse(url))
 
-    kotlin.runCatching {
+    runCatching {
         this.startActivity(intent)
     }.onFailure {
         showLongToast(it.message.toString())

@@ -5,6 +5,7 @@ import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
 import com.caioluis.githubpopular.domain.impl.usecases.GetMoreReposUseCaseImpl
 import io.mockk.coEvery
 import io.mockk.mockk
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -24,24 +25,20 @@ class GetMoreReposUseCaseTest {
         )
 
         // Act
-        val result = getMoreReposUseCase.loadRepositories("Kotlin")
+        val result = getMoreReposUseCase.loadRepositories("Kotlin").first()
 
         // Assert
-        assertEquals(Result.success(expected), result)
+        assertEquals(expected, result)
     }
 
-    @Test
+    @Test(expected = Exception::class)
     fun `loadRepositories returns failure`() = runTest {
         // Arrange
         val exception = Exception()
-        val expected = Result.failure<List<DomainGitHubRepository>>(exception)
 
         coEvery { gitHubReposRepository.getGitHubRepositories(any(), any()) } throws exception
 
         // Act
-        val result = getMoreReposUseCase.loadRepositories("Kotlin")
-
-        // Assert
-        assertEquals(expected, result)
+        getMoreReposUseCase.loadRepositories("Kotlin")
     }
 }
