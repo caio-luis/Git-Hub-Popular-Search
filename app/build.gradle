@@ -10,11 +10,11 @@ android {
 }
 
 dependencies {
-    implementation project(":data")
+    implementation project(":data:impl")
+    implementation project(":data:bridge")
     implementation project(":domain:impl")
     implementation project(":domain:bridge")
 
-    //Core
     implementation libs.kotlin.stdlib
     implementation libs.androix.ktx
     implementation libs.app.compat
@@ -28,8 +28,8 @@ dependencies {
     testImplementation libs.android.test.runner
     testImplementation libs.kotlin.coroutines.test
 
-    //Other dependencies
     implementation libs.androix.constraintlayout
+    implementation libs.material
 
     implementation libs.koin.core
     implementation libs.koin.android
@@ -45,6 +45,6 @@ dependencies {
     implementation libs.card.view
     implementation libs.swipe.refresh.layout
 
-    implementation libs.glide
-    ksp libs.glide.compiler
+    implementation libs.bumptech.glide
+    ksp libs.bumptech.glide.compiler
 }

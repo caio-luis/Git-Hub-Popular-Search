@@ -1,6 +1,6 @@
 [versions]
 app-compat = "1.6.1"
-android-gradle = "8.1.1"
+agp = "8.1.1"
 androidx-junit = "1.1.5"
 ktx = "1.12.0"
 ksp = "1.9.10-1.0.13"
@@ -12,7 +12,7 @@ android-test-rules = "1.5.0"
 android-test-runner = "1.5.2"
 core-testing = "2.2.0"
 kotlinx-coroutines = "1.7.3"
-kotlin-test = "1.8.0"
+kotlin-test = "1.8.21"
 robolectric = "4.10.3"
 mockk = "1.13.7"
 room = "2.5.2"
@@ -26,9 +26,12 @@ card-view = "1.0.0"
 swipe-refresh-layout = "1.1.0"
 glide = "4.16.0"
 moshi = "1.15.0"
+org-jetbrains-kotlin-android = "1.9.0"
+junit = "4.13.2"
+material = "1.9.0"
 
 [libraries]
-android-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle" }
+android-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 androix-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
 androix-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraint-layout-version" }
 gradle-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
@@ -37,8 +40,8 @@ app-compat = { group = "androidx.appcompat", name = "appcompat", version.ref = "
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-retrofit-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
+square-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+square-retrofit-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
@@ -47,12 +50,13 @@ androidx-lifecycle-commom = { group = "androidx.lifecycle", name = "lifecycle-co
 androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle-ktx" }
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle-ktx" }
 recycler-view = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recycler-view" }
-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
-glide-compiler = { group = "com.github.bumptech.glide", name = "ksp", version.ref = "glide" }
+bumptech-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+bumptech-glide-compiler = { group = "com.github.bumptech.glide", name = "ksp", version.ref = "glide" }
 card-view = { group = "androidx.cardview", name = "cardview", version.ref = "card-view" }
-moshi-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
-moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
+square-moshi-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
+square-moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
 swipe-refresh-layout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swipe-refresh-layout" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 # test libraries
 

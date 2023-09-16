@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/error_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textColor="#FA8181"
+        android:textIsSelectable="true"
+        android:textSize="16sp"
+        tools:text="Teste de mensagem de erro do app!" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/retry_button"
+        style="@style/Widget.AppCompat.Button"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/ic_retry_24" />
+
+</androidx.appcompat.widget.LinearLayoutCompat>

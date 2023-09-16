@@ -1,0 +1,27 @@
+apply plugin: 'com.android.library'
+apply from: "$rootDir/buildSrc/android-config.gradle"
+
+android {
+    namespace "com.caioluis.githubpopular.data.impl"
+}
+dependencies {
+    implementation project(path: ':domain:bridge')
+    implementation project(path: ':data:bridge')
+
+    implementation libs.kotlinx.coroutines
+    implementation libs.koin.core
+    implementation libs.koin.android
+    implementation libs.room.ktx
+    implementation libs.square.retrofit
+    implementation libs.square.retrofit.converter.moshi
+    implementation libs.room.runtime
+    implementation libs.square.moshi
+
+    ksp libs.room.compiler
+    ksp libs.square.moshi.codegen
+    ksp libs.koin.android
+
+    testImplementation libs.mockk
+    testImplementation libs.kotlin.coroutines.test
+    testImplementation libs.kotlin.test
+}

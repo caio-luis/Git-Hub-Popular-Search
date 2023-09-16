@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter
 import android.widget.ProgressBar
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -16,7 +15,6 @@ import com.caioluis.githubpopular.Constants.languages
 import com.caioluis.githubpopular.R
 import com.caioluis.githubpopular.adapter.EndlessScrollListener
 import com.caioluis.githubpopular.adapter.GitHubRepositoriesAdapter
-import com.caioluis.githubpopular.extensions.showLongToast
 import com.caioluis.githubpopular.model.UiGitHubRepository
 import com.caioluis.githubpopular.viewmodel.GetRepositoriesViewModel
 import com.caioluis.githubpopular.viewmodel.MoreReposViewModel
@@ -26,14 +24,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private val refreshLayout: SwipeRefreshLayout get() = findViewById(R.id.ghSwipeRefreshLayout)
     private val ghRecyclerView: RecyclerView get() = findViewById(R.id.gitHubRepositoriesRecyclerView)
-    private val languagesList: Spinner get() = findViewById(R.id.languages_list)
     private val progressBar: ProgressBar get() = findViewById(R.id.loading_more_progress_bar)
-    private val repositoriesAdapter: GitHubRepositoriesAdapter by lazy { GitHubRepositoriesAdapter() }
+    private val languagesList: Spinner get() = findViewById(R.id.languages_list)
 
     private val getRepositoriesViewModel: GetRepositoriesViewModel by viewModel()
     private val moreReposViewModel: MoreReposViewModel by viewModel()
 
     private val endlessScrollListener: EndlessScrollListener by lazy { getEndlessListener() }
+    private val repositoriesAdapter: GitHubRepositoriesAdapter by lazy { getAdapter() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,6 +40,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         setUpSpinner()
         loadList()
         observeGitHubRepositories()
+    }
+
+    private fun getAdapter() = GitHubRepositoriesAdapter {
+        repositoriesAdapter.removeAllRetryButtons()
+        moreReposViewModel.loadMore(getSelectedLanguage())
     }
 
     private fun setUpSpinner() {
@@ -70,7 +73,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private fun getEndlessListener(): EndlessScrollListener {
         return object : EndlessScrollListener(
             layoutManager = ghRecyclerView.layoutManager as LinearLayoutManager,
-            coroutineScope = lifecycleScope
         ) {
             override fun onLoadMoreItems() {
                 moreReposViewModel.loadMore(getSelectedLanguage())
@@ -79,7 +81,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun configureRecyclerView() {
-        endlessScrollListener.start()
         ghRecyclerView.adapter = repositoriesAdapter
         ghRecyclerView.addOnScrollListener(endlessScrollListener)
     }
@@ -114,27 +115,31 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private fun handleSuccessResponse(repositories: List<UiGitHubRepository>) {
         setSwipeLoadedState()
-        repositoriesAdapter.refreshList(repositories)
+        repositoriesAdapter.removeAllRetryButtons()
+        repositoriesAdapter.submitList(repositories)
     }
 
     private fun handleFailureResponse(error: Throwable?) {
+        repositoriesAdapter.addRetryButton(exception = error)
         setSwipeLoadedState()
-        showLongToast(error?.message.toString())
     }
 
     private fun handleLoadMoreSuccessResponse(repositories: List<UiGitHubRepository>) {
         setProgressBarState(show = false)
+        repositoriesAdapter.removeAllRetryButtons()
         repositoriesAdapter.insertMoreItems(repositories)
     }
 
     private fun handleLoadMoreFailure(error: Throwable?) {
+        repositoriesAdapter.addRetryButton(error)
         setProgressBarState(show = false)
-        showLongToast(error?.message.toString())
     }
 
     private fun setSwipeLoadingState() {
-        if (!refreshLayout.isRefreshing)
+        if (!refreshLayout.isRefreshing) {
+            endlessScrollListener.reset()
             refreshLayout.isRefreshing = true
+        }
     }
 
     private fun setSwipeLoadedState() {
@@ -147,10 +152,5 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             progressBar.visibility = View.VISIBLE
         else
             progressBar.visibility = View.GONE
-    }
-
-    override fun onDestroy() {
-        endlessScrollListener.dispose()
-        super.onDestroy()
     }
 }

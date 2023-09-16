@@ -11,6 +11,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -47,7 +48,7 @@ class MoreReposViewModelTest {
             val domainRepos = listOf(domainGitHubRepository)
 
             coEvery { getMoreRepositoriesUseCase.loadRepositories(any()) } coAnswers {
-                Result.success(domainRepos)
+                flowOf(domainRepos)
             }
 
             // when
@@ -67,9 +68,7 @@ class MoreReposViewModelTest {
     fun `should handle error when loading list of repositories`() = runTest {
         // given
         val expectedError = Exception("error")
-        coEvery { getMoreRepositoriesUseCase.loadRepositories(any()) } coAnswers {
-            Result.failure(expectedError)
-        }
+        coEvery { getMoreRepositoriesUseCase.loadRepositories(any()) } throws (expectedError)
 
         // when
         viewModel.loadMore("")
@@ -86,23 +85,23 @@ class MoreReposViewModelTest {
     @Test
     fun `should handle onLoading when loading`() = runTest {
         // given
-        var loadCalled: Boolean
+        var loadCalled = false
         coEvery { getMoreRepositoriesUseCase.loadRepositories(any()) } coAnswers {
-            Result.success(listOf(domainGitHubRepository))
+            flowOf(listOf(domainGitHubRepository))
         }
 
         // when
-        viewModel.loadMore("")
+        viewModel.loadMore("test")
 
         // then
         viewModel.observeMoreReposLiveData.observeForever { response ->
             response.handleResponse(
                 onLoading = {
                     loadCalled = true
-                    assertTrue(loadCalled)
                 }
             )
 
+            assertTrue(loadCalled)
         }
     }
 }

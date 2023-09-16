@@ -1,31 +1,17 @@
 package com.caioluis.githubpopular.adapter
 
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.caioluis.githubpopular.extensions.throttleFirst
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.receiveAsFlow
-import kotlinx.coroutines.launch
 
 const val VISIBLE_THRESHOLD = 5
-const val DEBOUNCE_TIMEOUT_MILLIS = 2500L
 
 abstract class EndlessScrollListener(
     private val layoutManager: LinearLayoutManager,
-    private val coroutineScope: CoroutineScope,
 ) : RecyclerView.OnScrollListener() {
 
-    private val output = Channel<Unit>()
-
-    fun start() {
-        coroutineScope.launch {
-            output
-                .receiveAsFlow()
-                .throttleFirst(DEBOUNCE_TIMEOUT_MILLIS)
-                .collect { onLoadMoreItems() }
-        }
-    }
+    private var isLoading = true
+    private var lastTotalItemCount = 0
 
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         if (dy < 0) return
@@ -34,11 +20,22 @@ abstract class EndlessScrollListener(
         val totalItemCount = layoutManager.itemCount
         val firstVisibleItem = layoutManager.findFirstVisibleItemPosition()
 
-        if (totalItemCount - visibleItemCount <= firstVisibleItem + VISIBLE_THRESHOLD)
-            output.trySend(Unit)
+        if (isLoading && totalItemCount > lastTotalItemCount) {
+            isLoading = false
+            lastTotalItemCount = totalItemCount
+        }
+
+        if (!isLoading && totalItemCount - visibleItemCount <= firstVisibleItem + VISIBLE_THRESHOLD) {
+            isLoading = true
+            onLoadMoreItems()
+            Log.d("EndlessScrollListener", "loading: $isLoading")
+        }
+    }
+
+    fun reset() {
+        lastTotalItemCount = 0
+        isLoading = true
     }
 
     abstract fun onLoadMoreItems()
-
-    fun dispose() = output.close()
 }
