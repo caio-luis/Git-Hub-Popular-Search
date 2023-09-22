@@ -5,16 +5,13 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.ProgressBar
-import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.caioluis.githubpopular.Constants.languages
 import com.caioluis.githubpopular.R
 import com.caioluis.githubpopular.adapter.EndlessScrollListener
 import com.caioluis.githubpopular.adapter.GitHubRepositoriesAdapter
+import com.caioluis.githubpopular.databinding.ActivityMainBinding
 import com.caioluis.githubpopular.model.UiGitHubRepository
 import com.caioluis.githubpopular.viewmodel.GetRepositoriesViewModel
 import com.caioluis.githubpopular.viewmodel.MoreReposViewModel
@@ -22,10 +19,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
-    private val refreshLayout: SwipeRefreshLayout get() = findViewById(R.id.ghSwipeRefreshLayout)
-    private val ghRecyclerView: RecyclerView get() = findViewById(R.id.gitHubRepositoriesRecyclerView)
-    private val progressBar: ProgressBar get() = findViewById(R.id.loading_more_progress_bar)
-    private val languagesList: Spinner get() = findViewById(R.id.languages_list)
+    private lateinit var binding: ActivityMainBinding
 
     private val getRepositoriesViewModel: GetRepositoriesViewModel by viewModel()
     private val moreReposViewModel: MoreReposViewModel by viewModel()
@@ -35,6 +29,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         configureRecyclerView()
         initOnRefreshListener()
         setUpSpinner()
@@ -52,9 +50,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         adapter.setDropDownViewResource(layout.simple_spinner_dropdown_item)
 
-        languagesList.adapter = adapter
+        binding.languagesList.adapter = adapter
 
-        languagesList.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        binding.languagesList.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>,
                 view: View?,
@@ -68,11 +66,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    private fun getSelectedLanguage() = languagesList.selectedItem.toString()
+    private fun getSelectedLanguage() = binding.languagesList.selectedItem.toString()
 
     private fun getEndlessListener(): EndlessScrollListener {
         return object : EndlessScrollListener(
-            layoutManager = ghRecyclerView.layoutManager as LinearLayoutManager,
+            layoutManager = binding.gitHubRepositoriesRecyclerView.layoutManager as LinearLayoutManager,
         ) {
             override fun onLoadMoreItems() {
                 moreReposViewModel.loadMore(getSelectedLanguage())
@@ -81,12 +79,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun configureRecyclerView() {
-        ghRecyclerView.adapter = repositoriesAdapter
-        ghRecyclerView.addOnScrollListener(endlessScrollListener)
+        binding.gitHubRepositoriesRecyclerView.adapter = repositoriesAdapter
+        binding.gitHubRepositoriesRecyclerView.addOnScrollListener(endlessScrollListener)
     }
 
     private fun initOnRefreshListener() {
-        refreshLayout.setOnRefreshListener(::loadList)
+        binding.ghSwipeRefreshLayout.setOnRefreshListener(::loadList)
     }
 
     private fun loadList() {
@@ -136,21 +134,21 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun setSwipeLoadingState() {
-        if (!refreshLayout.isRefreshing) {
+        if (!binding.ghSwipeRefreshLayout.isRefreshing) {
             endlessScrollListener.reset()
-            refreshLayout.isRefreshing = true
+            binding.ghSwipeRefreshLayout.isRefreshing = true
         }
     }
 
     private fun setSwipeLoadedState() {
-        if (refreshLayout.isRefreshing)
-            refreshLayout.isRefreshing = false
+        if (binding.ghSwipeRefreshLayout.isRefreshing)
+            binding.ghSwipeRefreshLayout.isRefreshing = false
     }
 
     private fun setProgressBarState(show: Boolean) {
         if (show)
-            progressBar.visibility = View.VISIBLE
+            binding.loadingMoreProgressBar.visibility = View.VISIBLE
         else
-            progressBar.visibility = View.GONE
+            binding.loadingMoreProgressBar.visibility = View.GONE
     }
 }

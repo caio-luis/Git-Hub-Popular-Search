@@ -1,27 +1,26 @@
 package com.caioluis.githubpopular.adapter
 
 import android.view.View
-import androidx.appcompat.widget.AppCompatButton
-import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
-import com.caioluis.githubpopular.R
 import com.caioluis.githubpopular.data.bridge.remote.NoMoreItemsException
+import com.caioluis.githubpopular.databinding.ItemRetryButtonBinding
 import com.caioluis.githubpopular.model.RetryButtonModel
 
-class RetryButtonViewHolder(view: View, private val clickOutput: () -> Unit) :
-    RecyclerView.ViewHolder(view) {
+class RetryButtonViewHolder(
+    private val binding: ItemRetryButtonBinding,
+    private val clickOutput: () -> Unit
+) :
+    RecyclerView.ViewHolder(binding.root) {
 
     fun bindView(retryButtonModel: RetryButtonModel) {
-        val errorText = itemView.findViewById<AppCompatTextView>(R.id.error_text)
-        val retryButton = itemView.findViewById<AppCompatButton>(R.id.retry_button)
 
-        errorText.text = retryButtonModel.exception?.message
+        binding.errorText.text = retryButtonModel.exception?.message
 
         when (retryButtonModel.exception) {
-            is NoMoreItemsException -> retryButton.visibility = View.GONE
+            is NoMoreItemsException -> binding.retryButton.visibility = View.GONE
             else -> {
-                retryButton.visibility = View.VISIBLE
-                retryButton.setOnClickListener { clickOutput() }
+                binding.retryButton.visibility = View.VISIBLE
+                binding.retryButton.setOnClickListener { clickOutput() }
             }
         }
     }
