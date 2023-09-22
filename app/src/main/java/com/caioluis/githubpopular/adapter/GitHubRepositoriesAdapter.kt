@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.caioluis.githubpopular.Constants.REPOSITORIES_VIEW_TYPE
 import com.caioluis.githubpopular.Constants.RETRY_BUTTON_VIEW_TYPE
-import com.caioluis.githubpopular.R
+import com.caioluis.githubpopular.databinding.ItemRetryButtonBinding
+import com.caioluis.githubpopular.databinding.ListItemGithubRepositoryBinding
 import com.caioluis.githubpopular.model.RetryButtonModel
 import com.caioluis.githubpopular.model.UiGitHubRepository
 import com.caioluis.githubpopular.model.UiModel
@@ -31,19 +32,22 @@ class GitHubRepositoriesAdapter(private val clickOutput: () -> Unit) :
         return when (viewType) {
 
             RETRY_BUTTON_VIEW_TYPE -> {
-                val view = LayoutInflater.from(parent.context)
-                    .inflate(R.layout.item_retry_button, parent, false)
-
-                RetryButtonViewHolder(view, clickOutput)
-            }
-
-            else -> {
-                val view = LayoutInflater.from(parent.context).inflate(
-                    R.layout.list_item_github_repository,
+                val binding = ItemRetryButtonBinding.inflate(
+                    LayoutInflater.from(parent.context),
                     parent,
                     false
                 )
-                GitHubReposViewHolder(view)
+
+                RetryButtonViewHolder(binding, clickOutput)
+            }
+
+            else -> {
+                val binding = ListItemGithubRepositoryBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                GitHubReposViewHolder(binding)
             }
         }
     }

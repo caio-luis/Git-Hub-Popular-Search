@@ -7,6 +7,10 @@ android {
     defaultConfig {
         applicationId "com.caioluis.githubpopular"
     }
+
+    viewBinding {
+        enabled = true
+    }
 }
 
 dependencies {
