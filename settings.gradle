@@ -1,9 +1,9 @@
 include ':app'
 include ':data'
 include ':data:impl'
-include ':data:bridge'
+include ':data:public'
 include ':domain'
 include ':domain:impl'
-include ':domain:bridge'
+include ':domain:public'
 
 rootProject.name = "GitHubPopular"

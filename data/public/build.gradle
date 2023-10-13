@@ -6,7 +6,7 @@ android {
 }
 
 dependencies {
-    implementation project(path: ':domain:bridge')
+    implementation project(path: ':domain:public')
 
     implementation libs.kotlinx.coroutines
     implementation libs.koin.core

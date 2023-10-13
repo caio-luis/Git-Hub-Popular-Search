@@ -1,8 +1,7 @@
 apply from: "$rootDir/buildSrc/java-config.gradle"
 
 dependencies {
-    implementation project(path: ':domain:bridge')
-
+    implementation project(path: ':domain:public')
     implementation libs.kotlinx.coroutines
     implementation libs.koin.core
 
