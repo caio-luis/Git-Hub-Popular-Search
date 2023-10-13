@@ -15,9 +15,9 @@ android {
 
 dependencies {
     implementation project(":data:impl")
-    implementation project(":data:bridge")
+    implementation project(':data:public')
     implementation project(":domain:impl")
-    implementation project(":domain:bridge")
+    implementation project(':domain:public')
 
     implementation libs.kotlin.stdlib
     implementation libs.androix.ktx
