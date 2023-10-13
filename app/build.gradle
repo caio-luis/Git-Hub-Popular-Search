@@ -4,6 +4,14 @@ apply from: "$rootDir/buildSrc/android-config.gradle"
 android {
     namespace 'com.caioluis.githubpopular'
 
+    buildFeatures {
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.5.3'
+    }
+
     defaultConfig {
         applicationId "com.caioluis.githubpopular"
     }
@@ -18,6 +26,8 @@ dependencies {
     implementation project(':data:public')
     implementation project(":domain:impl")
     implementation project(':domain:public')
+
+    implementation platform(libs.compose.bom)
 
     implementation libs.kotlin.stdlib
     implementation libs.androix.ktx
@@ -34,6 +44,14 @@ dependencies {
 
     implementation libs.androix.constraintlayout
     implementation libs.material
+
+    implementation libs.material3.compose
+    implementation libs.compose.ui.tooling.preview
+    debugImplementation libs.compose.ui.tooling.debug
+    debugImplementation libs.compose.activity
+    debugImplementation libs.compose.test.manifest
+
+    implementation libs.bumptech.glide.compose
 
     implementation libs.koin.core
     implementation libs.koin.android
