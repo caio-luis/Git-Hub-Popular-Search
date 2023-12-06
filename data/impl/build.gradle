@@ -5,8 +5,10 @@ android {
     namespace "com.caioluis.githubpopular.data.impl"
 }
 dependencies {
-    implementation project(path: ':domain:public')
-    implementation project(path: ':data:public')
+    api project(path: ':domain:public')
+    api project(path: ':data:public')
+
+    api libs.room.runtime
 
     implementation libs.kotlinx.coroutines
     implementation libs.koin.core
@@ -14,8 +16,10 @@ dependencies {
     implementation libs.room.ktx
     implementation libs.square.retrofit
     implementation libs.square.retrofit.converter.moshi
-    implementation libs.room.runtime
     implementation libs.square.moshi
+    implementation libs.square.okhttp
+    implementation libs.room.common
+    implementation libs.androidx.sqlite
 
     ksp libs.room.compiler
     ksp libs.square.moshi.codegen
@@ -23,5 +27,4 @@ dependencies {
 
     testImplementation libs.mockk
     testImplementation libs.kotlin.coroutines.test
-    testImplementation libs.kotlin.test
 }
