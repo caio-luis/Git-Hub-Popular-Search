@@ -6,19 +6,18 @@ android {
 }
 
 dependencies {
-    implementation project(path: ':domain:public')
+    api project(path: ':domain:public')
 
-    implementation libs.kotlinx.coroutines
-    implementation libs.koin.core
-    implementation libs.room.ktx
-    implementation libs.room.runtime
-    implementation libs.square.retrofit
-    implementation libs.square.moshi
+    runtimeOnly libs.room.runtime
+
+    api libs.square.retrofit
+    api libs.square.moshi
+
+    implementation libs.room.common
 
     ksp libs.square.moshi.codegen
     ksp libs.room.compiler
 
     testImplementation libs.mockk
     testImplementation libs.kotlin.coroutines.test
-    testImplementation libs.kotlin.test
 }

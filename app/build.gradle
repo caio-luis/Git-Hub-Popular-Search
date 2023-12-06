@@ -14,41 +14,39 @@ android {
 }
 
 dependencies {
-    implementation project(":data:impl")
+    implementation project(':data:impl')
     implementation project(':data:public')
-    implementation project(":domain:impl")
+    implementation project(':domain:impl')
     implementation project(':domain:public')
 
+    implementation libs.androidx.activity
+    implementation libs.androidx.annotation
+    implementation libs.androidx.lifecycle.common
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.lifecycle.viewmodel
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.androidx.lifecycle.livedata.core
     implementation libs.kotlin.stdlib
-    implementation libs.androix.ktx
     implementation libs.app.compat
-
-    //Test
-    testImplementation libs.android.junit
-    testImplementation libs.mockk
-    testImplementation libs.android.test.core
-    testImplementation libs.robolectric
-    testImplementation libs.android.core.testing
-    testImplementation libs.android.test.runner
-    testImplementation libs.kotlin.coroutines.test
-
-    implementation libs.androix.constraintlayout
-    implementation libs.material
-
     implementation libs.koin.core
     implementation libs.koin.android
-
     implementation libs.kotlinx.coroutines
-
-    implementation libs.androidx.lifecycle.viewmodel.ktx
-    implementation libs.androidx.lifecycle.runtime
-    implementation libs.androidx.lifecycle.extensions
-    ksp libs.androidx.lifecycle.commom
-
     implementation libs.recycler.view
     implementation libs.card.view
     implementation libs.swipe.refresh.layout
-
     implementation libs.bumptech.glide
+
+    ksp libs.androidx.lifecycle.common
     ksp libs.bumptech.glide.compiler
+
+    //Test
+    testRuntimeOnly libs.android.test.core
+    testRuntimeOnly libs.robolectric
+    testRuntimeOnly libs.android.test.runner
+    
+    testImplementation libs.mockk
+    testImplementation libs.android.core.testing
+    testImplementation libs.kotlin.coroutines.test
+    testImplementation libs.mockk.dsl
+    testImplementation libs.junit
 }

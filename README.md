@@ -12,6 +12,9 @@ App for studies that lists the most popular kotlin github repositories given the
 - Room for cache persistence
 - Glide
 
+## Gradle:
+- dependency analyser plugin for optimizing build
+
 ## Explaining some uses:
 
 - Moshi with codegen is faster than Gson. It uses generated code for it's adapters, while Gson uses
