@@ -1,8 +1,8 @@
 package com.caioluis.githubpopular.impl.remote
 
-import com.caioluis.githubpopular.data.bridge.remote.RemoteSource
-import com.caioluis.githubpopular.data.bridge.remote.model.RemoteGitHubRepository
-import com.caioluis.githubpopular.data.bridge.remote.service.GitHubRepositoriesService
+import com.caioluis.githubpopular.data.pub.remote.RemoteSource
+import com.caioluis.githubpopular.data.pub.remote.model.RemoteGitHubRepository
+import com.caioluis.githubpopular.data.pub.remote.service.GitHubRepositoriesService
 
 class RemoteSourceImpl(
     private val gitHubRepositoriesService: GitHubRepositoriesService

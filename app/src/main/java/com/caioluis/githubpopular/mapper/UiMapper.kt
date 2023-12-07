@@ -1,7 +1,7 @@
 package com.caioluis.githubpopular.mapper
 
-import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
-import com.caioluis.githubpopular.domain.bridge.entity.DomainRepositoryOwner
+import com.caioluis.githubpopular.domain.pub.entity.DomainGitHubRepository
+import com.caioluis.githubpopular.domain.pub.entity.DomainRepositoryOwner
 import com.caioluis.githubpopular.model.UiGitHubRepository
 import com.caioluis.githubpopular.model.UiRepositoryOwner
 

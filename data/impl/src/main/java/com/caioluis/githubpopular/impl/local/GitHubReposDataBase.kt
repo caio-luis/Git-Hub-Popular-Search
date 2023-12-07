@@ -5,8 +5,8 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.caioluis.githubpopular.data.bridge.local.dao.GitHubRepositoriesDao
-import com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubRepository
+import com.caioluis.githubpopular.data.pub.local.dao.GitHubRepositoriesDao
+import com.caioluis.githubpopular.data.pub.local.model.LocalGitHubRepository
 import com.caioluis.githubpopular.impl.local.type_converter.RepositoryOwnerConverter
 
 const val DATABASE_FILE_NAME = "GitHubPopular.db"

@@ -1,10 +1,10 @@
 package com.caioluis.githubpopular.impl.local
 
-import com.caioluis.githubpopular.data.bridge.local.LocalSource
-import com.caioluis.githubpopular.data.bridge.local.dao.GitHubRepositoriesDao
-import com.caioluis.githubpopular.data.bridge.mappers.toDomain
-import com.caioluis.githubpopular.data.bridge.mappers.toLocal
-import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
+import com.caioluis.githubpopular.data.pub.local.LocalSource
+import com.caioluis.githubpopular.data.pub.local.dao.GitHubRepositoriesDao
+import com.caioluis.githubpopular.data.pub.mappers.toDomain
+import com.caioluis.githubpopular.data.pub.mappers.toLocal
+import com.caioluis.githubpopular.domain.pub.entity.DomainGitHubRepository
 
 class LocalSourceImpl(
     private val gitHubRepositoriesDao: GitHubRepositoriesDao

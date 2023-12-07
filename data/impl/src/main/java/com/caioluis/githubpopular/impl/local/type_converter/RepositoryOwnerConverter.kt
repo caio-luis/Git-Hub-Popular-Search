@@ -1,8 +1,8 @@
 package com.caioluis.githubpopular.impl.local.type_converter
 
 import androidx.room.TypeConverter
-import com.caioluis.githubpopular.data.bridge.local.model.LocalRepositoryOwner
-import com.caioluis.githubpopular.data.bridge.local.model.LocalRepositoryOwnerJsonAdapter
+import com.caioluis.githubpopular.data.pub.local.model.LocalRepositoryOwner
+import com.caioluis.githubpopular.data.pub.local.model.LocalRepositoryOwnerJsonAdapter
 import com.squareup.moshi.Moshi
 
 class RepositoryOwnerConverter {

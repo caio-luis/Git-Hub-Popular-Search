@@ -1,10 +1,10 @@
 package com.caioluis.githubpopular.impl
 
-import com.caioluis.githubpopular.data.bridge.local.LocalSource
-import com.caioluis.githubpopular.data.bridge.remote.RemoteSource
-import com.caioluis.githubpopular.data.bridge.remote.service.GitHubRepositoriesService
+import com.caioluis.githubpopular.data.pub.local.LocalSource
+import com.caioluis.githubpopular.data.pub.remote.RemoteSource
+import com.caioluis.githubpopular.data.pub.remote.service.GitHubRepositoriesService
 import com.caioluis.githubpopular.data.impl.BuildConfig
-import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
+import com.caioluis.githubpopular.domain.pub.repository.GitHubReposRepository
 import com.caioluis.githubpopular.impl.local.GitHubReposDataBase
 import com.caioluis.githubpopular.impl.local.LocalSourceImpl
 import com.caioluis.githubpopular.impl.remote.GitHubReposRepositoryImpl
