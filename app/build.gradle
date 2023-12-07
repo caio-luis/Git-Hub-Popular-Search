@@ -49,4 +49,6 @@ dependencies {
     testImplementation libs.kotlin.coroutines.test
     testImplementation libs.mockk.dsl
     testImplementation libs.junit
+
+    debugImplementation libs.leakcanary.android
 }
