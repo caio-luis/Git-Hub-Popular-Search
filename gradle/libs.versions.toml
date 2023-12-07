@@ -16,6 +16,7 @@ android-sqlite = "2.4.0"
 core-testing = "2.2.0"
 kotlinx-coroutines = "1.7.3"
 kotlin-test = "1.8.21"
+leakcanary-android = "2.12"
 robolectric = "4.10.3"
 mockk = "1.13.7"
 room = "2.6.1"
@@ -46,9 +47,10 @@ androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-view
 androidx-sqlite = { module = "androidx.sqlite:sqlite", version.ref = "android-sqlite" }
 androidx-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "ktx" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraint-layout-version" }
-gradle-kotlin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
 app-compat = { group = "androidx.appcompat", name = "appcompat", version.ref = "app-compat" }
+leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary-android" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-common = { module = "androidx.room:room-common", version.ref = "room" }
@@ -63,7 +65,7 @@ bumptech-glide = { group = "com.github.bumptech.glide", name = "glide", version.
 bumptech-glide-compiler = { group = "com.github.bumptech.glide", name = "ksp", version.ref = "glide" }
 card-view = { group = "androidx.cardview", name = "cardview", version.ref = "card-view" }
 square-moshi-codegen = { group = "com.squareup.moshi", name = "moshi-kotlin-codegen", version.ref = "moshi" }
-square-moshi = { group = "com.squareup.moshi", name = "moshi", version.ref = "moshi" }
+square-moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 square-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 swipe-refresh-layout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swipe-refresh-layout" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
@@ -84,4 +86,4 @@ junit = { module = "junit:junit", version.ref = "junit" }
 
 [plugins]
 ksp-plugin = { id = "com.google.devtools.ksp", version.ref = "ksp" }
-dependency-analysis = { id = "com.autonomousapps.dependency-analysis" , version.ref = "dependency-analysis" }
+dependency-analysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependency-analysis" }
