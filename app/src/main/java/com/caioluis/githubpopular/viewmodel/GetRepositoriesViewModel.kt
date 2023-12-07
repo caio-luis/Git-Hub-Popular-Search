@@ -1,13 +1,11 @@
 package com.caioluis.githubpopular.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.caioluis.githubpopular.Constants
-import com.caioluis.githubpopular.domain.bridge.model.Response
-import com.caioluis.githubpopular.domain.bridge.usecase.ActualPage
-import com.caioluis.githubpopular.domain.bridge.usecase.GetRepositoriesUseCase
+import com.caioluis.githubpopular.domain.pub.model.Response
+import com.caioluis.githubpopular.domain.pub.usecase.ActualPage
+import com.caioluis.githubpopular.domain.pub.usecase.GetRepositoriesUseCase
 import com.caioluis.githubpopular.mapper.toUi
 import com.caioluis.githubpopular.model.UiGitHubRepository
 import kotlinx.coroutines.flow.first

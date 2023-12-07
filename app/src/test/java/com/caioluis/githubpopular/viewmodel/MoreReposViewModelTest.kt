@@ -3,7 +3,7 @@ package com.caioluis.githubpopular.viewmodel
 import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.caioluis.githubpopular.MainDispatcherRule
-import com.caioluis.githubpopular.domain.bridge.usecase.GetMoreReposUseCase
+import com.caioluis.githubpopular.domain.pub.usecase.GetMoreReposUseCase
 import com.caioluis.githubpopular.mapper.Fixtures.domainGitHubRepository
 import com.caioluis.githubpopular.mapper.Fixtures.uiRepository
 import io.mockk.coEvery
