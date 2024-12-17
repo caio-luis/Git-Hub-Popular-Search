@@ -1,7 +1,7 @@
 package com.caioluis.githubpopular.domain.impl.usecases
 
-import com.caioluis.githubpopular.domain.pub.entity.DomainGitHubRepository
-import com.caioluis.githubpopular.domain.pub.repository.GitHubReposRepository
+import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
+import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.flow.first
