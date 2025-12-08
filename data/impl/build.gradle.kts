@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.caioluis.githubpopular.data.impl"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 23
