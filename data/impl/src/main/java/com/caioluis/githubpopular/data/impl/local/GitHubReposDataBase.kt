@@ -38,8 +38,8 @@ abstract class GitHubReposDataBase : RoomDatabase() {
                 GitHubReposDataBase::class.java,
                 DATABASE_FILE_NAME
             )
-                .fallbackToDestructiveMigration()
-                .fallbackToDestructiveMigrationOnDowngrade()
+                .fallbackToDestructiveMigration(dropAllTables = true)
+                .fallbackToDestructiveMigrationOnDowngrade(dropAllTables = true)
                 .build()
     }
 }
