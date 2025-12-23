@@ -1,6 +1,7 @@
 plugins {
     id("githubpopular.android.application")
     alias(libs.plugins.ksp.plugin)
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -30,16 +31,17 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.core)
     implementation(libs.kotlin.stdlib)
     implementation(libs.app.compat)
-    implementation(libs.koin.core)
-    implementation(libs.koin.android)
     implementation(libs.kotlinx.coroutines)
     implementation(libs.recycler.view)
     implementation(libs.card.view)
     implementation(libs.swipe.refresh.layout)
     implementation(libs.bumptech.glide)
+    implementation(libs.hilt.android)
 
     ksp(libs.androidx.lifecycle.common)
     ksp(libs.bumptech.glide.compiler)
+    ksp(libs.hilt.compiler)
+    ksp(libs.kotlin.metadata.jvm)
 
     testRuntimeOnly(libs.android.test.core)
     testRuntimeOnly(libs.robolectric)

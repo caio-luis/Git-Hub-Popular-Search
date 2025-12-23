@@ -11,33 +11,35 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class GetRepositoriesUseCaseTest {
-
     private val gitHubReposRepository = mockk<GitHubReposRepository>()
     private val getReposUseCase = GetRepositoriesUseCaseImpl(gitHubReposRepository)
 
     @Test
-    fun `loadRepositories returns expected result`() = runTest {
-        // Arrange
-        val expected = listOf(DomainGitHubRepository())
-        coEvery { gitHubReposRepository.getGitHubRepositories(any(), any()) } returns flowOf(
-            expected
-        )
+    fun `loadRepositories returns expected result`() =
+        runTest {
+            // Arrange
+            val expected = listOf(DomainGitHubRepository())
+            coEvery { gitHubReposRepository.getGitHubRepositories(any(), any()) } returns
+                flowOf(
+                    expected,
+                )
 
-        // Act
-        val result = getReposUseCase.loadRepositories("Kotlin").first()
+            // Act
+            val result = getReposUseCase.loadRepositories("Kotlin").first()
 
-        // Assert
-        assertEquals(expected, result)
-    }
+            // Assert
+            assertEquals(expected, result)
+        }
 
     @Test(expected = Exception::class)
-    fun `loadRepositories returns failure`() = runTest {
-        // Arrange
-        val exception = Exception()
+    fun `loadRepositories returns failure`() =
+        runTest {
+            // Arrange
+            val exception = Exception()
 
-        coEvery { gitHubReposRepository.getGitHubRepositories(any(), any()) } throws exception
+            coEvery { gitHubReposRepository.getGitHubRepositories(any(), any()) } throws exception
 
-        // Act
-        getReposUseCase.loadRepositories("Kotlin")
-    }
+            // Act
+            getReposUseCase.loadRepositories("Kotlin")
+        }
 }

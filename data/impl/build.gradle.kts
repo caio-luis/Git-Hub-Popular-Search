@@ -1,6 +1,7 @@
 plugins {
     id("githubpopular.android.library")
     alias(libs.plugins.ksp.plugin)
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -23,8 +24,7 @@ dependencies {
     runtimeOnly(libs.room.runtime)
 
     implementation(libs.kotlinx.coroutines)
-    implementation(libs.koin.core)
-    implementation(libs.koin.android)
+    implementation(libs.hilt.android)
     implementation(libs.room.ktx)
     implementation(libs.square.retrofit)
     implementation(libs.square.retrofit.converter.moshi)
@@ -35,7 +35,7 @@ dependencies {
 
     ksp(libs.room.compiler)
     ksp(libs.square.moshi.codegen)
-    ksp(libs.koin.android)
+    ksp(libs.hilt.compiler)
 
     testImplementation(libs.mockk)
     testImplementation(libs.kotlin.coroutines.test)

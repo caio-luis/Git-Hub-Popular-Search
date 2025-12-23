@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 interface GitHubReposRepository {
     suspend fun getGitHubRepositories(
         page: Int,
-        language: String
+        language: String,
     ): Flow<List<DomainGitHubRepository>?>
 }

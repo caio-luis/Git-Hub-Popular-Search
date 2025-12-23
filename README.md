@@ -6,7 +6,7 @@ App for studies that lists the most popular kotlin github repositories given the
 
 - Kotlin Coroutines (Flow)
 - Clean Architecture with MVVM and modularization
-- Koin for dependency injection
+- Dagger Hilt for dependency injection
 - Retrofit and Moshi (with codegen) for API REST
 - KSP
 - Room for cache persistence
