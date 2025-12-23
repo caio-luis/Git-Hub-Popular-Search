@@ -13,46 +13,51 @@ import com.caioluis.githubpopular.model.RetryButtonModel
 import com.caioluis.githubpopular.model.UiGitHubRepository
 import com.caioluis.githubpopular.model.UiModel
 
-class GitHubRepositoriesAdapter(private val clickOutput: () -> Unit) :
-    RecyclerView.Adapter<ViewHolder>() {
-
+class GitHubRepositoriesAdapter(
+    private val clickOutput: () -> Unit,
+) : RecyclerView.Adapter<ViewHolder>() {
     private val itemList: MutableList<UiModel> = mutableListOf()
 
-    override fun getItemViewType(position: Int): Int {
-        return when (itemList[position]) {
+    override fun getItemViewType(position: Int): Int =
+        when (itemList[position]) {
             is UiGitHubRepository -> REPOSITORIES_VIEW_TYPE
             is RetryButtonModel -> RETRY_BUTTON_VIEW_TYPE
             else -> -1
         }
-    }
 
     override fun getItemCount(): Int = itemList.size
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return when (viewType) {
-
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int,
+    ): ViewHolder =
+        when (viewType) {
             RETRY_BUTTON_VIEW_TYPE -> {
-                val binding = ItemRetryButtonBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
+                val binding =
+                    ItemRetryButtonBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false,
+                    )
 
                 RetryButtonViewHolder(binding, clickOutput)
             }
 
             else -> {
-                val binding = ListItemGithubRepositoryBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
+                val binding =
+                    ListItemGithubRepositoryBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false,
+                    )
                 GitHubReposViewHolder(binding)
             }
         }
-    }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int,
+    ) {
         when (holder.itemViewType) {
             REPOSITORIES_VIEW_TYPE -> {
                 holder as GitHubReposViewHolder

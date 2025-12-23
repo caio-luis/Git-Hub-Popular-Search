@@ -18,7 +18,6 @@ import com.caioluis.githubpopular.viewmodel.MoreReposViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
-
     private lateinit var binding: ActivityMainBinding
 
     private val getRepositoriesViewModel: GetRepositoriesViewModel by viewModel()
@@ -40,10 +39,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         observeGitHubRepositories()
     }
 
-    private fun getAdapter() = GitHubRepositoriesAdapter {
-        repositoriesAdapter.removeAllRetryButtons()
-        moreReposViewModel.loadMore(getSelectedLanguage())
-    }
+    private fun getAdapter() =
+        GitHubRepositoriesAdapter {
+            repositoriesAdapter.removeAllRetryButtons()
+            moreReposViewModel.loadMore(getSelectedLanguage())
+        }
 
     private fun setUpSpinner() {
         val adapter = ArrayAdapter(this, layout.simple_spinner_item, languages)
@@ -52,31 +52,31 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         binding.languagesList.adapter = adapter
 
-        binding.languagesList.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                getRepositoriesViewModel.loadList(getSelectedLanguage())
-            }
+        binding.languagesList.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>,
+                    view: View?,
+                    position: Int,
+                    id: Long,
+                ) {
+                    getRepositoriesViewModel.loadList(getSelectedLanguage())
+                }
 
-            override fun onNothingSelected(parent: AdapterView<*>) = Unit
-        }
+                override fun onNothingSelected(parent: AdapterView<*>) = Unit
+            }
     }
 
     private fun getSelectedLanguage() = binding.languagesList.selectedItem.toString()
 
-    private fun getEndlessListener(): EndlessScrollListener {
-        return object : EndlessScrollListener(
+    private fun getEndlessListener(): EndlessScrollListener =
+        object : EndlessScrollListener(
             layoutManager = binding.gitHubRepositoriesRecyclerView.layoutManager as LinearLayoutManager,
         ) {
             override fun onLoadMoreItems() {
                 moreReposViewModel.loadMore(getSelectedLanguage())
             }
         }
-    }
 
     private fun configureRecyclerView() {
         binding.gitHubRepositoriesRecyclerView.adapter = repositoriesAdapter
@@ -93,20 +93,22 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private fun observeGitHubRepositories() {
         getRepositoriesViewModel
-            .observeGitHubReposLiveData.observe(this) { repositoriesResponse ->
+            .observeGitHubReposLiveData
+            .observe(this) { repositoriesResponse ->
                 repositoriesResponse.handleResponse(
                     onLoading = ::setSwipeLoadingState,
                     onSuccess = ::handleSuccessResponse,
-                    onFailure = ::handleFailureResponse
+                    onFailure = ::handleFailureResponse,
                 )
             }
 
         moreReposViewModel
-            .observeMoreReposLiveData.observe(this) { repositoriesResponse ->
+            .observeMoreReposLiveData
+            .observe(this) { repositoriesResponse ->
                 repositoriesResponse.handleResponse(
                     onLoading = { setProgressBarState(show = true) },
                     onSuccess = ::handleLoadMoreSuccessResponse,
-                    onFailure = ::handleLoadMoreFailure
+                    onFailure = ::handleLoadMoreFailure,
                 )
             }
     }
@@ -141,14 +143,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun setSwipeLoadedState() {
-        if (binding.ghSwipeRefreshLayout.isRefreshing)
+        if (binding.ghSwipeRefreshLayout.isRefreshing) {
             binding.ghSwipeRefreshLayout.isRefreshing = false
+        }
     }
 
     private fun setProgressBarState(show: Boolean) {
-        if (show)
+        if (show) {
             binding.loadingMoreProgressBar.visibility = View.VISIBLE
-        else
+        } else {
             binding.loadingMoreProgressBar.visibility = View.GONE
+        }
     }
 }

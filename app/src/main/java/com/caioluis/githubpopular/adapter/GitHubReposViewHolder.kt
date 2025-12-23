@@ -6,10 +6,10 @@ import com.caioluis.githubpopular.databinding.ListItemGithubRepositoryBinding
 import com.caioluis.githubpopular.extensions.openBrowserIntent
 import com.caioluis.githubpopular.model.UiGitHubRepository
 
-class GitHubReposViewHolder(private val binding: ListItemGithubRepositoryBinding) :
-    RecyclerView.ViewHolder(binding.root) {
+class GitHubReposViewHolder(
+    private val binding: ListItemGithubRepositoryBinding,
+) : RecyclerView.ViewHolder(binding.root) {
     fun bindView(itemInfo: UiGitHubRepository) {
-
         binding.root.setOnClickListener {
             binding.root.context.openBrowserIntent(itemInfo.htmlUrl)
         }

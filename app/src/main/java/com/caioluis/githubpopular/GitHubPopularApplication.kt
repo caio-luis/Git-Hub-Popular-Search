@@ -1,13 +1,12 @@
 package com.caioluis.githubpopular
 
 import android.app.Application
-import com.caioluis.githubpopular.domain.impl.domainModule
 import com.caioluis.githubpopular.data.impl.dataModule
+import com.caioluis.githubpopular.domain.impl.domainModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 
 class GitHubPopularApplication : Application() {
-
     override fun onCreate() {
         super.onCreate()
 
@@ -18,7 +17,7 @@ class GitHubPopularApplication : Application() {
                     dataModule,
                     domainModule,
                     viewModelModule,
-                )
+                ),
             )
         }
     }

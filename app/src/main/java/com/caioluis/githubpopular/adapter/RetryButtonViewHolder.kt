@@ -8,12 +8,9 @@ import com.caioluis.githubpopular.model.RetryButtonModel
 
 class RetryButtonViewHolder(
     private val binding: ItemRetryButtonBinding,
-    private val clickOutput: () -> Unit
-) :
-    RecyclerView.ViewHolder(binding.root) {
-
+    private val clickOutput: () -> Unit,
+) : RecyclerView.ViewHolder(binding.root) {
     fun bindView(retryButtonModel: RetryButtonModel) {
-
         binding.errorText.text = retryButtonModel.exception?.message
 
         when (retryButtonModel.exception) {

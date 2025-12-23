@@ -12,5 +12,5 @@ data class UiGitHubRepository(
     val stargazersCount: Int = 0,
     val forksCount: Int = 0,
     val htmlUrl: String = "",
-    override val viewType: Int = REPOSITORIES_VIEW_TYPE
+    override val viewType: Int = REPOSITORIES_VIEW_TYPE,
 ) : UiModel

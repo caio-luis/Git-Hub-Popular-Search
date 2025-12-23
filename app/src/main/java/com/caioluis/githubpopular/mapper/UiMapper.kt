@@ -15,12 +15,12 @@ fun DomainGitHubRepository.toUi() =
         pullsUrl = pullsUrl,
         stargazersCount = stargazersCount,
         htmlUrl = htmlUrl,
-        forksCount = forksCount
+        forksCount = forksCount,
     )
 
 fun DomainRepositoryOwner.toUi() =
     UiRepositoryOwner(
         id = id,
         login = login,
-        avatarUrl = avatarUrl
+        avatarUrl = avatarUrl,
     )
