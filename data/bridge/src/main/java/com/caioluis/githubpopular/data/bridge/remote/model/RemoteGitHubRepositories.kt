@@ -5,6 +5,6 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class RemoteGitHubRepositories(
-    @Json(name = "items")
+    @param:Json(name = "items")
     val repositories: List<RemoteGitHubRepository?>? = null,
 )

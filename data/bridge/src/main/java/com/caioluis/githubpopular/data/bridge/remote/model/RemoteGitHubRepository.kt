@@ -5,30 +5,30 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class RemoteGitHubRepository(
-    @Json(name = "id")
+    @param:Json(name = "id")
     val id: Int? = null,
 
-    @Json(name = "name")
+    @param:Json(name = "name")
     val name: String? = "",
 
-    @Json(name = "full_name")
+    @param:Json(name = "full_name")
     val fullName: String? = "",
 
-    @Json(name = "owner")
+    @param:Json(name = "owner")
     val owner: RemoteRepositoryOwner? = null,
 
-    @Json(name = "description")
+    @param:Json(name = "description")
     val description: String? = "",
 
-    @Json(name = "pulls_url")
+    @param:Json(name = "pulls_url")
     val pullsUrl: String? = "",
 
-    @Json(name = "stargazers_count")
+    @param:Json(name = "stargazers_count")
     val stargazersCount: Int? = null,
 
-    @Json(name = "forks_count")
+    @param:Json(name = "forks_count")
     val forksCount: Int? = null,
 
-    @Json(name = "html_url")
+    @param:Json(name = "html_url")
     val htmlUrl: String? = ""
 )

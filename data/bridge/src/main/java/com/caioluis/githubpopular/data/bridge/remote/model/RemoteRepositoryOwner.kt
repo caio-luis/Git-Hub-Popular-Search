@@ -5,12 +5,12 @@ import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
 data class RemoteRepositoryOwner(
-    @Json(name = "login")
+    @param:Json(name = "login")
     val login: String? = "",
 
-    @Json(name = "id")
+    @param:Json(name = "id")
     val id: Int? = null,
 
-    @Json(name = "avatar_url")
+    @param:Json(name = "avatar_url")
     val avatarUrl: String? = "",
 )
