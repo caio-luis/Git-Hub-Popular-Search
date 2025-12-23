@@ -13,9 +13,12 @@ interface GitHubRepositoriesDao {
 
     @Query(
         "SELECT * FROM GitHubRepositories WHERE page=:page AND language=:language " +
-                "COLLATE NOCASE ORDER BY stargazersCount DESC"
+            "COLLATE NOCASE ORDER BY stargazersCount DESC",
     )
-    suspend fun getAllRepositories(page: Int, language: String): List<LocalGitHubRepository>?
+    suspend fun getAllRepositories(
+        page: Int,
+        language: String,
+    ): List<LocalGitHubRepository>?
 
     @Query("DELETE FROM GitHubRepositories WHERE language=:language COLLATE NOCASE")
     suspend fun deleteReposByLanguage(language: String)

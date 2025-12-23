@@ -20,7 +20,6 @@ robolectric = "4.16"
 mockk = "1.14.7"
 room = "2.8.4"
 retrofit = "3.0.0"
-koin = "4.1.1"
 coroutines = "1.10.2"
 lifecycle-ktx = "2.10.0"
 recycler-view = "1.4.0"
@@ -34,8 +33,14 @@ material = "1.13.0"
 dependency-analysis = "3.5.1"
 jetbrainsKotlinJvm = "2.3.0"
 spotless = "8.1.0"
+hilt = "2.57.2"
 
 [libraries]
+kotlin-metadata-jvm = { group = "org.jetbrains.kotlin", name = "kotlin-metadata-jvm", version.ref = "kotlin" }
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hilt" }
+hilt-core-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
 ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "symbol-processing-gradle-plugin", version.ref = "ksp" }
 android-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 androidx-activity = { module = "androidx.activity:activity", version.ref = "activity" }
@@ -57,8 +62,6 @@ room-common = { module = "androidx.room:room-common", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 square-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 square-retrofit-converter-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
-koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
-koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 recycler-view = { group = "androidx.recyclerview", name = "recyclerview", version.ref = "recycler-view" }
 bumptech-glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
@@ -92,3 +95,4 @@ dependency-analysis = { id = "com.autonomousapps.dependency-analysis", version.r
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }

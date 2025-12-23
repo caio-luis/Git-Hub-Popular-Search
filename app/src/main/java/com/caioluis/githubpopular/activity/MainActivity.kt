@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.caioluis.githubpopular.Constants.languages
@@ -15,13 +16,14 @@ import com.caioluis.githubpopular.databinding.ActivityMainBinding
 import com.caioluis.githubpopular.model.UiGitHubRepository
 import com.caioluis.githubpopular.viewmodel.GetRepositoriesViewModel
 import com.caioluis.githubpopular.viewmodel.MoreReposViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var binding: ActivityMainBinding
 
-    private val getRepositoriesViewModel: GetRepositoriesViewModel by viewModel()
-    private val moreReposViewModel: MoreReposViewModel by viewModel()
+    private val getRepositoriesViewModel: GetRepositoriesViewModel by viewModels()
+    private val moreReposViewModel: MoreReposViewModel by viewModels()
 
     private val endlessScrollListener: EndlessScrollListener by lazy { getEndlessListener() }
     private val repositoriesAdapter: GitHubRepositoriesAdapter by lazy { getAdapter() }

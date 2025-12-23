@@ -6,8 +6,11 @@ interface LocalSource {
     suspend fun saveToLocalCache(
         repositories: List<DomainGitHubRepository>,
         page: Int,
-        language: String
+        language: String,
     )
 
-    suspend fun getFromCache(page: Int, language: String): List<DomainGitHubRepository>?
+    suspend fun getFromCache(
+        page: Int,
+        language: String,
+    ): List<DomainGitHubRepository>?
 }
