@@ -2,6 +2,7 @@ plugins {
     id("githubpopular.android.library")
     alias(libs.plugins.ksp.plugin)
 }
+
 android {
     namespace = "com.caioluis.githubpopular.data.bridge"
 
