@@ -65,43 +65,45 @@ class MoreReposViewModelTest {
     }
 
     @Test
-    fun `should handle error when loading list of repositories`() = runTest {
-        // given
-        val expectedError = Exception("error")
-        coEvery { getMoreRepositoriesUseCase.loadRepositories(any()) } throws (expectedError)
+    fun `should handle error when loading list of repositories`() =
+        runTest {
+            // given
+            val expectedError = Exception("error")
+            coEvery { getMoreRepositoriesUseCase.loadRepositories(any()) } throws (expectedError)
 
-        // when
-        viewModel.loadMore("")
+            // when
+            viewModel.loadMore("")
 
-        // then
-        viewModel.observeMoreReposLiveData.observeForever { response ->
-            response.handleResponse(
-                onSuccess = { assertNull(it) },
-                onFailure = { assertEquals(expectedError, it) }
-            )
+            // then
+            viewModel.observeMoreReposLiveData.observeForever { response ->
+                response.handleResponse(
+                    onSuccess = { assertNull(it) },
+                    onFailure = { assertEquals(expectedError, it) },
+                )
+            }
         }
-    }
 
     @Test
-    fun `should handle onLoading when loading`() = runTest {
-        // given
-        var loadCalled = false
-        coEvery { getMoreRepositoriesUseCase.loadRepositories(any()) } coAnswers {
-            flowOf(listOf(domainGitHubRepository))
+    fun `should handle onLoading when loading`() =
+        runTest {
+            // given
+            var loadCalled = false
+            coEvery { getMoreRepositoriesUseCase.loadRepositories(any()) } coAnswers {
+                flowOf(listOf(domainGitHubRepository))
+            }
+
+            // when
+            viewModel.loadMore("test")
+
+            // then
+            viewModel.observeMoreReposLiveData.observeForever { response ->
+                response.handleResponse(
+                    onLoading = {
+                        loadCalled = true
+                    },
+                )
+
+                assertTrue(loadCalled)
+            }
         }
-
-        // when
-        viewModel.loadMore("test")
-
-        // then
-        viewModel.observeMoreReposLiveData.observeForever { response ->
-            response.handleResponse(
-                onLoading = {
-                    loadCalled = true
-                }
-            )
-
-            assertTrue(loadCalled)
-        }
-    }
 }

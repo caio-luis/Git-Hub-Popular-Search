@@ -9,11 +9,14 @@ const val VISIBLE_THRESHOLD = 5
 abstract class EndlessScrollListener(
     private val layoutManager: LinearLayoutManager,
 ) : RecyclerView.OnScrollListener() {
-
     private var isLoading = true
     private var lastTotalItemCount = 0
 
-    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+    override fun onScrolled(
+        recyclerView: RecyclerView,
+        dx: Int,
+        dy: Int,
+    ) {
         if (dy < 0) return
 
         val visibleItemCount = recyclerView.childCount

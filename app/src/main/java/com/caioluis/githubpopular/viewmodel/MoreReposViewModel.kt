@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 class MoreReposViewModel(
     private val getMoreReposUseCase: GetMoreReposUseCase,
 ) : ViewModel() {
-
     private val moreReposLiveData: MutableLiveData<Response<List<UiGitHubRepository>>> =
         MutableLiveData()
     val observeMoreReposLiveData = moreReposLiveData

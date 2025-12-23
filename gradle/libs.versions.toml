@@ -33,6 +33,7 @@ junit = "4.13.2"
 material = "1.13.0"
 dependency-analysis = "3.5.1"
 jetbrainsKotlinJvm = "2.3.0"
+spotless = "8.1.0"
 
 [libraries]
 ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "symbol-processing-gradle-plugin", version.ref = "ksp" }
@@ -90,3 +91,4 @@ ksp-plugin = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 dependency-analysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependency-analysis" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }

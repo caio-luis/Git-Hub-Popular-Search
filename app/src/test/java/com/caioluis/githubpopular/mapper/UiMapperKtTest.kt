@@ -7,7 +7,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class UiMapperKtTest {
-
     @Test
     fun `assert that map domain to ui model`() {
         // When

@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 class GetRepositoriesViewModel(
     private val getRepositoriesUseCase: GetRepositoriesUseCase,
 ) : ViewModel() {
-
     private val gitHubReposLiveData: MutableLiveData<Response<List<UiGitHubRepository>>> =
         MutableLiveData()
     val observeGitHubReposLiveData = gitHubReposLiveData
