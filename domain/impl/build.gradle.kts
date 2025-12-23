@@ -1,6 +1,5 @@
 plugins {
-    `java-library`
-    alias(libs.plugins.jetbrains.kotlin.jvm)
+    id("githubpopular.jvm.library")
 }
 
 dependencies {
