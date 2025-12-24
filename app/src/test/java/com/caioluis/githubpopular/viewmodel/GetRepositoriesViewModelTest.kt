@@ -3,15 +3,20 @@ package com.caioluis.githubpopular.viewmodel
 import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.caioluis.githubpopular.MainDispatcherRule
+import com.caioluis.githubpopular.domain.bridge.model.Response
 import com.caioluis.githubpopular.domain.bridge.usecase.GetRepositoriesUseCase
 import com.caioluis.githubpopular.mapper.Fixtures.domainGitHubRepository
 import com.caioluis.githubpopular.mapper.Fixtures.uiRepository
+import com.caioluis.githubpopular.model.UiGitHubRepository
 import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
@@ -41,67 +46,91 @@ class GetRepositoriesViewModelTest {
     }
 
     @Test
-    fun `assert that call loadList returns response success`() {
-        runTest {
-            // given
-            val uiRepos = listOf(uiRepository)
-            val domainRepos = listOf(domainGitHubRepository)
+    fun `assert that call loadList returns response success`() = runTest {
+        // given
+        val uiRepos = listOf(uiRepository)
+        val domainRepos = listOf(domainGitHubRepository)
+        val emittedValues = mutableListOf<Response<List<UiGitHubRepository>>>()
 
-            coEvery { getRepositoriesUseCase.loadRepositories(any()) } coAnswers {
-                flowOf(domainRepos)
-            }
+        coEvery { getRepositoriesUseCase.loadRepositories(any()) } coAnswers {
+            flowOf(domainRepos)
+        }
 
-            // when
-            viewModel.loadList("")
-
-            // then
-            viewModel.observeGitHubReposLiveData.observeForever { response ->
-                response.handleResponse(
-                    onSuccess = { assertEquals(uiRepos, it) },
-                    onFailure = { assertNull(it) },
-                )
+        val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.repositoriesFlow.collect {
+                emittedValues.add(it)
             }
         }
+
+        // when
+        viewModel.loadList("")
+        advanceUntilIdle()
+
+        // then
+        assertTrue(emittedValues.isNotEmpty())
+        val lastValue = emittedValues.last()
+        lastValue.handleResponse(
+            onSuccess = { assertEquals(uiRepos, it) },
+            onFailure = { assertNull(it) },
+        )
+
+        job.cancel()
     }
 
     @Test
     fun `should handle error when loading list of repositories`() = runTest {
         // given
         val expectedError = Exception("error")
+        val emittedValues = mutableListOf<Response<List<UiGitHubRepository>>>()
+
         coEvery { getRepositoriesUseCase.loadRepositories(any()) } throws expectedError
+
+        val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.repositoriesFlow.collect {
+                emittedValues.add(it)
+            }
+        }
 
         // when
         viewModel.loadList("")
+        advanceUntilIdle()
 
         // then
-        viewModel.observeGitHubReposLiveData.observeForever { response ->
-            response.handleResponse(
-                onSuccess = { assertNull(it) },
-                onFailure = { assertEquals(expectedError, it) },
-            )
-        }
+        assertTrue(emittedValues.isNotEmpty())
+        val lastValue = emittedValues.last()
+
+        var failureException: Throwable? = null
+        lastValue.handleResponse(
+            onSuccess = { assertNull(it) },
+            onFailure = { failureException = it },
+        )
+        assertEquals(expectedError, failureException)
+
+        job.cancel()
     }
 
     @Test
     fun `should handle onLoading when loading`() = runTest {
         // given
-        var loadCalled = false
+        val emittedValues = mutableListOf<Response<List<UiGitHubRepository>>>()
         coEvery { getRepositoriesUseCase.loadRepositories(any()) } coAnswers {
             flowOf(listOf(domainGitHubRepository))
         }
 
+        val job = backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.repositoriesFlow.collect {
+                emittedValues.add(it)
+            }
+        }
+
         // when
         viewModel.loadList("test")
+        advanceUntilIdle()
 
         // then
-        viewModel.observeGitHubReposLiveData.observeForever { response ->
-            response.handleResponse(
-                onLoading = {
-                    loadCalled = true
-                },
-            )
+        val hasLoading = emittedValues.any { it is Response.Loading }
+        assertTrue(hasLoading)
 
-            assertTrue(loadCalled)
-        }
+        job.cancel()
     }
 }

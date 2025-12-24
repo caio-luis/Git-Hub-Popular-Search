@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  build:
+  assemble_and_test:
     runs-on: self-hosted
 
     steps:
@@ -16,4 +16,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: run build with fastlane
-        run: bundle exec fastlane build
+        run: bundle exec fastlane assemble
+
+      - name: run tests with fastlane
+        run: bundle exec fastlane test
