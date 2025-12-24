@@ -18,8 +18,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.caioluis.githubpopular.model.UiGitHubRepository
+import com.caioluis.githubpopular.model.UiRepositoryOwner
 
 @Composable
 fun RepositoriesList(
@@ -80,4 +82,25 @@ fun RepositoriesList(
             }
         }
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun RepositoriesListPreview() {
+    val dummyRepositories = List(10) { index ->
+        UiGitHubRepository(
+            name = "Awesome Repo $index",
+            description = "This is a very awesome repository with a long description to test how it looks in the list item.",
+            stargazersCount = 1234 + index,
+            forksCount = 567 + index,
+            owner = UiRepositoryOwner(login = "dev_guru_$index", avatarUrl = ""),
+        )
+    }
+
+    RepositoriesList(
+        repositories = dummyRepositories,
+        isLoadingMore = false,
+        loadMoreError = null,
+        onLoadMore = {},
+    )
 }

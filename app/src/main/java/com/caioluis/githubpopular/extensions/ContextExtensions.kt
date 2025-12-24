@@ -5,10 +5,6 @@ import android.content.Intent
 import android.widget.Toast
 import androidx.core.net.toUri
 
-fun Context.showShortToast(message: Int) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-}
-
 fun Context.showLongToast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
