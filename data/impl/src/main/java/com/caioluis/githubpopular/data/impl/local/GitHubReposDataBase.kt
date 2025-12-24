@@ -23,19 +23,17 @@ abstract class GitHubReposDataBase : RoomDatabase() {
     companion object {
         private var dbInstance: GitHubReposDataBase? = null
 
-        fun getInstance(context: Context): GitHubReposDataBase =
-            dbInstance ?: synchronized(this) {
-                dbInstance ?: buildDatabase(context).also { dbInstance = it }
-            }
+        fun getInstance(context: Context): GitHubReposDataBase = dbInstance ?: synchronized(this) {
+            dbInstance ?: buildDatabase(context).also { dbInstance = it }
+        }
 
-        private fun buildDatabase(context: Context) =
-            Room
-                .databaseBuilder(
-                    context.applicationContext,
-                    GitHubReposDataBase::class.java,
-                    DATABASE_FILE_NAME,
-                ).fallbackToDestructiveMigration(dropAllTables = true)
-                .fallbackToDestructiveMigrationOnDowngrade(dropAllTables = true)
-                .build()
+        private fun buildDatabase(context: Context) = Room
+            .databaseBuilder(
+                context.applicationContext,
+                GitHubReposDataBase::class.java,
+                DATABASE_FILE_NAME,
+            ).fallbackToDestructiveMigration(dropAllTables = true)
+            .fallbackToDestructiveMigrationOnDowngrade(dropAllTables = true)
+            .build()
     }
 }

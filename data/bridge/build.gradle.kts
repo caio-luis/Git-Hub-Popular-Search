@@ -10,10 +10,6 @@ android {
         buildFeatures.buildConfig = true
         buildConfigField("String", "API_BASE_URL", "\"https://api.github.com/\"")
     }
-
-    viewBinding {
-        enable = true
-    }
 }
 
 dependencies {

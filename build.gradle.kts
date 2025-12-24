@@ -17,7 +17,11 @@ subprojects {
         kotlin {
             target("**/*.kt")
             targetExclude("**/build/**/*.kt")
-            ktlint()
+            ktlint().editorConfigOverride(
+                mapOf(
+                    "ktlint_function_naming_ignore_when_annotated_with" to "Composable"
+                )
+            )
         }
 
         kotlinGradle {

@@ -11,10 +11,6 @@ android {
         buildFeatures.buildConfig = true
         buildConfigField("String", "API_BASE_URL", "\"https://api.github.com/\"")
     }
-
-    viewBinding {
-        enable = true
-    }
 }
 
 dependencies {
@@ -30,6 +26,7 @@ dependencies {
     implementation(libs.square.retrofit.converter.moshi)
     implementation(libs.square.moshi)
     implementation(libs.square.okhttp)
+    implementation(libs.square.okhttp.logging.interceptor)
     implementation(libs.room.common)
     implementation(libs.androidx.sqlite)
 

@@ -65,45 +65,43 @@ class GetRepositoriesViewModelTest {
     }
 
     @Test
-    fun `should handle error when loading list of repositories`() =
-        runTest {
-            // given
-            val expectedError = Exception("error")
-            coEvery { getRepositoriesUseCase.loadRepositories(any()) } throws expectedError
+    fun `should handle error when loading list of repositories`() = runTest {
+        // given
+        val expectedError = Exception("error")
+        coEvery { getRepositoriesUseCase.loadRepositories(any()) } throws expectedError
 
-            // when
-            viewModel.loadList("")
+        // when
+        viewModel.loadList("")
 
-            // then
-            viewModel.observeGitHubReposLiveData.observeForever { response ->
-                response.handleResponse(
-                    onSuccess = { assertNull(it) },
-                    onFailure = { assertEquals(expectedError, it) },
-                )
-            }
+        // then
+        viewModel.observeGitHubReposLiveData.observeForever { response ->
+            response.handleResponse(
+                onSuccess = { assertNull(it) },
+                onFailure = { assertEquals(expectedError, it) },
+            )
         }
+    }
 
     @Test
-    fun `should handle onLoading when loading`() =
-        runTest {
-            // given
-            var loadCalled = false
-            coEvery { getRepositoriesUseCase.loadRepositories(any()) } coAnswers {
-                flowOf(listOf(domainGitHubRepository))
-            }
-
-            // when
-            viewModel.loadList("test")
-
-            // then
-            viewModel.observeGitHubReposLiveData.observeForever { response ->
-                response.handleResponse(
-                    onLoading = {
-                        loadCalled = true
-                    },
-                )
-
-                assertTrue(loadCalled)
-            }
+    fun `should handle onLoading when loading`() = runTest {
+        // given
+        var loadCalled = false
+        coEvery { getRepositoriesUseCase.loadRepositories(any()) } coAnswers {
+            flowOf(listOf(domainGitHubRepository))
         }
+
+        // when
+        viewModel.loadList("test")
+
+        // then
+        viewModel.observeGitHubReposLiveData.observeForever { response ->
+            response.handleResponse(
+                onLoading = {
+                    loadCalled = true
+                },
+            )
+
+            assertTrue(loadCalled)
+        }
+    }
 }
