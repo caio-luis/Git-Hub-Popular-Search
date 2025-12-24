@@ -23,7 +23,6 @@ dependencies {
     api(project(":domain:impl"))
     api(project(":domain:bridge"))
 
-    implementation(libs.androidx.activity)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.ui)
@@ -39,17 +38,11 @@ dependencies {
 
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.lifecycle.common)
-    implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.lifecycle.livedata.core)
-    implementation(libs.kotlin.stdlib)
     implementation(libs.app.compat)
     implementation(libs.kotlinx.coroutines)
-    implementation(libs.recycler.view)
-    implementation(libs.card.view)
-    implementation(libs.swipe.refresh.layout)
-    implementation(libs.bumptech.glide)
     implementation(libs.hilt.android)
 
     ksp(libs.androidx.lifecycle.common)
