@@ -20,3 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 -dontwarn java.lang.invoke.StringConcatFactory
+
+-keep class com.caioluis.githubpopular.data.bridge.local.dao.** { *; }
+-keep class com.caioluis.githubpopular.data.bridge.local.model.** { *; }

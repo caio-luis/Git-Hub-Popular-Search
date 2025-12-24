@@ -21,9 +21,9 @@ platform :android do
     gradle(task: "test")
   end
 
-  desc "Build and run all tests on all variants"
-  lane :build do
-    gradle(task: "build")
+  desc "Assemble main outputs for all the variants"
+  lane :assemble do
+    gradle(task: "assemble")
   end
 
   desc "Submit a new Beta Build to Crashlytics Beta"

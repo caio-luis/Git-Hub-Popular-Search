@@ -41,7 +41,7 @@ interface DataModule {
         @Singleton
         fun provideGitHubReposDataBase(
             @ApplicationContext context: Context,
-        ): GitHubReposDataBase = GitHubReposDataBase.Companion.getInstance(context)
+        ): GitHubReposDataBase = GitHubReposDataBase.getInstance(context)
 
         @Provides
         fun provideGitHubRepositoriesDao(dataBase: GitHubReposDataBase): GitHubRepositoriesDao = dataBase.gitHubRepositoriesDao()
