@@ -8,6 +8,7 @@ dependencies {
     compileOnly(libs.android.gradle)
     compileOnly(libs.kotlin.gradle.plugin)
     compileOnly(libs.ksp.gradle.plugin)
+    implementation(libs.spotless.gradle.plugin)
 }
 
 gradlePlugin {

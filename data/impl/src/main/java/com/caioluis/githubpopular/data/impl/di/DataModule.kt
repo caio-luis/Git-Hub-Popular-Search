@@ -35,8 +35,7 @@ interface DataModule {
     companion object {
         @Provides
         @Singleton
-        fun provideGitHubRepositoriesService(): GitHubRepositoriesService =
-            ServiceBuilder.Companion<GitHubRepositoriesService>(BuildConfig.API_BASE_URL)
+        fun provideGitHubRepositoriesService(): GitHubRepositoriesService = ServiceBuilder.Companion<GitHubRepositoriesService>(BuildConfig.API_BASE_URL)
 
         @Provides
         @Singleton

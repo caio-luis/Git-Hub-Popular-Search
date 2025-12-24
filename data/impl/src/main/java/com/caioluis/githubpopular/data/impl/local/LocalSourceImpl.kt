@@ -8,26 +8,25 @@ import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 import javax.inject.Inject
 
 class LocalSourceImpl
-    @Inject
-    constructor(
-        private val gitHubRepositoriesDao: GitHubRepositoriesDao,
-    ) : LocalSource {
-        override suspend fun saveToLocalCache(
-            repositories: List<DomainGitHubRepository>,
-            page: Int,
-            language: String,
-        ) {
-            if (page <= 1) {
-                gitHubRepositoriesDao.deleteReposByLanguage(language)
-            }
-            gitHubRepositoriesDao.saveRepositories(repositories.map { it.toLocal() })
+@Inject
+constructor(
+    private val gitHubRepositoriesDao: GitHubRepositoriesDao,
+) : LocalSource {
+    override suspend fun saveToLocalCache(
+        repositories: List<DomainGitHubRepository>,
+        page: Int,
+        language: String,
+    ) {
+        if (page <= 1) {
+            gitHubRepositoriesDao.deleteReposByLanguage(language)
         }
-
-        override suspend fun getFromCache(
-            page: Int,
-            language: String,
-        ): List<DomainGitHubRepository>? =
-            gitHubRepositoriesDao.getAllRepositories(page, language)?.map {
-                it.toDomain()
-            }
+        gitHubRepositoriesDao.saveRepositories(repositories.map { it.toLocal() })
     }
+
+    override suspend fun getFromCache(
+        page: Int,
+        language: String,
+    ): List<DomainGitHubRepository>? = gitHubRepositoriesDao.getAllRepositories(page, language)?.map {
+        it.toDomain()
+    }
+}

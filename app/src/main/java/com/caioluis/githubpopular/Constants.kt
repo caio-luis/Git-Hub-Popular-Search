@@ -28,7 +28,4 @@ object Constants {
             "Bash",
             "Java",
         ).toList()
-
-    const val REPOSITORIES_VIEW_TYPE = 100
-    const val RETRY_BUTTON_VIEW_TYPE = 101
 }

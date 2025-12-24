@@ -9,12 +9,11 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import javax.inject.Inject
 
 class GetRepositoriesUseCaseImpl
-    @Inject
-    constructor(
-        private val gitHubReposRepository: GitHubReposRepository,
-    ) : GetRepositoriesUseCase {
-        override suspend fun loadRepositories(language: String): Flow<List<DomainGitHubRepository>?> =
-            gitHubReposRepository
-                .getGitHubRepositories(pageNumber, language)
-                .distinctUntilChanged()
-    }
+@Inject
+constructor(
+    private val gitHubReposRepository: GitHubReposRepository,
+) : GetRepositoriesUseCase {
+    override suspend fun loadRepositories(language: String): Flow<List<DomainGitHubRepository>?> = gitHubReposRepository
+        .getGitHubRepositories(pageNumber, language)
+        .distinctUntilChanged()
+}

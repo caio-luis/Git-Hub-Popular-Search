@@ -16,8 +16,8 @@ fun RemoteGitHubRepository.toDomain(
     name = name ?: "",
     fullName = fullName ?: "",
     owner =
-        owner?.toDomain()
-            ?: DomainRepositoryOwner(),
+    owner?.toDomain()
+        ?: DomainRepositoryOwner(),
     description = description ?: "",
     pullsUrl = pullsUrl ?: "",
     stargazersCount = stargazersCount ?: 0,
@@ -27,57 +27,52 @@ fun RemoteGitHubRepository.toDomain(
     language = language,
 )
 
-fun RemoteRepositoryOwner.toDomain() =
-    DomainRepositoryOwner(
-        id = id ?: -1,
-        login = login ?: "",
-        avatarUrl = avatarUrl ?: "",
-    )
+fun RemoteRepositoryOwner.toDomain() = DomainRepositoryOwner(
+    id = id ?: -1,
+    login = login ?: "",
+    avatarUrl = avatarUrl ?: "",
+)
 
 // Local
 
-fun LocalGitHubRepository.toDomain() =
-    DomainGitHubRepository(
-        id = id,
-        name = name,
-        fullName = fullName,
-        owner = owner.toDomain(),
-        description = description,
-        pullsUrl = pullsUrl,
-        stargazersCount = stargazersCount,
-        forksCount = forksCount,
-        htmlUrl = htmlUrl,
-        page = page,
-        language = language,
-    )
+fun LocalGitHubRepository.toDomain() = DomainGitHubRepository(
+    id = id,
+    name = name,
+    fullName = fullName,
+    owner = owner.toDomain(),
+    description = description,
+    pullsUrl = pullsUrl,
+    stargazersCount = stargazersCount,
+    forksCount = forksCount,
+    htmlUrl = htmlUrl,
+    page = page,
+    language = language,
+)
 
-fun LocalRepositoryOwner.toDomain() =
-    DomainRepositoryOwner(
-        id = id,
-        login = login,
-        avatarUrl = avatarUrl,
-    )
+fun LocalRepositoryOwner.toDomain() = DomainRepositoryOwner(
+    id = id,
+    login = login,
+    avatarUrl = avatarUrl,
+)
 
 // Domain
 
-fun DomainGitHubRepository.toLocal() =
-    LocalGitHubRepository(
-        id = id,
-        name = name,
-        fullName = fullName,
-        owner = owner.toLocal(),
-        description = description,
-        pullsUrl = pullsUrl,
-        stargazersCount = stargazersCount,
-        forksCount = forksCount,
-        htmlUrl = htmlUrl,
-        page = page,
-        language = language,
-    )
+fun DomainGitHubRepository.toLocal() = LocalGitHubRepository(
+    id = id,
+    name = name,
+    fullName = fullName,
+    owner = owner.toLocal(),
+    description = description,
+    pullsUrl = pullsUrl,
+    stargazersCount = stargazersCount,
+    forksCount = forksCount,
+    htmlUrl = htmlUrl,
+    page = page,
+    language = language,
+)
 
-fun DomainRepositoryOwner.toLocal() =
-    LocalRepositoryOwner(
-        id = id,
-        login = login,
-        avatarUrl = avatarUrl,
-    )
+fun DomainRepositoryOwner.toLocal() = LocalRepositoryOwner(
+    id = id,
+    login = login,
+    avatarUrl = avatarUrl,
+)

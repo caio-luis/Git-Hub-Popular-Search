@@ -2,6 +2,7 @@ plugins {
     id("githubpopular.android.application")
     alias(libs.plugins.ksp.plugin)
     alias(libs.plugins.hilt.android)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -11,8 +12,8 @@ android {
         buildFeatures.buildConfig = true
     }
 
-    viewBinding {
-        enable = true
+    buildFeatures {
+        compose = true
     }
 }
 
@@ -23,6 +24,19 @@ dependencies {
     api(project(":domain:bridge"))
 
     implementation(libs.androidx.activity)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.coil.compose)
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.navigation.compose)
+    implementation(libs.lifecycle.runtime.compose)
+
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.lifecycle.common)
     implementation(libs.androidx.constraintlayout)
@@ -54,4 +68,9 @@ dependencies {
     testImplementation(libs.junit)
 
     debugImplementation(libs.leakcanary.android)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
+
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
 }
