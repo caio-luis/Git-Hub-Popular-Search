@@ -24,13 +24,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.caioluis.githubpopular.Constants
 import com.caioluis.githubpopular.model.UiGitHubRepository
-import com.caioluis.githubpopular.model.UiRepositoryOwner
 import com.caioluis.githubpopular.viewmodel.GetRepositoriesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -138,18 +136,4 @@ fun MainScreen(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun MainScreenPreview() {
-    RepositoryItem(
-        repository = UiGitHubRepository(
-            name = "Example of title",
-            description = "This is a example of a kotlin repository description. It'll appear like this to the user!",
-            stargazersCount = 1234565,
-            forksCount = 1234565,
-            owner = UiRepositoryOwner(login = "User Name"),
-        ),
-    )
 }

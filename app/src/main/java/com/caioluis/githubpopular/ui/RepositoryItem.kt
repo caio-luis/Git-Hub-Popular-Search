@@ -2,7 +2,7 @@ package com.caioluis.githubpopular.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize // Importante importar isso
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.caioluis.githubpopular.R
+import com.caioluis.githubpopular.extensions.openBrowserIntent
 import com.caioluis.githubpopular.model.UiGitHubRepository
 import com.caioluis.githubpopular.model.UiRepositoryOwner
 
@@ -38,7 +40,10 @@ fun RepositoryItem(
     repository: UiGitHubRepository,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+
     Card(
+        onClick = { context.openBrowserIntent(repository.htmlUrl) },
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 5.dp),
