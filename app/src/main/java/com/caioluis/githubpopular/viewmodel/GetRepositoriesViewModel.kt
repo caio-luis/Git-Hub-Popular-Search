@@ -2,81 +2,97 @@ package com.caioluis.githubpopular.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.caioluis.githubpopular.domain.bridge.model.Response
-import com.caioluis.githubpopular.domain.bridge.usecase.ActualPage
 import com.caioluis.githubpopular.domain.bridge.usecase.GetRepositoriesUseCase
 import com.caioluis.githubpopular.mapper.toUi
-import com.caioluis.githubpopular.model.UiGitHubRepository
+import com.caioluis.githubpopular.model.MainUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GetRepositoriesViewModel
-@Inject
-constructor(
+class GetRepositoriesViewModel @Inject constructor(
     private val getRepositoriesUseCase: GetRepositoriesUseCase,
 ) : ViewModel() {
-    private val allRepositories = mutableListOf<UiGitHubRepository>()
+    private val _uiState = MutableStateFlow(MainUiState())
+    val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
 
-    private val _repositoriesFlow =
-        MutableStateFlow<Response<List<UiGitHubRepository>>>(Response.Success(emptyList()))
-    val repositoriesFlow = _repositoriesFlow.asStateFlow()
-
-    private val _isLoadingMore = MutableStateFlow(false)
-    val isLoadingMore = _isLoadingMore.asStateFlow()
-
-    private val _loadMoreError = MutableStateFlow<Throwable?>(null)
-    val loadMoreError = _loadMoreError.asStateFlow()
+    private var currentPage = 1
 
     fun loadList(language: String) {
         viewModelScope.launch {
-            ActualPage.reset()
-            _repositoriesFlow.value = Response.Loading
-            allRepositories.clear()
-            _loadMoreError.value = null
-            _isLoadingMore.value = false
+            currentPage = 1
+
+            _uiState.update { currentState ->
+                currentState.copy(
+                    isLoading = true,
+                    error = null,
+                    loadMoreError = null,
+                    repositories = emptyList(),
+                )
+            }
 
             runCatching {
                 getRepositoriesUseCase
-                    .loadRepositories(language)
+                    .loadRepositories(page = currentPage, language = language)
                     .first()
             }.onSuccess { domainRepositories ->
-                ActualPage.increase()
-                val uiResponse = domainRepositories?.map { it.toUi() }.orEmpty()
-                allRepositories.addAll(uiResponse)
-                _repositoriesFlow.value = Response.Success(allRepositories.toList())
-            }.onFailure {
-                _repositoriesFlow.value = Response.Failure(it)
+                val uiList = domainRepositories?.map { it.toUi() }.orEmpty()
+
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        repositories = uiList,
+                        error = null,
+                    )
+                }
+            }.onFailure { error ->
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        error = error,
+                    )
+                }
             }
         }
     }
 
     fun loadMore(language: String) {
-        if (_isLoadingMore.value) return
+        if (_uiState.value.isLoadingMore) return
 
         viewModelScope.launch {
-            _isLoadingMore.value = true
-            _loadMoreError.value = null
+            _uiState.update { it.copy(isLoadingMore = true, loadMoreError = null) }
 
             runCatching {
                 getRepositoriesUseCase
-                    .loadRepositories(language)
+                    .loadRepositories(page = currentPage + 1, language = language)
                     .first()
             }.onSuccess { domainRepositories ->
-                ActualPage.increase()
-                val uiResponse = domainRepositories?.map { it.toUi() }.orEmpty()
-                if (uiResponse.isNotEmpty()) {
-                    allRepositories.addAll(uiResponse)
-                    _repositoriesFlow.value = Response.Success(allRepositories.toList())
+                val newItems = domainRepositories?.map { it.toUi() }.orEmpty()
+
+                if (newItems.isNotEmpty()) {
+                    currentPage++
+
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            isLoadingMore = false,
+                            repositories = currentState.repositories + newItems,
+                        )
+                    }
+                } else {
+                    _uiState.update { it.copy(isLoadingMore = false) }
                 }
-                _isLoadingMore.value = false
-            }.onFailure {
-                _loadMoreError.value = it
-                _isLoadingMore.value = false
+            }.onFailure { error ->
+                _uiState.update {
+                    it.copy(
+                        isLoadingMore = false,
+                        loadMoreError = error,
+                    )
+                }
             }
         }
     }
