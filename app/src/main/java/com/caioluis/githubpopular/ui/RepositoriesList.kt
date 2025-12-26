@@ -1,5 +1,6 @@
 package com.caioluis.githubpopular.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.caioluis.githubpopular.model.UiGitHubRepository
 import com.caioluis.githubpopular.model.UiRepositoryOwner
+import java.util.UUID
 
 @Composable
 fun RepositoriesList(
@@ -35,7 +37,11 @@ fun RepositoriesList(
 
     val isScrollToEnd by remember {
         derivedStateOf {
-            listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == listState.layoutInfo.totalItemsCount - 1
+            val layoutInfo = listState.layoutInfo
+            val totalItems = layoutInfo.totalItemsCount
+            val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+
+            totalItems > 0 && lastVisibleItemIndex >= (totalItems - 1)
         }
     }
 
@@ -48,14 +54,18 @@ fun RepositoriesList(
     LazyColumn(
         state = listState,
         modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(vertical = 8.dp),
+        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        items(repositories) { repository ->
+        items(
+            items = repositories,
+            key = { it.id },
+        ) { repository ->
             RepositoryItem(repository = repository)
         }
 
         if (isLoadingMore) {
-            item {
+            item(key = UUID.randomUUID()) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -68,7 +78,7 @@ fun RepositoriesList(
         }
 
         if (loadMoreError != null) {
-            item {
+            item(key = UUID.randomUUID()) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -89,8 +99,9 @@ fun RepositoriesList(
 fun RepositoriesListPreview() {
     val dummyRepositories = List(10) { index ->
         UiGitHubRepository(
+            id = index,
             name = "Awesome Repo $index",
-            description = "This is a very awesome repository with a long description to test how it looks in the list item.",
+            description = "Description for repo $index",
             stargazersCount = 1234 + index,
             forksCount = 567 + index,
             owner = UiRepositoryOwner(login = "dev_guru_$index", avatarUrl = ""),

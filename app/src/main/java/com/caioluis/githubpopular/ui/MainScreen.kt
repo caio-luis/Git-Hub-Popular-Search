@@ -25,7 +25,10 @@ fun MainScreen(
 ) {
     val uiState by getRepositoriesViewModel.uiState.collectAsStateWithLifecycle()
 
-    var selectedLanguage by remember { mutableStateOf(Constants.languages.first()) }
+    var selectedLanguage by remember {
+        mutableStateOf(Constants.languages.firstOrNull() ?: "Kotlin")
+    }
+
     val pullToRefreshState = rememberPullToRefreshState()
 
     LaunchedEffect(selectedLanguage) {

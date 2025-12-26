@@ -13,9 +13,10 @@ import androidx.compose.ui.Modifier
 fun ErrorContent(
     error: Throwable?,
     onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {

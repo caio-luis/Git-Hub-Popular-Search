@@ -20,16 +20,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.caioluis.githubpopular.R
 import com.caioluis.githubpopular.extensions.openBrowserIntent
 import com.caioluis.githubpopular.model.UiGitHubRepository
@@ -44,11 +45,12 @@ fun RepositoryItem(
 
     Card(
         onClick = { context.openBrowserIntent(repository.htmlUrl) },
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 5.dp),
-        elevation = CardDefaults.cardElevation(defaultElevation = 7.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        modifier = modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+        ),
     ) {
         Row(
             modifier = Modifier
@@ -61,8 +63,11 @@ fun RepositoryItem(
                 modifier = Modifier.padding(end = 12.dp),
             ) {
                 AsyncImage(
-                    model = repository.owner.avatarUrl,
-                    contentDescription = "User Image",
+                    model = ImageRequest.Builder(LocalContext.current)
+                        .data(repository.owner.avatarUrl)
+                        .crossfade(true)
+                        .build(),
+                    contentDescription = "User image",
                     placeholder = painterResource(id = R.drawable.ic_star),
                     error = painterResource(id = R.drawable.ic_star),
                     modifier = Modifier
@@ -79,7 +84,6 @@ fun RepositoryItem(
                     ),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    color = Color.Black,
                 )
             }
 
@@ -96,7 +100,6 @@ fun RepositoryItem(
                     ),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    color = Color.Black,
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
@@ -104,7 +107,6 @@ fun RepositoryItem(
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 3,
                     overflow = TextOverflow.Ellipsis,
-                    color = Color.Black,
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -121,7 +123,6 @@ fun RepositoryItem(
                         text = repository.stargazersCount.toString(),
                         style = MaterialTheme.typography.bodySmall,
                         modifier = Modifier.padding(end = 10.dp),
-                        color = Color.Black,
                     )
 
                     Image(
@@ -133,7 +134,6 @@ fun RepositoryItem(
                     Text(
                         text = repository.forksCount.toString(),
                         style = MaterialTheme.typography.bodySmall,
-                        color = Color.Black,
                     )
                 }
             }
@@ -147,8 +147,7 @@ fun RepositoryItemPreview() {
     RepositoryItem(
         repository = UiGitHubRepository(
             name = "Example of title",
-            description = "This is a example of a kotlin repository description. " +
-                "It'll appear like this to the user! If the text pass 3 lines, ellipsis will shine",
+            description = "This is a example of a kotlin repository description.",
             stargazersCount = 1234565,
             forksCount = 1234565,
             owner = UiRepositoryOwner(login = "User Name"),
