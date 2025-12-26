@@ -4,8 +4,6 @@ import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -18,13 +16,10 @@ class GetRepositoriesUseCaseTest {
     fun `loadRepositories returns expected result`() = runTest {
         // Arrange
         val expected = listOf(DomainGitHubRepository())
-        coEvery { gitHubReposRepository.getGitHubRepositories(any(), any()) } returns
-            flowOf(
-                expected,
-            )
+        coEvery { gitHubReposRepository.getGitHubRepositories(any(), any()) } returns expected
 
         // Act
-        val result = getReposUseCase.loadRepositories("Kotlin").first()
+        val result = getReposUseCase.loadRepositories(1, "Kotlin")
 
         // Assert
         assertEquals(expected, result)
@@ -38,6 +33,6 @@ class GetRepositoriesUseCaseTest {
         coEvery { gitHubReposRepository.getGitHubRepositories(any(), any()) } throws exception
 
         // Act
-        getReposUseCase.loadRepositories("Kotlin")
+        getReposUseCase.loadRepositories(1, "Kotlin")
     }
 }
