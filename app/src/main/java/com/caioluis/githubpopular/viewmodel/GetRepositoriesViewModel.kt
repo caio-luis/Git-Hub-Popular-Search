@@ -9,7 +9,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,7 +38,6 @@ class GetRepositoriesViewModel @Inject constructor(
             runCatching {
                 getRepositoriesUseCase
                     .loadRepositories(page = currentPage, language = language)
-                    .first()
             }.onSuccess { domainRepositories ->
                 val uiList = domainRepositories?.map { it.toUi() }.orEmpty()
 
@@ -70,7 +68,6 @@ class GetRepositoriesViewModel @Inject constructor(
             runCatching {
                 getRepositoriesUseCase
                     .loadRepositories(page = currentPage + 1, language = language)
-                    .first()
             }.onSuccess { domainRepositories ->
                 val newItems = domainRepositories?.map { it.toUi() }.orEmpty()
 
