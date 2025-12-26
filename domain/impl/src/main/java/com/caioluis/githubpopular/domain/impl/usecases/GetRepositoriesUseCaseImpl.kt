@@ -13,6 +13,6 @@ constructor(
     override suspend fun loadRepositories(
         page: Int,
         language: String,
-    ): List<DomainGitHubRepository>? = gitHubReposRepository
+    ): List<DomainGitHubRepository> = gitHubReposRepository
         .getGitHubRepositories(page, language)
 }

@@ -17,20 +17,16 @@ constructor(
     override suspend fun getGitHubRepositories(
         page: Int,
         language: String,
-    ): List<DomainGitHubRepository>? = runCatching {
-        remoteSource
-            .fetchFromRemote(page, language)
+    ): List<DomainGitHubRepository> = runCatching {
+        remoteSource.fetchFromRemote(page, language)
             ?.mapNotNull { it?.toDomain(page, language) }
             ?.takeIf { it.isNotEmpty() }
-            ?.let {
-                localSource.saveToLocalCache(it, page, language)
-                localSource.getFromCache(page, language)
-            }?.takeIf { it.isNotEmpty() }
-            ?: throw NoMoreItemsException()
-    }.onFailure { previousError ->
-        localSource
-            .getFromCache(page, language)
+            ?.also { items ->
+                localSource.saveToLocalCache(items, page, language)
+            } ?: throw NoMoreItemsException()
+    }.getOrElse { previousError ->
+        localSource.getFromCache(page, language)
             ?.takeIf { it.isNotEmpty() }
             ?: throw previousError
-    }.getOrNull()
+    }
 }

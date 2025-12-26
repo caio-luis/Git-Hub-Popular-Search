@@ -6,5 +6,5 @@ interface GitHubReposRepository {
     suspend fun getGitHubRepositories(
         page: Int,
         language: String,
-    ): List<DomainGitHubRepository>?
+    ): List<DomainGitHubRepository>
 }

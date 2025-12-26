@@ -42,7 +42,6 @@ fun LanguageSelector(
                 value = selectedLanguage,
                 onValueChange = {},
                 readOnly = true,
-                // MELHORIA: Uso de Resource de String
                 label = { Text("Language") },
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)

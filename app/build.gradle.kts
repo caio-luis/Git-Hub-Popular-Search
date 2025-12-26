@@ -35,6 +35,8 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.navigation.compose)
     implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
 
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.lifecycle.common)
@@ -59,6 +61,8 @@ dependencies {
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.mockk.dsl)
     testImplementation(libs.junit)
+    testImplementation(libs.androidx.paging.common)
+    testImplementation(libs.androidx.paging.testing)
 
     debugImplementation(libs.leakcanary.android)
     debugImplementation(libs.androidx.ui.tooling)

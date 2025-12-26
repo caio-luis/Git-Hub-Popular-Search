@@ -2,14 +2,18 @@ package com.caioluis.githubpopular.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.map
+import com.caioluis.githubpopular.data.GitHubPagingSource
 import com.caioluis.githubpopular.domain.bridge.usecase.GetRepositoriesUseCase
-import com.caioluis.githubpopular.mapper.toUi
-import com.caioluis.githubpopular.model.MainUiState
+import com.caioluis.githubpopular.model.UiGitHubRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,80 +21,46 @@ import javax.inject.Inject
 class GetRepositoriesViewModel @Inject constructor(
     private val getRepositoriesUseCase: GetRepositoriesUseCase,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(MainUiState())
-    val uiState: StateFlow<MainUiState> = _uiState.asStateFlow()
 
-    private var currentPage = 1
+    private val _repositories = MutableStateFlow<PagingData<UiGitHubRepository>>(PagingData.empty())
+    val repositories: StateFlow<PagingData<UiGitHubRepository>> = _repositories
 
     fun loadList(language: String) {
         viewModelScope.launch {
-            currentPage = 1
-
-            _uiState.update { currentState ->
-                currentState.copy(
-                    isLoading = true,
-                    error = null,
-                    loadMoreError = null,
-                    repositories = emptyList(),
-                )
-            }
-
-            runCatching {
-                getRepositoriesUseCase
-                    .loadRepositories(page = currentPage, language = language)
-            }.onSuccess { domainRepositories ->
-                val uiList = domainRepositories?.map { it.toUi() }.orEmpty()
-
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        repositories = uiList,
-                        error = null,
+            Pager(
+                config = PagingConfig(
+                    pageSize = 20,
+                    initialLoadSize = 20,
+                    prefetchDistance = 3,
+                    enablePlaceholders = true,
+                ),
+                pagingSourceFactory = {
+                    GitHubPagingSource(
+                        getRepositoriesUseCase = getRepositoriesUseCase,
+                        language = language,
                     )
-                }
-            }.onFailure { error ->
-                _uiState.update {
-                    it.copy(
-                        isLoading = false,
-                        error = error,
-                    )
-                }
-            }
-        }
-    }
-
-    fun loadMore(language: String) {
-        if (_uiState.value.isLoadingMore) return
-
-        viewModelScope.launch {
-            _uiState.update { it.copy(isLoadingMore = true, loadMoreError = null) }
-
-            runCatching {
-                getRepositoriesUseCase
-                    .loadRepositories(page = currentPage + 1, language = language)
-            }.onSuccess { domainRepositories ->
-                val newItems = domainRepositories?.map { it.toUi() }.orEmpty()
-
-                if (newItems.isNotEmpty()) {
-                    currentPage++
-
-                    _uiState.update { currentState ->
-                        currentState.copy(
-                            isLoadingMore = false,
-                            repositories = currentState.repositories + newItems,
+                },
+            )
+                .flow
+                .cachedIn(viewModelScope)
+                .collectLatest { pagingData ->
+                    val uiPagingData = pagingData.map { domainRepo ->
+                        UiGitHubRepository(
+                            id = domainRepo.id,
+                            name = domainRepo.name,
+                            description = domainRepo.description,
+                            forksCount = domainRepo.forksCount,
+                            stargazersCount = domainRepo.stargazersCount,
+                            owner = domainRepo.owner.let { owner ->
+                                com.caioluis.githubpopular.model.UiRepositoryOwner(
+                                    avatarUrl = owner.avatarUrl,
+                                    login = owner.login,
+                                )
+                            },
                         )
                     }
-                } else {
-                    _uiState.update { it.copy(isLoadingMore = false) }
+                    _repositories.value = uiPagingData
                 }
-            }.onFailure { error ->
-                _uiState.update {
-                    it.copy(
-                        isLoadingMore = false,
-                        loadMoreError = error,
-                    )
-                }
-            }
         }
     }
 }
