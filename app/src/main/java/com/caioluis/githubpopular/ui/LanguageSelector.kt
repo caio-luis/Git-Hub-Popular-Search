@@ -16,7 +16,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.caioluis.githubpopular.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -24,11 +26,12 @@ fun LanguageSelector(
     selectedLanguage: String,
     languages: List<String>,
     onLanguageSelected: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(16.dp),
     ) {
@@ -41,8 +44,11 @@ fun LanguageSelector(
                 value = selectedLanguage,
                 onValueChange = {},
                 readOnly = true,
+                // MELHORIA: Uso de Resource de String
                 label = { Text("Language") },
-                trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded) },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
+                },
                 colors = ExposedDropdownMenuDefaults.textFieldColors(),
                 modifier = Modifier
                     .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable, true)
