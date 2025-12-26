@@ -14,7 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.caioluis.githubpopular.Constants
 import com.caioluis.githubpopular.viewmodel.GetRepositoriesViewModel
 
@@ -23,7 +24,7 @@ import com.caioluis.githubpopular.viewmodel.GetRepositoriesViewModel
 fun MainScreen(
     getRepositoriesViewModel: GetRepositoriesViewModel = hiltViewModel(),
 ) {
-    val uiState by getRepositoriesViewModel.uiState.collectAsStateWithLifecycle()
+    val repositories = getRepositoriesViewModel.repositories.collectAsLazyPagingItems()
 
     var selectedLanguage by remember {
         mutableStateOf(Constants.languages.firstOrNull() ?: "Kotlin")
@@ -35,6 +36,8 @@ fun MainScreen(
         getRepositoriesViewModel.loadList(selectedLanguage)
     }
 
+    val isRefreshing = repositories.loadState.refresh is LoadState.Loading
+
     Scaffold(
         topBar = {
             LanguageSelector(
@@ -45,24 +48,23 @@ fun MainScreen(
         },
     ) { innerPadding ->
         PullToRefreshBox(
-            isRefreshing = uiState.isLoading,
+            isRefreshing = isRefreshing,
             state = pullToRefreshState,
-            onRefresh = { getRepositoriesViewModel.loadList(selectedLanguage) },
+            onRefresh = { repositories.refresh() },
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize(),
         ) {
-            when {
-                uiState.error != null -> ErrorContent(
-                    error = uiState.error,
-                    onRetry = { getRepositoriesViewModel.loadList(selectedLanguage) },
-                )
+            val refreshState = repositories.loadState.refresh
 
-                else -> RepositoriesList(
-                    repositories = uiState.repositories,
-                    isLoadingMore = uiState.isLoadingMore,
-                    loadMoreError = uiState.loadMoreError,
-                    onLoadMore = { getRepositoriesViewModel.loadMore(selectedLanguage) },
+            if (refreshState is LoadState.Error) {
+                ErrorContent(
+                    error = refreshState.error,
+                    onRetry = { repositories.retry() },
+                )
+            } else {
+                RepositoriesList(
+                    repositories = repositories,
                 )
             }
         }
