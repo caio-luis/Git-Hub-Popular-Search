@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.data.bridge.local
+package com.caioluis.githubpopular.data.impl.local.model
 
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 
@@ -12,5 +12,5 @@ interface LocalSource {
     suspend fun getFromCache(
         page: Int,
         language: String,
-    ): List<DomainGitHubRepository>?
+    ): List<DomainGitHubRepository>
 }

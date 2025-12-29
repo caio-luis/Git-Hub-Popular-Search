@@ -1,3 +1,3 @@
-package com.caioluis.githubpopular.data.bridge.remote
+package com.caioluis.githubpopular.data.impl.remote
 
 class NoMoreItemsException : Exception(("No more items to show"))

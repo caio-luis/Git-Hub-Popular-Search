@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.data.bridge.local.dao
+package com.caioluis.githubpopular.data.impl.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
@@ -18,7 +18,7 @@ interface GitHubRepositoriesDao {
     suspend fun getAllRepositories(
         page: Int,
         language: String,
-    ): List<LocalGitHubRepository>?
+    ): List<LocalGitHubRepository>
 
     @Query("DELETE FROM GitHubRepositories WHERE language=:language COLLATE NOCASE")
     suspend fun deleteReposByLanguage(language: String)
