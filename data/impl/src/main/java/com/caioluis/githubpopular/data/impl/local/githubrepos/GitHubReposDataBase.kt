@@ -1,21 +1,24 @@
-package com.caioluis.githubpopular.data.impl.local
+package com.caioluis.githubpopular.data.impl.local.githubrepos
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubPullRequest
 import com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubRepository
-import com.caioluis.githubpopular.data.impl.local.dao.GitHubRepositoriesDao
+import com.caioluis.githubpopular.data.impl.local.githubpullrequests.dao.GitHubPullRequestsDao
+import com.caioluis.githubpopular.data.impl.local.githubrepos.dao.GitHubRepositoriesDao
 
 const val DATABASE_FILE_NAME = "GitHubPopular.db"
 
 @Database(
-    entities = [LocalGitHubRepository::class],
+    entities = [LocalGitHubRepository::class, LocalGitHubPullRequest::class],
     version = 1,
     exportSchema = false,
 )
 abstract class GitHubReposDataBase : RoomDatabase() {
     abstract fun gitHubRepositoriesDao(): GitHubRepositoriesDao
+    abstract fun gitHubPullRequestsDao(): GitHubPullRequestsDao
 
     companion object {
         private var dbInstance: GitHubReposDataBase? = null

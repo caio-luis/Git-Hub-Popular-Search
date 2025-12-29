@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.data.impl.local.dao
+package com.caioluis.githubpopular.data.impl.local.githubrepos.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

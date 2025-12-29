@@ -1,7 +1,9 @@
 package com.caioluis.githubpopular.data.bridge.mappers
 
+import com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubPullRequest
 import com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubRepository
 import com.caioluis.githubpopular.data.bridge.remote.model.RemoteGitHubRepository
+import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubPullRequest
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 
 // Remote
@@ -38,6 +40,15 @@ fun LocalGitHubRepository.toDomain() = DomainGitHubRepository(
     avatarUrl = avatarUrl,
 )
 
+fun LocalGitHubPullRequest.toDomain() = DomainGitHubPullRequest(
+    id = id,
+    htmlUrl = htmlUrl,
+    title = title,
+    body = body,
+    userName = userName,
+    avatarUrl = avatarUrl,
+)
+
 // Domain
 
 fun DomainGitHubRepository.toLocal() = LocalGitHubRepository(
@@ -52,4 +63,14 @@ fun DomainGitHubRepository.toLocal() = LocalGitHubRepository(
     language = language,
     userName = userName,
     avatarUrl = avatarUrl,
+)
+
+fun DomainGitHubPullRequest.toLocal(repositoryId: Int) = LocalGitHubPullRequest(
+    id = id,
+    htmlUrl = htmlUrl,
+    title = title,
+    body = body,
+    userName = userName,
+    avatarUrl = avatarUrl,
+    repositoryId = repositoryId,
 )

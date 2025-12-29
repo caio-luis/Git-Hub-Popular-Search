@@ -1,9 +1,8 @@
-package com.caioluis.githubpopular.data.impl.local
+package com.caioluis.githubpopular.data.impl.local.githubrepos
 
 import com.caioluis.githubpopular.data.bridge.mappers.toDomain
 import com.caioluis.githubpopular.data.bridge.mappers.toLocal
-import com.caioluis.githubpopular.data.impl.local.dao.GitHubRepositoriesDao
-import com.caioluis.githubpopular.data.impl.local.model.LocalSource
+import com.caioluis.githubpopular.data.impl.local.githubrepos.dao.GitHubRepositoriesDao
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 import javax.inject.Inject
 

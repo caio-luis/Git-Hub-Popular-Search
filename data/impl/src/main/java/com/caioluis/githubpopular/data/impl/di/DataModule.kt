@@ -3,10 +3,13 @@ package com.caioluis.githubpopular.data.impl.di
 import ServiceBuilder
 import android.content.Context
 import com.caioluis.githubpopular.data.impl.BuildConfig
-import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
-import com.caioluis.githubpopular.data.impl.local.LocalSourceImpl
-import com.caioluis.githubpopular.data.impl.local.dao.GitHubRepositoriesDao
-import com.caioluis.githubpopular.data.impl.local.model.LocalSource
+import com.caioluis.githubpopular.data.impl.local.githubpullrequests.PullRequestsLocalSource
+import com.caioluis.githubpopular.data.impl.local.githubpullrequests.PullRequestsLocalSourceImpl
+import com.caioluis.githubpopular.data.impl.local.githubpullrequests.dao.GitHubPullRequestsDao
+import com.caioluis.githubpopular.data.impl.local.githubrepos.GitHubReposDataBase
+import com.caioluis.githubpopular.data.impl.local.githubrepos.LocalSource
+import com.caioluis.githubpopular.data.impl.local.githubrepos.LocalSourceImpl
+import com.caioluis.githubpopular.data.impl.local.githubrepos.dao.GitHubRepositoriesDao
 import com.caioluis.githubpopular.data.impl.remote.GitHubReposRepositoryImpl
 import com.caioluis.githubpopular.data.impl.remote.RemoteSource
 import com.caioluis.githubpopular.data.impl.remote.RemoteSourceImpl
@@ -30,6 +33,9 @@ interface DataModule {
     fun bindLocalSource(impl: LocalSourceImpl): LocalSource
 
     @Binds
+    fun bindPullRequestsLocalSource(impl: PullRequestsLocalSourceImpl): PullRequestsLocalSource
+
+    @Binds
     fun bindGitHubReposRepository(impl: GitHubReposRepositoryImpl): GitHubReposRepository
 
     companion object {
@@ -45,5 +51,8 @@ interface DataModule {
 
         @Provides
         fun provideGitHubRepositoriesDao(dataBase: GitHubReposDataBase): GitHubRepositoriesDao = dataBase.gitHubRepositoriesDao()
+
+        @Provides
+        fun provideGitHubPullRequestsDao(dataBase: GitHubReposDataBase): GitHubPullRequestsDao = dataBase.gitHubPullRequestsDao()
     }
 }
