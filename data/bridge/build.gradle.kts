@@ -14,7 +14,7 @@ android {
 }
 
 dependencies {
-    api(project(":domain:bridge"))
+    implementation(project(":domain:bridge"))
     runtimeOnly(libs.room.runtime)
 
     implementation(libs.square.retrofit)

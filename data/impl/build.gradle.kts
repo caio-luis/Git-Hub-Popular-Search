@@ -14,8 +14,9 @@ android {
 }
 
 dependencies {
-    api(project(":domain:bridge"))
-    api(project(":data:bridge"))
+    implementation(project(":domain:bridge"))
+    implementation(project(":data:bridge"))
+    implementation(project(":core:common"))
 
     runtimeOnly(libs.room.runtime)
 

@@ -2,6 +2,7 @@ package com.caioluis.githubpopular.data
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
+import com.caioluis.githubpopular.core.common.utils.LogUtil
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 import com.caioluis.githubpopular.domain.bridge.usecase.GetRepositoriesUseCase
 
@@ -27,6 +28,11 @@ class GitHubPagingSource(
                 nextKey = if (repositories.isEmpty()) null else page + 1,
             )
         } catch (e: Exception) {
+            LogUtil.e(
+                tag = GitHubPagingSource::class.simpleName,
+                message = e.message,
+                throwable = e,
+            )
             LoadResult.Error(e)
         }
     }
