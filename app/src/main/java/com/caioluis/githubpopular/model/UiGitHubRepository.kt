@@ -2,12 +2,12 @@ package com.caioluis.githubpopular.model
 
 data class UiGitHubRepository(
     val id: Int = 0,
-    val name: String = "",
-    val fullName: String = "",
-    val owner: UiRepositoryOwner = UiRepositoryOwner(),
+    val title: String = "",
     val description: String = "",
     val pullsUrl: String = "",
     val stargazersCount: Int = 0,
     val forksCount: Int = 0,
-    val htmlUrl: String = "",
+    val repositoryUrl: String = "",
+    val userName: String = "",
+    val avatarUrl: String = "",
 )

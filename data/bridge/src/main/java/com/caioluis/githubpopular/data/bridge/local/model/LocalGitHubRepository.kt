@@ -8,14 +8,14 @@ import com.caioluis.githubpopular.data.bridge.local.LocalConstants.GIT_HUB_REPOS
 data class LocalGitHubRepository(
     @PrimaryKey(autoGenerate = false)
     val id: Int,
-    val name: String,
-    val fullName: String,
-    val owner: LocalRepositoryOwner,
+    val title: String,
     val description: String,
     val pullsUrl: String,
     val stargazersCount: Int,
     val forksCount: Int,
-    val htmlUrl: String,
+    val repositoryUrl: String,
     val page: Int,
     val language: String,
+    val userName: String,
+    val avatarUrl: String,
 )

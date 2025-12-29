@@ -1,11 +1,8 @@
 package com.caioluis.githubpopular.data.bridge.mappers
 
 import com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubRepository
-import com.caioluis.githubpopular.data.bridge.local.model.LocalRepositoryOwner
 import com.caioluis.githubpopular.data.bridge.remote.model.RemoteGitHubRepository
-import com.caioluis.githubpopular.data.bridge.remote.model.RemoteRepositoryOwner
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
-import com.caioluis.githubpopular.domain.bridge.entity.DomainRepositoryOwner
 
 // Remote
 fun RemoteGitHubRepository.toDomain(
@@ -13,11 +10,7 @@ fun RemoteGitHubRepository.toDomain(
     language: String,
 ) = DomainGitHubRepository(
     id = id ?: -1,
-    name = name.orEmpty(),
-    fullName = fullName.orEmpty(),
-    owner =
-    owner?.toDomain()
-        ?: DomainRepositoryOwner(),
+    title = name.orEmpty(),
     description = description.orEmpty(),
     pullsUrl = pullsUrl.orEmpty(),
     stargazersCount = stargazersCount ?: 0,
@@ -25,33 +18,23 @@ fun RemoteGitHubRepository.toDomain(
     htmlUrl = htmlUrl.orEmpty(),
     page = page,
     language = language,
-)
-
-fun RemoteRepositoryOwner.toDomain() = DomainRepositoryOwner(
-    id = id ?: -1,
-    login = login.orEmpty(),
-    avatarUrl = avatarUrl.orEmpty(),
+    userName = owner?.login.orEmpty(),
+    avatarUrl = owner?.avatarUrl.orEmpty(),
 )
 
 // Local
 
 fun LocalGitHubRepository.toDomain() = DomainGitHubRepository(
     id = id,
-    name = name,
-    fullName = fullName,
-    owner = owner.toDomain(),
+    title = title,
     description = description,
     pullsUrl = pullsUrl,
     stargazersCount = stargazersCount,
     forksCount = forksCount,
-    htmlUrl = htmlUrl,
+    htmlUrl = repositoryUrl,
     page = page,
     language = language,
-)
-
-fun LocalRepositoryOwner.toDomain() = DomainRepositoryOwner(
-    id = id,
-    login = login,
+    userName = userName,
     avatarUrl = avatarUrl,
 )
 
@@ -59,20 +42,14 @@ fun LocalRepositoryOwner.toDomain() = DomainRepositoryOwner(
 
 fun DomainGitHubRepository.toLocal() = LocalGitHubRepository(
     id = id,
-    name = name,
-    fullName = fullName,
-    owner = owner.toLocal(),
+    title = title,
     description = description,
     pullsUrl = pullsUrl,
     stargazersCount = stargazersCount,
     forksCount = forksCount,
-    htmlUrl = htmlUrl,
+    repositoryUrl = htmlUrl,
     page = page,
     language = language,
-)
-
-fun DomainRepositoryOwner.toLocal() = LocalRepositoryOwner(
-    id = id,
-    login = login,
+    userName = userName,
     avatarUrl = avatarUrl,
 )
