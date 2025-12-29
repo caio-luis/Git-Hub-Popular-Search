@@ -9,6 +9,7 @@ import androidx.paging.cachedIn
 import androidx.paging.map
 import com.caioluis.githubpopular.data.GitHubPagingSource
 import com.caioluis.githubpopular.domain.bridge.usecase.GetRepositoriesUseCase
+import com.caioluis.githubpopular.mapper.toUi
 import com.caioluis.githubpopular.model.UiGitHubRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -45,19 +46,7 @@ class GetRepositoriesViewModel @Inject constructor(
                 .cachedIn(viewModelScope)
                 .collectLatest { pagingData ->
                     val uiPagingData = pagingData.map { domainRepo ->
-                        UiGitHubRepository(
-                            id = domainRepo.id,
-                            name = domainRepo.name,
-                            description = domainRepo.description,
-                            forksCount = domainRepo.forksCount,
-                            stargazersCount = domainRepo.stargazersCount,
-                            owner = domainRepo.owner.let { owner ->
-                                com.caioluis.githubpopular.model.UiRepositoryOwner(
-                                    avatarUrl = owner.avatarUrl,
-                                    login = owner.login,
-                                )
-                            },
-                        )
+                        domainRepo.toUi()
                     }
                     _repositories.value = uiPagingData
                 }
