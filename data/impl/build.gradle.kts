@@ -37,4 +37,10 @@ dependencies {
 
     testImplementation(libs.mockk)
     testImplementation(libs.kotlin.coroutines.test)
+    testImplementation(libs.junit)
+    testImplementation(libs.androidx.junit.ktx)
+    testImplementation(libs.robolectric)
+
+    androidTestImplementation(libs.android.test.runner)
+    androidTestImplementation(libs.androidx.junit.ktx)
 }

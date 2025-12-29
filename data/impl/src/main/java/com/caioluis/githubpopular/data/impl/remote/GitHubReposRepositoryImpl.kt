@@ -2,7 +2,7 @@ package com.caioluis.githubpopular.data.impl.remote
 
 import com.caioluis.githubpopular.core.common.utils.LogUtil
 import com.caioluis.githubpopular.data.bridge.mappers.toDomain
-import com.caioluis.githubpopular.data.impl.local.model.LocalSource
+import com.caioluis.githubpopular.data.impl.local.githubrepos.LocalSource
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
 import javax.inject.Inject

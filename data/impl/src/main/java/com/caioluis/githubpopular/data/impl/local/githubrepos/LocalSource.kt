@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.data.impl.local.model
+package com.caioluis.githubpopular.data.impl.local.githubrepos
 
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 
