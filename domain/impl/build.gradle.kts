@@ -4,7 +4,7 @@ plugins {
 }
 
 dependencies {
-    api(project(":domain:bridge"))
+    implementation(project(":domain:bridge"))
 
     implementation(libs.kotlinx.coroutines)
     implementation(libs.hilt.core)

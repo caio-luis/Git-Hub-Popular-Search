@@ -18,10 +18,11 @@ android {
 }
 
 dependencies {
-    api(project(":data:impl"))
-    api(project(":data:bridge"))
-    api(project(":domain:impl"))
-    api(project(":domain:bridge"))
+    implementation(project(":data:impl"))
+    implementation(project(":data:bridge"))
+    implementation(project(":domain:impl"))
+    implementation(project(":domain:bridge"))
+    implementation(project(":core:common"))
 
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
