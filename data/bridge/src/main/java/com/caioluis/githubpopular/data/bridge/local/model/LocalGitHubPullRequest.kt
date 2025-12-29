@@ -7,7 +7,7 @@ import com.caioluis.githubpopular.data.bridge.local.LocalConstants.GIT_HUB_PULL_
 @Entity(tableName = GIT_HUB_PULL_REQUESTS_TABLE_NAME)
 data class LocalGitHubPullRequest(
     @PrimaryKey(autoGenerate = false)
-    val id: Long,
+    val id: Int,
     val htmlUrl: String,
     val title: String,
     val body: String,

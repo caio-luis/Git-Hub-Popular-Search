@@ -1,7 +1,7 @@
 package com.caioluis.githubpopular.domain.bridge.entity
 
 data class DomainGitHubPullRequest(
-    val id: Long = 0L,
+    val id: Int = 0,
     val htmlUrl: String = "",
     val title: String = "",
     val body: String = "",

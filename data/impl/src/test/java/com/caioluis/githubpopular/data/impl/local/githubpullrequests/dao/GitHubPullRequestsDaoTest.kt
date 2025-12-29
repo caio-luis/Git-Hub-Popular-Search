@@ -3,8 +3,8 @@ package com.caioluis.githubpopular.data.impl.local.githubpullrequests.dao
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.caioluis.githubpopular.data.impl.local.Fixtures
-import com.caioluis.githubpopular.data.impl.local.githubrepos.GitHubReposDataBase
+import com.caioluis.githubpopular.data.impl.Fixtures
+import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals

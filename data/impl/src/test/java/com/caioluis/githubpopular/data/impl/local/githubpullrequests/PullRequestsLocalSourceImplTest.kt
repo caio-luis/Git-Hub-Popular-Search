@@ -1,6 +1,6 @@
 package com.caioluis.githubpopular.data.impl.local.githubpullrequests
 
-import com.caioluis.githubpopular.data.impl.local.Fixtures
+import com.caioluis.githubpopular.data.impl.Fixtures
 import com.caioluis.githubpopular.data.impl.local.githubpullrequests.dao.GitHubPullRequestsDao
 import io.mockk.coEvery
 import io.mockk.coVerify
