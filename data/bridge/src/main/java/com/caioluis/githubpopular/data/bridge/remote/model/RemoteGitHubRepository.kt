@@ -1,26 +1,26 @@
 package com.caioluis.githubpopular.data.bridge.remote.model
 
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@JsonClass(generateAdapter = true)
+@Serializable
 data class RemoteGitHubRepository(
-    @param:Json(name = "id")
+    @SerialName("id")
     val id: Int? = null,
-    @param:Json(name = "name")
+    @SerialName("name")
     val name: String? = "",
-    @param:Json(name = "full_name")
+    @SerialName("full_name")
     val fullName: String? = "",
-    @param:Json(name = "owner")
+    @SerialName("owner")
     val owner: RemoteRepositoryOwner? = null,
-    @param:Json(name = "description")
+    @SerialName("description")
     val description: String? = "",
-    @param:Json(name = "pulls_url")
+    @SerialName("pulls_url")
     val pullsUrl: String? = "",
-    @param:Json(name = "stargazers_count")
+    @SerialName("stargazers_count")
     val stargazersCount: Int? = null,
-    @param:Json(name = "forks_count")
+    @SerialName("forks_count")
     val forksCount: Int? = null,
-    @param:Json(name = "html_url")
+    @SerialName("html_url")
     val htmlUrl: String? = "",
 )

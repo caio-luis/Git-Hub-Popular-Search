@@ -23,15 +23,15 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.room.ktx)
     implementation(libs.square.retrofit)
-    implementation(libs.square.retrofit.converter.moshi)
-    implementation(libs.square.moshi)
+
     implementation(libs.square.okhttp)
+    implementation(libs.kotlinx.serialization.converter)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.square.okhttp.logging.interceptor)
     implementation(libs.room.common)
     implementation(libs.androidx.sqlite)
 
     ksp(libs.room.compiler)
-    ksp(libs.square.moshi.codegen)
     ksp(libs.hilt.compiler)
 
     testImplementation(libs.mockk)

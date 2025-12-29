@@ -28,7 +28,7 @@ The project follows **Clean Architecture** principles combined with **MVVM (Mode
 
 ### Networking & Data
 - **[Retrofit](https://square.github.io/retrofit/)**: Type-safe HTTP client.
-- **[Moshi](https://github.com/square/moshi)**: JSON parsing library (using Codegen/KSP for performance over reflection).
+- **[Kotlin Serialization](https://kotlinlang.org/docs/serialization.html)**: Official Kotlin serialization library, offering efficient, type-safe, and reflection-free JSON parsing.
 - **[OkHttp](https://square.github.io/okhttp/)**: HTTP client with logging interceptors.
 - **[Room](https://developer.android.com/training/data-storage/room)**: Local persistence library (SQLite abstraction).
 - **[Paging 3](https://developer.android.com/topic/libraries/architecture/paging/v3)**: Efficiently loads and displays pages of data.
@@ -39,10 +39,12 @@ The project follows **Clean Architecture** principles combined with **MVVM (Mode
 ### Build, Quality & Tools
 - **[Gradle Version Catalogs](https://docs.gradle.org/current/userguide/platforms.html)**: Centralized dependency management via `libs.versions.toml`.
 - **[Convention Plugins](https://docs.gradle.org/current/samples/sample_convention_plugins.html)**: Custom plugins to share build logic across modules.
-- **[KSP (Kotlin Symbol Processing)](https://kotlinlang.org/docs/ksp-overview.html)**: Faster alternative to KAPT for code generation (used by Room and Moshi).
+- **[KSP (Kotlin Symbol Processing)](https://kotlinlang.org/docs/ksp-overview.html)**: Faster alternative to KAPT for code generation (used by Room).
 - **[Spotless](https://github.com/diffplug/spotless)**: Enforces consistent code formatting.
 - **[LeakCanary](https://square.github.io/leakcanary/)**: Memory leak detection during development.
 - **[Dependency Analysis](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin)**: Tool to analyze and optimize project dependencies.
+- **[Mise](https://mise.jdx.dev/)**: Runtime manager for setting up development environments (Java, Ruby, etc.).
+- **[Fastlane](https://fastlane.tools/)**: Automation tool for building and testing Android apps.
 
 ### Testing
 - **[Mockk](https://mockk.io/)**: Mocking library for Kotlin.
@@ -51,7 +53,7 @@ The project follows **Clean Architecture** principles combined with **MVVM (Mode
 
 ## 💡 Strategic Decisions & Best Practices
 
-- **Moshi vs Gson**: Moshi is used with code generation (KSP), which is significantly faster and safer than Gson's reflection-based approach.
+- **Kotlin Serialization**: Chosen for its seamless integration with the Kotlin ecosystem, type safety, and reflection-free JSON parsing, offering better performance and future-proofing compared to reflection-based libraries like Gson.
 - **Coroutines vs RxJava**: Coroutines provide a lighter, more idiomatic way to handle concurrency in Kotlin compared to RxJava, perfectly fitting the project's scope.
 - **Offline Support**: Room is used to cache data, improving user experience under poor network conditions.
 - **Strict Dependency Management**: Usage of `dependency-analysis` plugin ensures no unused or misconfigured dependencies exist in the project.
