@@ -11,8 +11,11 @@ import com.caioluis.githubpopular.data.impl.local.githubrepos.LocalSource
 import com.caioluis.githubpopular.data.impl.local.githubrepos.LocalSourceImpl
 import com.caioluis.githubpopular.data.impl.local.githubrepos.dao.GitHubRepositoriesDao
 import com.caioluis.githubpopular.data.impl.remote.GitHubReposRepositoryImpl
+import com.caioluis.githubpopular.data.impl.remote.PullRequestsRemoteSource
+import com.caioluis.githubpopular.data.impl.remote.PullRequestsRemoteSourceImpl
 import com.caioluis.githubpopular.data.impl.remote.RemoteSource
 import com.caioluis.githubpopular.data.impl.remote.RemoteSourceImpl
+import com.caioluis.githubpopular.data.impl.remote.service.GitHubPullRequestsService
 import com.caioluis.githubpopular.data.impl.remote.service.GitHubRepositoriesService
 import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
 import dagger.Binds
@@ -36,12 +39,19 @@ interface DataModule {
     fun bindPullRequestsLocalSource(impl: PullRequestsLocalSourceImpl): PullRequestsLocalSource
 
     @Binds
+    fun bindPullRequestsRemoteSource(impl: PullRequestsRemoteSourceImpl): PullRequestsRemoteSource
+
+    @Binds
     fun bindGitHubReposRepository(impl: GitHubReposRepositoryImpl): GitHubReposRepository
 
     companion object {
         @Provides
         @Singleton
         fun provideGitHubRepositoriesService(): GitHubRepositoriesService = ServiceBuilder.Companion<GitHubRepositoriesService>(BuildConfig.API_BASE_URL)
+
+        @Provides
+        @Singleton
+        fun provideGitHubPullRequestsService(): GitHubPullRequestsService = ServiceBuilder.Companion<GitHubPullRequestsService>(BuildConfig.API_BASE_URL)
 
         @Provides
         @Singleton
