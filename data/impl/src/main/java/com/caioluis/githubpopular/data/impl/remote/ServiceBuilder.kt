@@ -1,10 +1,10 @@
-package com.caioluis.githubpopular.data.impl.remote
-
 import com.caioluis.githubpopular.data.impl.BuildConfig
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.util.concurrent.TimeUnit
 
 interface ServiceBuilder {
@@ -26,10 +26,15 @@ interface ServiceBuilder {
 
             val httpClient = httpClientBuilder.build()
 
+            val jsonConfig = Json {
+                ignoreUnknownKeys = true
+                coerceInputValues = true
+            }
+
             return Retrofit
                 .Builder()
                 .baseUrl(baseUrl)
-                .addConverterFactory(MoshiConverterFactory.create())
+                .addConverterFactory(jsonConfig.asConverterFactory("application/json".toMediaType()))
                 .client(httpClient)
                 .build()
                 .create(S::class.java)

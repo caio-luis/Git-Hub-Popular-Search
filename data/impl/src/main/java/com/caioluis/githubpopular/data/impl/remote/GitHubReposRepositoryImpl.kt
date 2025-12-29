@@ -1,5 +1,6 @@
 package com.caioluis.githubpopular.data.impl.remote
 
+import android.util.Log
 import com.caioluis.githubpopular.data.bridge.mappers.toDomain
 import com.caioluis.githubpopular.data.impl.local.model.LocalSource
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
@@ -25,6 +26,9 @@ constructor(
     }.getOrElse { previousError ->
         localSource.getFromCache(page, language)
             .takeIf { it.isNotEmpty() }
-            ?: throw previousError
+            ?: run {
+                Log.e(GitHubReposRepositoryImpl::class.simpleName, previousError.message, previousError)
+                throw previousError
+            }
     }
 }

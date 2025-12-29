@@ -1,6 +1,7 @@
 plugins {
     id("githubpopular.android.library")
     alias(libs.plugins.ksp.plugin)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -17,10 +18,9 @@ dependencies {
     runtimeOnly(libs.room.runtime)
 
     implementation(libs.square.retrofit)
-    implementation(libs.square.moshi)
+    implementation(libs.kotlinx.serialization.json)
     implementation(libs.room.common)
 
-    ksp(libs.square.moshi.codegen)
     ksp(libs.room.compiler)
 
     testImplementation(libs.mockk)

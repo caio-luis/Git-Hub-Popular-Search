@@ -1,5 +1,6 @@
 package com.caioluis.githubpopular.data.impl.di
 
+import ServiceBuilder
 import android.content.Context
 import com.caioluis.githubpopular.data.impl.BuildConfig
 import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
@@ -9,7 +10,6 @@ import com.caioluis.githubpopular.data.impl.local.model.LocalSource
 import com.caioluis.githubpopular.data.impl.remote.GitHubReposRepositoryImpl
 import com.caioluis.githubpopular.data.impl.remote.RemoteSource
 import com.caioluis.githubpopular.data.impl.remote.RemoteSourceImpl
-import com.caioluis.githubpopular.data.impl.remote.ServiceBuilder
 import com.caioluis.githubpopular.data.impl.remote.service.GitHubRepositoriesService
 import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
 import dagger.Binds
