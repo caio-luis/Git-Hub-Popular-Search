@@ -4,10 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 import com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubRepository
 import com.caioluis.githubpopular.data.impl.local.dao.GitHubRepositoriesDao
-import com.caioluis.githubpopular.data.impl.local.typeconverter.RepositoryOwnerConverter
 
 const val DATABASE_FILE_NAME = "GitHubPopular.db"
 
@@ -16,7 +14,6 @@ const val DATABASE_FILE_NAME = "GitHubPopular.db"
     version = 1,
     exportSchema = false,
 )
-@TypeConverters(RepositoryOwnerConverter::class)
 abstract class GitHubReposDataBase : RoomDatabase() {
     abstract fun gitHubRepositoriesDao(): GitHubRepositoriesDao
 

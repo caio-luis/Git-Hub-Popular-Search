@@ -2,9 +2,7 @@ package com.caioluis.githubpopular.domain.bridge.entity
 
 data class DomainGitHubRepository(
     val id: Int = 0,
-    val name: String = "",
-    val fullName: String = "",
-    val owner: DomainRepositoryOwner = DomainRepositoryOwner(),
+    val title: String = "",
     val description: String = "",
     val pullsUrl: String = "",
     val stargazersCount: Int = 0,
@@ -12,4 +10,6 @@ data class DomainGitHubRepository(
     val htmlUrl: String = "",
     val page: Int = 0,
     val language: String = "",
+    val userName: String = "",
+    val avatarUrl: String = "",
 )

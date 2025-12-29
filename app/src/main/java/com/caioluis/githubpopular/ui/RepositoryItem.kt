@@ -33,7 +33,6 @@ import coil.request.ImageRequest
 import com.caioluis.githubpopular.R
 import com.caioluis.githubpopular.extensions.openBrowserIntent
 import com.caioluis.githubpopular.model.UiGitHubRepository
-import com.caioluis.githubpopular.model.UiRepositoryOwner
 
 @Composable
 fun RepositoryItem(
@@ -43,7 +42,7 @@ fun RepositoryItem(
     val context = LocalContext.current
 
     Card(
-        onClick = { context.openBrowserIntent(repository.htmlUrl) },
+        onClick = { context.openBrowserIntent(repository.repositoryUrl) },
         modifier = modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(
@@ -63,7 +62,7 @@ fun RepositoryItem(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(repository.owner.avatarUrl)
+                        .data(repository.avatarUrl)
                         .crossfade(true)
                         .build(),
                     contentDescription = "User image",
@@ -76,7 +75,7 @@ fun RepositoryItem(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = repository.owner.login,
+                    text = repository.userName,
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
@@ -92,7 +91,7 @@ fun RepositoryItem(
                     .fillMaxHeight(),
             ) {
                 Text(
-                    text = repository.name,
+                    text = repository.title,
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
@@ -145,11 +144,11 @@ fun RepositoryItem(
 fun RepositoryItemPreview() {
     RepositoryItem(
         repository = UiGitHubRepository(
-            name = "Example of title",
+            title = "Example of title",
             description = "This is a example of a kotlin repository description.",
             stargazersCount = 1234565,
             forksCount = 1234565,
-            owner = UiRepositoryOwner(login = "User Name"),
+            userName = "User Name",
         ),
     )
 }
