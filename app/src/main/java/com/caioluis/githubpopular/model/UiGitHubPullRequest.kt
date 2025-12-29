@@ -1,10 +1,10 @@
-package com.caioluis.githubpopular.domain.bridge.entity
+package com.caioluis.githubpopular.model
 
-data class DomainGitHubPullRequest(
+data class UiGitHubPullRequest(
     val id: Long = 0,
-    val htmlUrl: String = "",
     val title: String = "",
     val body: String = "",
+    val htmlUrl: String = "",
     val userName: String = "",
     val avatarUrl: String = "",
 )

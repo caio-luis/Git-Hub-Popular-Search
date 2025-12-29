@@ -9,5 +9,5 @@ class PullRequestsRemoteSourceImpl
 constructor(
     private val service: GitHubPullRequestsService,
 ) : PullRequestsRemoteSource {
-    override suspend fun fetchPullRequests(url: String): List<RemotePullRequest> = service.getPullRequests(url)
+    override suspend fun fetchPullRequests(url: String, page: Int): List<RemotePullRequest> = service.getPullRequests(url, page)
 }

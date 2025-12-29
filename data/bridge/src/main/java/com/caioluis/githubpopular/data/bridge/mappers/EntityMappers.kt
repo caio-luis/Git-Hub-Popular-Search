@@ -26,7 +26,7 @@ fun RemoteGitHubRepository.toDomain(
 )
 
 fun RemotePullRequest.toDomain() = DomainGitHubPullRequest(
-    id = id ?: -1,
+    id = id ?: -1L,
     htmlUrl = url.orEmpty(),
     title = title.orEmpty(),
     body = body.orEmpty(),

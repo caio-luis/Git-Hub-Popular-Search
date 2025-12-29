@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.ui
+package com.caioluis.githubpopular.ui.githubpulls
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,11 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
-import com.caioluis.githubpopular.model.UiGitHubRepository
+import com.caioluis.githubpopular.model.UiGitHubPullRequest
+import com.caioluis.githubpopular.ui.ErrorContent
+import com.caioluis.githubpopular.ui.githubrepos.RepositoryItemPlaceholder
 
 @Composable
-fun RepositoriesList(
-    repositories: LazyPagingItems<UiGitHubRepository>,
+fun PullRequestsList(
+    pullRequests: LazyPagingItems<UiGitHubPullRequest>,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
@@ -26,22 +28,22 @@ fun RepositoriesList(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(
-            count = repositories.itemCount,
+            count = pullRequests.itemCount,
             key = { index ->
-                val item = repositories.peek(index)
+                val item = pullRequests.peek(index)
                 item?.id ?: "placeholder_$index"
             },
         ) { index ->
-            val repository = repositories[index]
+            val pullRequest = pullRequests[index]
 
-            if (repository != null) {
-                RepositoryItem(repository = repository)
+            if (pullRequest != null) {
+                PullRequestItem(pullRequest = pullRequest)
             } else {
                 RepositoryItemPlaceholder()
             }
         }
 
-        when (repositories.loadState.append) {
+        when (pullRequests.loadState.append) {
             is LoadState.Loading -> {
                 item(key = "append_loading") {
                     RepositoryItemPlaceholder()
@@ -51,8 +53,8 @@ fun RepositoriesList(
             is LoadState.Error -> {
                 item(key = "append_error") {
                     ErrorContent(
-                        error = (repositories.loadState.append as LoadState.Error).error,
-                        onRetry = { repositories.retry() },
+                        error = (pullRequests.loadState.append as LoadState.Error).error,
+                        onRetry = { pullRequests.retry() },
                     )
                 }
             }

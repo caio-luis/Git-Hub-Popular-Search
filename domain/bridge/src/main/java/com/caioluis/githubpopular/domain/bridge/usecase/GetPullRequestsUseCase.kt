@@ -1,11 +1,11 @@
-package com.caioluis.githubpopular.domain.bridge.repository
+package com.caioluis.githubpopular.domain.bridge.usecase
 
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubPullRequest
 
-interface GitHubPullRequestsRepository {
-    suspend fun getPullRequests(
+interface GetPullRequestsUseCase {
+    suspend fun loadPullRequests(
+        page: Int,
         pullUrl: String,
         repositoryId: Int,
-        page: Int,
     ): List<DomainGitHubPullRequest>
 }

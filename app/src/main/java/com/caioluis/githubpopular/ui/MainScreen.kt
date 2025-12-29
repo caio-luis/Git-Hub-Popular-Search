@@ -17,11 +17,15 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.caioluis.githubpopular.Constants
+import com.caioluis.githubpopular.model.UiGitHubRepository
+import com.caioluis.githubpopular.ui.githubrepos.LanguageSelector
+import com.caioluis.githubpopular.ui.githubrepos.RepositoriesList
 import com.caioluis.githubpopular.viewmodel.GetRepositoriesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
+    onRepositoryClick: (UiGitHubRepository) -> Unit,
     getRepositoriesViewModel: GetRepositoriesViewModel = hiltViewModel(),
 ) {
     val repositories = getRepositoriesViewModel.repositories.collectAsLazyPagingItems()
@@ -65,6 +69,7 @@ fun MainScreen(
             } else {
                 RepositoriesList(
                     repositories = repositories,
+                    onRepositoryClick = onRepositoryClick,
                 )
             }
         }

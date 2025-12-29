@@ -1,6 +1,8 @@
 package com.caioluis.githubpopular.domain.impl.di
 
+import com.caioluis.githubpopular.domain.bridge.usecase.GetPullRequestsUseCase
 import com.caioluis.githubpopular.domain.bridge.usecase.GetRepositoriesUseCase
+import com.caioluis.githubpopular.domain.impl.usecases.GetPullRequestsUseCaseImpl
 import com.caioluis.githubpopular.domain.impl.usecases.GetRepositoriesUseCaseImpl
 import dagger.Binds
 import dagger.Module
@@ -12,4 +14,7 @@ import dagger.hilt.components.SingletonComponent
 interface DomainModule {
     @Binds
     fun bindGetRepositoriesUseCase(impl: GetRepositoriesUseCaseImpl): GetRepositoriesUseCase
+
+    @Binds
+    fun bindGetPullRequestsUseCase(impl: GetPullRequestsUseCaseImpl): GetPullRequestsUseCase
 }

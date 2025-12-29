@@ -16,23 +16,33 @@ constructor(
     override suspend fun getPullRequests(
         pullUrl: String,
         repositoryId: Int,
+        page: Int,
     ): List<DomainGitHubPullRequest> = runCatching {
-        remoteSource.fetchPullRequests(pullUrl)
+        remoteSource.fetchPullRequests(pullUrl, page)
             .takeIf { it.isNotEmpty() }
             ?.map { it.toDomain() }
             ?.also { items ->
                 localSource.saveToLocalCache(items, repositoryId)
             } ?: throw NoMoreItemsException()
     }.getOrElse { previousError ->
-        localSource.getFromCache(repositoryId)
-            .takeIf { it.isNotEmpty() }
-            ?: run {
-                LogUtil.e(
-                    tag = GitHubPullRequestsRepositoryImpl::class.simpleName,
-                    message = previousError.message,
-                    throwable = previousError,
-                )
-                throw previousError
-            }
+        if (page == 1) {
+            localSource.getFromCache(repositoryId)
+                .takeIf { it.isNotEmpty() }
+                ?: run {
+                    LogUtil.e(
+                        tag = GitHubPullRequestsRepositoryImpl::class.simpleName,
+                        message = previousError.message,
+                        throwable = previousError,
+                    )
+                    throw previousError
+                }
+        } else {
+            LogUtil.e(
+                tag = GitHubPullRequestsRepositoryImpl::class.simpleName,
+                message = previousError.message,
+                throwable = previousError,
+            )
+            throw previousError
+        }
     }
 }

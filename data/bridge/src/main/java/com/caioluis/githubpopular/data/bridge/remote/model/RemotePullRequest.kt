@@ -5,10 +5,10 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RemotePullRequest(
-    @SerialName("url")
+    @SerialName("html_url")
     val url: String? = "",
     @SerialName("id")
-    val id: Int? = null,
+    val id: Long? = null,
     @SerialName("title")
     val title: String? = "",
     @SerialName("user")

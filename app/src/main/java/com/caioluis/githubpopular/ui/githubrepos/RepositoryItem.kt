@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.ui
+package com.caioluis.githubpopular.ui.githubrepos
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -31,18 +31,16 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.caioluis.githubpopular.R
-import com.caioluis.githubpopular.extensions.openBrowserIntent
 import com.caioluis.githubpopular.model.UiGitHubRepository
 
 @Composable
 fun RepositoryItem(
     repository: UiGitHubRepository,
+    onClick: (UiGitHubRepository) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
-
     Card(
-        onClick = { context.openBrowserIntent(repository.repositoryUrl) },
+        onClick = { onClick(repository) },
         modifier = modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(
@@ -150,5 +148,6 @@ fun RepositoryItemPreview() {
             forksCount = 1234565,
             userName = "User Name",
         ),
+        onClick = {},
     )
 }
