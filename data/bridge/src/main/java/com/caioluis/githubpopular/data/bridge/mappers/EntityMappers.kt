@@ -13,24 +13,24 @@ fun RemoteGitHubRepository.toDomain(
     language: String,
 ) = DomainGitHubRepository(
     id = id ?: -1,
-    name = name ?: "",
-    fullName = fullName ?: "",
+    name = name.orEmpty(),
+    fullName = fullName.orEmpty(),
     owner =
     owner?.toDomain()
         ?: DomainRepositoryOwner(),
-    description = description ?: "",
-    pullsUrl = pullsUrl ?: "",
+    description = description.orEmpty(),
+    pullsUrl = pullsUrl.orEmpty(),
     stargazersCount = stargazersCount ?: 0,
     forksCount = forksCount ?: 0,
-    htmlUrl = htmlUrl ?: "",
+    htmlUrl = htmlUrl.orEmpty(),
     page = page,
     language = language,
 )
 
 fun RemoteRepositoryOwner.toDomain() = DomainRepositoryOwner(
     id = id ?: -1,
-    login = login ?: "",
-    avatarUrl = avatarUrl ?: "",
+    login = login.orEmpty(),
+    avatarUrl = avatarUrl.orEmpty(),
 )
 
 // Local

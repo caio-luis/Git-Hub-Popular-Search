@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.data.bridge.remote.service
+package com.caioluis.githubpopular.data.impl.remote.service
 
 import com.caioluis.githubpopular.data.bridge.remote.model.RemoteGitHubRepositories
 import retrofit2.http.GET

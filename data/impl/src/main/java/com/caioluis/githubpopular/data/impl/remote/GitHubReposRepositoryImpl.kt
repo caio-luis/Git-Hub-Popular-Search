@@ -1,9 +1,7 @@
 package com.caioluis.githubpopular.data.impl.remote
 
-import com.caioluis.githubpopular.data.bridge.local.LocalSource
 import com.caioluis.githubpopular.data.bridge.mappers.toDomain
-import com.caioluis.githubpopular.data.bridge.remote.NoMoreItemsException
-import com.caioluis.githubpopular.data.bridge.remote.RemoteSource
+import com.caioluis.githubpopular.data.impl.local.model.LocalSource
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
 import javax.inject.Inject
@@ -26,7 +24,7 @@ constructor(
             } ?: throw NoMoreItemsException()
     }.getOrElse { previousError ->
         localSource.getFromCache(page, language)
-            ?.takeIf { it.isNotEmpty() }
+            .takeIf { it.isNotEmpty() }
             ?: throw previousError
     }
 }
