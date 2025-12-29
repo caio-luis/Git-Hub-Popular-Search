@@ -3,13 +3,14 @@ package com.caioluis.githubpopular.data.impl.di
 import ServiceBuilder
 import android.content.Context
 import com.caioluis.githubpopular.data.impl.BuildConfig
+import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
 import com.caioluis.githubpopular.data.impl.local.githubpullrequests.PullRequestsLocalSource
 import com.caioluis.githubpopular.data.impl.local.githubpullrequests.PullRequestsLocalSourceImpl
 import com.caioluis.githubpopular.data.impl.local.githubpullrequests.dao.GitHubPullRequestsDao
-import com.caioluis.githubpopular.data.impl.local.githubrepos.GitHubReposDataBase
 import com.caioluis.githubpopular.data.impl.local.githubrepos.LocalSource
 import com.caioluis.githubpopular.data.impl.local.githubrepos.LocalSourceImpl
 import com.caioluis.githubpopular.data.impl.local.githubrepos.dao.GitHubRepositoriesDao
+import com.caioluis.githubpopular.data.impl.remote.GitHubPullRequestsRepositoryImpl
 import com.caioluis.githubpopular.data.impl.remote.GitHubReposRepositoryImpl
 import com.caioluis.githubpopular.data.impl.remote.PullRequestsRemoteSource
 import com.caioluis.githubpopular.data.impl.remote.PullRequestsRemoteSourceImpl
@@ -17,6 +18,7 @@ import com.caioluis.githubpopular.data.impl.remote.RemoteSource
 import com.caioluis.githubpopular.data.impl.remote.RemoteSourceImpl
 import com.caioluis.githubpopular.data.impl.remote.service.GitHubPullRequestsService
 import com.caioluis.githubpopular.data.impl.remote.service.GitHubRepositoriesService
+import com.caioluis.githubpopular.domain.bridge.repository.GitHubPullRequestsRepository
 import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
 import dagger.Binds
 import dagger.Module
@@ -43,6 +45,9 @@ interface DataModule {
 
     @Binds
     fun bindGitHubReposRepository(impl: GitHubReposRepositoryImpl): GitHubReposRepository
+
+    @Binds
+    fun bindGitHubPullRequestsRepository(impl: GitHubPullRequestsRepositoryImpl): GitHubPullRequestsRepository
 
     companion object {
         @Provides

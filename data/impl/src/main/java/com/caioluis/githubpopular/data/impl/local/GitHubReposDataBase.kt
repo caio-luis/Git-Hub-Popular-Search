@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.data.impl.local.githubrepos
+package com.caioluis.githubpopular.data.impl.local
 
 import android.content.Context
 import androidx.room.Database

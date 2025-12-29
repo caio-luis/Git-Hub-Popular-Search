@@ -8,7 +8,7 @@ data class RemotePullRequest(
     @SerialName("url")
     val url: String? = "",
     @SerialName("id")
-    val id: Long? = null,
+    val id: Int? = null,
     @SerialName("title")
     val title: String? = "",
     @SerialName("user")

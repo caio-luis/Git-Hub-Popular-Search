@@ -1,7 +1,9 @@
-package com.caioluis.githubpopular.data.impl.local
+package com.caioluis.githubpopular.data.impl
 
 import com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubPullRequest
 import com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubRepository
+import com.caioluis.githubpopular.data.bridge.remote.model.RemotePullRequest
+import com.caioluis.githubpopular.data.bridge.remote.model.RemoteRepositoryOwner
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubPullRequest
 
 object Fixtures {
@@ -9,7 +11,7 @@ object Fixtures {
     const val REPOSITORY_ID = 1
 
     val domainGitHubPullRequest = DomainGitHubPullRequest(
-        id = 1L,
+        id = 1,
         htmlUrl = "url",
         title = "title",
         body = "body",
@@ -18,7 +20,7 @@ object Fixtures {
     )
 
     val localGitHubPullRequest = LocalGitHubPullRequest(
-        id = 1L,
+        id = 1,
         htmlUrl = "url",
         title = "title",
         body = "body",
@@ -28,7 +30,7 @@ object Fixtures {
     )
 
     fun createLocalGitHubPullRequest(
-        id: Long = 1L,
+        id: Int = 1,
         repositoryId: Int = REPOSITORY_ID,
     ) = LocalGitHubPullRequest(
         id = id,
@@ -71,5 +73,18 @@ object Fixtures {
         language = language,
         userName = "user$id",
         avatarUrl = "avatar$id",
+    )
+
+    fun createRemotePullRequest(
+        id: Int = 1,
+    ) = RemotePullRequest(
+        id = id,
+        title = "title",
+        url = "url",
+        body = "body",
+        user = RemoteRepositoryOwner(
+            login = "user",
+            avatarUrl = "avatar",
+        ),
     )
 }
