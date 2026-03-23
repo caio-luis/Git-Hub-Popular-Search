@@ -9,3 +9,9 @@ android {
         buildFeatures.buildConfig = true
     }
 }
+
+dependencies {
+    implementation(libs.androidx.annotation.jvm)
+    testImplementation(libs.mockk)
+    testImplementation(libs.junit)
+}

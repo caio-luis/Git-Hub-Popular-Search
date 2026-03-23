@@ -22,7 +22,7 @@ constructor(
             ?.takeIf { it.isNotEmpty() }
             ?.also { items ->
                 localSource.saveToLocalCache(items, page, language)
-            } ?: throw NoMoreItemsException()
+            } ?: emptyList()
     }.getOrElse { previousError ->
         localSource.getFromCache(page, language)
             .takeIf { it.isNotEmpty() }

@@ -11,7 +11,7 @@ object Fixtures {
     const val REPOSITORY_ID = 1
 
     val domainGitHubPullRequest = DomainGitHubPullRequest(
-        id = 1,
+        id = 1L,
         htmlUrl = "url",
         title = "title",
         body = "body",
@@ -20,7 +20,7 @@ object Fixtures {
     )
 
     val localGitHubPullRequest = LocalGitHubPullRequest(
-        id = 1,
+        id = 1L,
         htmlUrl = "url",
         title = "title",
         body = "body",
@@ -30,7 +30,7 @@ object Fixtures {
     )
 
     fun createLocalGitHubPullRequest(
-        id: Int = 1,
+        id: Long = 1L,
         repositoryId: Int = REPOSITORY_ID,
     ) = LocalGitHubPullRequest(
         id = id,
@@ -76,7 +76,7 @@ object Fixtures {
     )
 
     fun createRemotePullRequest(
-        id: Int = 1,
+        id: Long = 1L,
     ) = RemotePullRequest(
         id = id,
         title = "title",

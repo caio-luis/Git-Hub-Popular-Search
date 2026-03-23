@@ -14,6 +14,7 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.key
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.paging.LoadState
@@ -64,15 +65,17 @@ fun PullRequestsScreen(
         ) {
             val refreshState = pullRequests.loadState.refresh
 
-            if (refreshState is LoadState.Error) {
+            if (refreshState is LoadState.Error && pullRequests.itemCount == 0) {
                 ErrorContent(
                     error = refreshState.error,
                     onRetry = { pullRequests.retry() },
                 )
             } else {
-                PullRequestsList(
-                    pullRequests = pullRequests,
-                )
+                key(repositoryId) {
+                    PullRequestsList(
+                        pullRequests = pullRequests,
+                    )
+                }
             }
         }
     }

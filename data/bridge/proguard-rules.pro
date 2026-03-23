@@ -23,3 +23,6 @@
 
 -keep class com.caioluis.githubpopular.data.bridge.local.dao.** { *; }
 -keep class com.caioluis.githubpopular.data.bridge.local.model.** { *; }
+-keep class com.caioluis.githubpopular.data.bridge.remote.model.** { *; }
+-keep class com.caioluis.githubpopular.domain.bridge.entity.** { *; }
+-keep class com.caioluis.githubpopular.data.bridge.mappers.** { *; }

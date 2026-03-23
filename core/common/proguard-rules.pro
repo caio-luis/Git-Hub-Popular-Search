@@ -21,10 +21,4 @@
 #-renamesourcefileattribute SourceFile
 -dontwarn java.lang.invoke.StringConcatFactory
 
--keep class com.caioluis.githubpopular.data.bridge.local.dao.** { *; }
--keep class com.caioluis.githubpopular.data.bridge.local.model.** { *; }
--keep class com.caioluis.githubpopular.data.impl.** { *; }
--keep class com.caioluis.githubpopular.domain.bridge.entity.** { *; }
-
--dontwarn com.caioluis.githubpopular.data.bridge.local.dao.**
--dontwarn com.caioluis.githubpopular.data.bridge.local.model.**
+-keep class com.caioluis.githubpopular.core.common.** { *; }
