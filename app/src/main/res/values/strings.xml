@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Git Hub Popular Repositories</string>
+    <string name="no_items_to_display">Não há items para exibir</string>
+    <string name="no_more_items_to_display">Não há mais items para exibir</string>
 </resources>

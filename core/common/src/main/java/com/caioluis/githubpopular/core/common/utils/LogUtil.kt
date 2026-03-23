@@ -1,9 +1,15 @@
 package com.caioluis.githubpopular.core.common.utils
 
 import android.util.Log
+import androidx.annotation.Keep
+import androidx.annotation.VisibleForTesting
 import com.caioluis.githubpopular.core.common.BuildConfig
 
+@Keep
 object LogUtil {
+
+    @VisibleForTesting
+    var isDebug: Boolean = BuildConfig.DEBUG
 
     fun d(tag: String, message: String) = log { Log.d(tag, message) }
 
@@ -18,7 +24,7 @@ object LogUtil {
     }
 
     private inline fun log(block: () -> Unit) {
-        if (BuildConfig.DEBUG) {
+        if (isDebug) {
             block()
         }
     }

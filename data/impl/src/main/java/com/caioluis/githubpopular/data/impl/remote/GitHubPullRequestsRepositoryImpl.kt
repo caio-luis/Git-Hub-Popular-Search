@@ -23,7 +23,7 @@ constructor(
             ?.map { it.toDomain() }
             ?.also { items ->
                 localSource.saveToLocalCache(items, repositoryId)
-            } ?: throw NoMoreItemsException()
+            } ?: emptyList()
     }.getOrElse { previousError ->
         if (page == 1) {
             localSource.getFromCache(repositoryId)

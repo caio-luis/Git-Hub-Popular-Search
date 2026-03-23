@@ -8,9 +8,11 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -29,9 +31,10 @@ fun MainScreen(
     getRepositoriesViewModel: GetRepositoriesViewModel = hiltViewModel(),
 ) {
     val repositories = getRepositoriesViewModel.repositories.collectAsLazyPagingItems()
+    val viewModelSelectedLanguage by getRepositoriesViewModel.selectedLanguage.collectAsState()
 
-    var selectedLanguage by remember {
-        mutableStateOf(Constants.languages.firstOrNull() ?: "Kotlin")
+    var selectedLanguage by rememberSaveable {
+        mutableStateOf(viewModelSelectedLanguage ?: Constants.languages.firstOrNull() ?: "Kotlin")
     }
 
     val pullToRefreshState = rememberPullToRefreshState()
@@ -61,16 +64,18 @@ fun MainScreen(
         ) {
             val refreshState = repositories.loadState.refresh
 
-            if (refreshState is LoadState.Error) {
+            if (refreshState is LoadState.Error && repositories.itemCount == 0) {
                 ErrorContent(
                     error = refreshState.error,
                     onRetry = { repositories.retry() },
                 )
             } else {
-                RepositoriesList(
-                    repositories = repositories,
-                    onRepositoryClick = onRepositoryClick,
-                )
+                key(selectedLanguage) {
+                    RepositoriesList(
+                        repositories = repositories,
+                        onRepositoryClick = onRepositoryClick,
+                    )
+                }
             }
         }
     }

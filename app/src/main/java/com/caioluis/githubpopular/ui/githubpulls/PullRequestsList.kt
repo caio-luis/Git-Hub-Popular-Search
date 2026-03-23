@@ -7,10 +7,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
+import com.caioluis.githubpopular.R
 import com.caioluis.githubpopular.model.UiGitHubPullRequest
+import com.caioluis.githubpopular.ui.EmptyContent
+import com.caioluis.githubpopular.ui.EndOfListContent
 import com.caioluis.githubpopular.ui.ErrorContent
 import com.caioluis.githubpopular.ui.githubrepos.RepositoryItemPlaceholder
 
@@ -20,6 +24,11 @@ fun PullRequestsList(
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
+
+    if (pullRequests.loadState.refresh is LoadState.NotLoading && pullRequests.itemCount == 0) {
+        EmptyContent(message = stringResource(id = R.string.no_items_to_display))
+        return
+    }
 
     LazyColumn(
         state = listState,
@@ -43,7 +52,7 @@ fun PullRequestsList(
             }
         }
 
-        when (pullRequests.loadState.append) {
+        when (val appendState = pullRequests.loadState.append) {
             is LoadState.Loading -> {
                 item(key = "append_loading") {
                     RepositoryItemPlaceholder()
@@ -53,13 +62,19 @@ fun PullRequestsList(
             is LoadState.Error -> {
                 item(key = "append_error") {
                     ErrorContent(
-                        error = (pullRequests.loadState.append as LoadState.Error).error,
+                        error = appendState.error,
                         onRetry = { pullRequests.retry() },
                     )
                 }
             }
 
-            else -> Unit
+            is LoadState.NotLoading -> {
+                if (appendState.endOfPaginationReached && pullRequests.itemCount > 0) {
+                    item(key = "append_end") {
+                        EndOfListContent(message = stringResource(id = R.string.no_more_items_to_display))
+                    }
+                }
+            }
         }
     }
 }

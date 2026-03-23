@@ -26,7 +26,13 @@ class GetRepositoriesViewModel @Inject constructor(
     private val _repositories = MutableStateFlow<PagingData<UiGitHubRepository>>(PagingData.empty())
     val repositories: StateFlow<PagingData<UiGitHubRepository>> = _repositories
 
+    private val _selectedLanguage = MutableStateFlow<String?>(null)
+    val selectedLanguage: StateFlow<String?> = _selectedLanguage
+
     fun loadList(language: String) {
+        if (_selectedLanguage.value == language) return
+        _selectedLanguage.value = language
+
         viewModelScope.launch {
             Pager(
                 config = PagingConfig(
