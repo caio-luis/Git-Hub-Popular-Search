@@ -43,7 +43,6 @@ The project follows **Clean Architecture** principles combined with **MVVM (Mode
 - **[Spotless](https://github.com/diffplug/spotless)**: Enforces consistent code formatting.
 - **[LeakCanary](https://square.github.io/leakcanary/)**: Memory leak detection during development.
 - **[Dependency Analysis](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin)**: Tool to analyze and optimize project dependencies.
-- **[Mise](https://mise.jdx.dev/)**: Runtime manager for setting up development environments (Java, Ruby, etc.).
 - **[Fastlane](https://fastlane.tools/)**: Automation tool for building and testing Android apps.
 
 ### Testing
