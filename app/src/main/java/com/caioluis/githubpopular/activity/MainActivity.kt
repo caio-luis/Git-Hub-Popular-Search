@@ -8,9 +8,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.caioluis.githubpopular.githubpulls.ui.PullRequestsScreen
 import com.caioluis.githubpopular.theme.GitHubPopularTheme
 import com.caioluis.githubpopular.ui.MainScreen
-import com.caioluis.githubpopular.ui.githubpulls.PullRequestsScreen
 import dagger.hilt.android.AndroidEntryPoint
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets

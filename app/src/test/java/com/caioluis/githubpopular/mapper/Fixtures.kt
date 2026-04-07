@@ -1,7 +1,7 @@
 package com.caioluis.githubpopular.mapper
 
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
-import com.caioluis.githubpopular.model.UiGitHubRepository
+import com.caioluis.githubpopular.githubrepos.model.UiGitHubRepo
 
 object Fixtures {
     val domainGitHubRepository =
@@ -19,7 +19,7 @@ object Fixtures {
         )
 
     val uiRepository =
-        UiGitHubRepository(
+        UiGitHubRepo(
             id = 123,
             title = "example-repo",
             description = "This is an example repository",

@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.model
+package com.caioluis.githubpopular.githubpulls.model
 
 data class UiGitHubPullRequest(
     val id: Long = 0,

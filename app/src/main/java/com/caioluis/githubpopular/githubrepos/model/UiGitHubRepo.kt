@@ -1,6 +1,6 @@
-package com.caioluis.githubpopular.model
+package com.caioluis.githubpopular.githubrepos.model
 
-data class UiGitHubRepository(
+data class UiGitHubRepo(
     val id: Int = 0,
     val title: String = "",
     val description: String = "",

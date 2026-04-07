@@ -1,5 +1,6 @@
 package com.caioluis.githubpopular.mapper
 
+import com.caioluis.githubpopular.githubrepos.mapper.toUi
 import com.caioluis.githubpopular.mapper.Fixtures.domainGitHubRepository
 import com.caioluis.githubpopular.mapper.Fixtures.uiRepository
 import org.junit.Assert.assertEquals

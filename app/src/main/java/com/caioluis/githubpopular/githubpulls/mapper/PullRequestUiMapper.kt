@@ -1,8 +1,8 @@
-package com.caioluis.githubpopular.mapper
+package com.caioluis.githubpopular.githubpulls.mapper
 
+import com.caioluis.githubpopular.core.common.extensions.truncate
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubPullRequest
-import com.caioluis.githubpopular.extensions.truncate
-import com.caioluis.githubpopular.model.UiGitHubPullRequest
+import com.caioluis.githubpopular.githubpulls.model.UiGitHubPullRequest
 
 private const val BODY_CHAR_LIMIT = 200
 

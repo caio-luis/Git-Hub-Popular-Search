@@ -2,7 +2,6 @@ package com.caioluis.githubpopular.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
@@ -19,15 +18,14 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.caioluis.githubpopular.Constants
-import com.caioluis.githubpopular.model.UiGitHubRepository
-import com.caioluis.githubpopular.ui.githubrepos.LanguageSelector
-import com.caioluis.githubpopular.ui.githubrepos.RepositoriesList
-import com.caioluis.githubpopular.viewmodel.GetRepositoriesViewModel
+import com.caioluis.githubpopular.githubrepos.model.UiGitHubRepo
+import com.caioluis.githubpopular.githubrepos.ui.LanguageSelector
+import com.caioluis.githubpopular.githubrepos.ui.RepositoriesList
+import com.caioluis.githubpopular.githubrepos.viewmodel.GetRepositoriesViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    onRepositoryClick: (UiGitHubRepository) -> Unit,
+    onRepositoryClick: (UiGitHubRepo) -> Unit,
     getRepositoriesViewModel: GetRepositoriesViewModel = hiltViewModel(),
 ) {
     val repositories = getRepositoriesViewModel.repositories.collectAsLazyPagingItems()

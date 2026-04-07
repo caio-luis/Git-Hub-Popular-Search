@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.caioluis.githubpopular.MainDispatcherRule
 import com.caioluis.githubpopular.domain.bridge.usecase.GetRepositoriesUseCase
+import com.caioluis.githubpopular.githubrepos.viewmodel.GetRepositoriesViewModel
 import com.caioluis.githubpopular.mapper.Fixtures.domainGitHubRepository
 import io.mockk.coEvery
 import io.mockk.every
