@@ -1,18 +1,18 @@
-import com.android.build.api.dsl.CommonExtension
-import org.gradle.api.JavaVersion
+import com.android.build.api.dsl.ApplicationExtension
+import com.android.build.api.dsl.LibraryExtension
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
-internal fun Project.configureAndroid(
-    commonExtension: CommonExtension<*, *, *, *, *, *>,
+internal fun Project.configureAndroidApplication(
+    applicationExtension: ApplicationExtension
 ) {
-    commonExtension.apply {
-        compileSdk = 36
+    applicationExtension.apply {
+        compileSdk = BuildConstants.Android.COMPILE_SDK_VERSION
 
         defaultConfig {
-            minSdk = 23
+            targetSdk = BuildConstants.Android.TARGET_SDK_VERSION
+            minSdk = BuildConstants.Android.MIN_SDK_VERSION
             testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
             vectorDrawables {
@@ -27,14 +27,49 @@ internal fun Project.configureAndroid(
         }
 
         compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_21
-            targetCompatibility = JavaVersion.VERSION_21
+            sourceCompatibility = BuildConstants.Java.VERSION
+            targetCompatibility = BuildConstants.Java.VERSION
         }
     }
 
     tasks.withType<KotlinCompile>().configureEach {
         compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_21)
+            jvmTarget.set(BuildConstants.Java.JVM_TARGET)
+        }
+    }
+}
+
+internal fun Project.configureAndroidLibrary(
+    libraryExtension: LibraryExtension
+) {
+    libraryExtension.apply {
+        compileSdk = BuildConstants.Android.COMPILE_SDK_VERSION
+
+        defaultConfig {
+            minSdk = BuildConstants.Android.MIN_SDK_VERSION
+            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+            vectorDrawables {
+                useSupportLibrary = true
+            }
+        }
+
+        testOptions {
+            unitTests {
+                isIncludeAndroidResources = true
+                targetSdk = BuildConstants.Android.TARGET_SDK_VERSION
+            }
+        }
+
+        compileOptions {
+            sourceCompatibility = BuildConstants.Java.VERSION
+            targetCompatibility = BuildConstants.Java.VERSION
+        }
+    }
+
+    tasks.withType<KotlinCompile>().configureEach {
+        compilerOptions {
+            jvmTarget.set(BuildConstants.Java.JVM_TARGET)
         }
     }
 }
