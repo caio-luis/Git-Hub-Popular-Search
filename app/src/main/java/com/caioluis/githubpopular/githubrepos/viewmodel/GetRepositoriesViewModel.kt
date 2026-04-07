@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.viewmodel
+package com.caioluis.githubpopular.githubrepos.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,10 +7,10 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
-import com.caioluis.githubpopular.data.GitHubPagingSource
 import com.caioluis.githubpopular.domain.bridge.usecase.GetRepositoriesUseCase
-import com.caioluis.githubpopular.mapper.toUi
-import com.caioluis.githubpopular.model.UiGitHubRepository
+import com.caioluis.githubpopular.githubrepos.GitHubPagingSource
+import com.caioluis.githubpopular.githubrepos.mapper.toUi
+import com.caioluis.githubpopular.githubrepos.model.UiGitHubRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,8 +23,9 @@ class GetRepositoriesViewModel @Inject constructor(
     private val getRepositoriesUseCase: GetRepositoriesUseCase,
 ) : ViewModel() {
 
-    private val _repositories = MutableStateFlow<PagingData<UiGitHubRepository>>(PagingData.empty())
-    val repositories: StateFlow<PagingData<UiGitHubRepository>> = _repositories
+    private val _repositories =
+        MutableStateFlow<PagingData<UiGitHubRepo>>(PagingData.Companion.empty())
+    val repositories: StateFlow<PagingData<UiGitHubRepo>> = _repositories
 
     private val _selectedLanguage = MutableStateFlow<String?>(null)
     val selectedLanguage: StateFlow<String?> = _selectedLanguage

@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.extensions
+package com.caioluis.githubpopular.core.common.extensions
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

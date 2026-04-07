@@ -1,6 +1,5 @@
-package com.caioluis.githubpopular.ui.githubrepos
+package com.caioluis.githubpopular.githubpulls.ui
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -31,16 +29,18 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.caioluis.githubpopular.R
-import com.caioluis.githubpopular.model.UiGitHubRepository
+import com.caioluis.githubpopular.core.common.extensions.openBrowserIntent
+import com.caioluis.githubpopular.githubpulls.model.UiGitHubPullRequest
 
 @Composable
-fun RepositoryItem(
-    repository: UiGitHubRepository,
-    onClick: (UiGitHubRepository) -> Unit,
+fun PullRequestItem(
+    pullRequest: UiGitHubPullRequest,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+
     Card(
-        onClick = { onClick(repository) },
+        onClick = { context.openBrowserIntent(pullRequest.htmlUrl) },
         modifier = modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(
@@ -60,7 +60,7 @@ fun RepositoryItem(
             ) {
                 AsyncImage(
                     model = ImageRequest.Builder(LocalContext.current)
-                        .data(repository.avatarUrl)
+                        .data(pullRequest.avatarUrl)
                         .crossfade(true)
                         .build(),
                     contentDescription = "User image",
@@ -73,7 +73,7 @@ fun RepositoryItem(
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = repository.userName,
+                    text = pullRequest.userName,
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontSize = 12.sp,
                         fontWeight = FontWeight.Bold,
@@ -89,49 +89,21 @@ fun RepositoryItem(
                     .fillMaxHeight(),
             ) {
                 Text(
-                    text = repository.title,
+                    text = pullRequest.title,
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                     ),
-                    maxLines = 1,
+                    maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                 )
                 Spacer(modifier = Modifier.height(10.dp))
                 Text(
-                    text = repository.description,
+                    text = pullRequest.body,
                     style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 3,
+                    maxLines = 10,
                     overflow = TextOverflow.Ellipsis,
                 )
-
-                Spacer(modifier = Modifier.weight(1f))
-                Spacer(modifier = Modifier.height(10.dp))
-
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_star),
-                        contentDescription = "Stars",
-                        modifier = Modifier.size(16.dp),
-                    )
-                    Spacer(modifier = Modifier.width(5.dp))
-                    Text(
-                        text = repository.stargazersCount.toString(),
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(end = 10.dp),
-                    )
-
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_forks),
-                        contentDescription = "Forks",
-                        modifier = Modifier.size(16.dp),
-                    )
-                    Spacer(modifier = Modifier.width(5.dp))
-                    Text(
-                        text = repository.forksCount.toString(),
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-                }
             }
         }
     }
@@ -139,15 +111,12 @@ fun RepositoryItem(
 
 @Preview(showBackground = true)
 @Composable
-fun RepositoryItemPreview() {
-    RepositoryItem(
-        repository = UiGitHubRepository(
+fun PullRequestItemPreview() {
+    PullRequestItem(
+        pullRequest = UiGitHubPullRequest(
             title = "Example of title",
-            description = "This is a example of a kotlin repository description.",
-            stargazersCount = 1234565,
-            forksCount = 1234565,
+            body = "This is a example of a pull request body.",
             userName = "User Name",
         ),
-        onClick = {},
     )
 }

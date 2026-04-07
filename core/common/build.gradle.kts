@@ -12,6 +12,7 @@ android {
 
 dependencies {
     implementation(libs.androidx.annotation.jvm)
+    implementation(libs.androidx.core.ktx)
     testImplementation(libs.mockk)
     testImplementation(libs.junit)
 }

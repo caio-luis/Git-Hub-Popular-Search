@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.ui.githubrepos
+package com.caioluis.githubpopular.githubrepos.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

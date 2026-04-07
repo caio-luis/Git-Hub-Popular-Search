@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.data
+package com.caioluis.githubpopular.githubpulls
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState

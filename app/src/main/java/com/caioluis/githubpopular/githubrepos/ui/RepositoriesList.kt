@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.ui.githubpulls
+package com.caioluis.githubpopular.githubrepos.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,20 +12,20 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.caioluis.githubpopular.R
-import com.caioluis.githubpopular.model.UiGitHubPullRequest
+import com.caioluis.githubpopular.githubrepos.model.UiGitHubRepo
 import com.caioluis.githubpopular.ui.EmptyContent
 import com.caioluis.githubpopular.ui.EndOfListContent
 import com.caioluis.githubpopular.ui.ErrorContent
-import com.caioluis.githubpopular.ui.githubrepos.RepositoryItemPlaceholder
 
 @Composable
-fun PullRequestsList(
-    pullRequests: LazyPagingItems<UiGitHubPullRequest>,
+fun RepositoriesList(
+    repositories: LazyPagingItems<UiGitHubRepo>,
+    onRepositoryClick: (UiGitHubRepo) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
 
-    if (pullRequests.loadState.refresh is LoadState.NotLoading && pullRequests.itemCount == 0) {
+    if (repositories.loadState.refresh is LoadState.NotLoading && repositories.itemCount == 0) {
         EmptyContent(message = stringResource(id = R.string.no_items_to_display))
         return
     }
@@ -37,22 +37,25 @@ fun PullRequestsList(
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(
-            count = pullRequests.itemCount,
+            count = repositories.itemCount,
             key = { index ->
-                val item = pullRequests.peek(index)
+                val item = repositories.peek(index)
                 item?.id ?: "placeholder_$index"
             },
         ) { index ->
-            val pullRequest = pullRequests[index]
+            val repository = repositories[index]
 
-            if (pullRequest != null) {
-                PullRequestItem(pullRequest = pullRequest)
+            if (repository != null) {
+                RepositoryItem(
+                    repository = repository,
+                    onClick = onRepositoryClick,
+                )
             } else {
                 RepositoryItemPlaceholder()
             }
         }
 
-        when (val appendState = pullRequests.loadState.append) {
+        when (val appendState = repositories.loadState.append) {
             is LoadState.Loading -> {
                 item(key = "append_loading") {
                     RepositoryItemPlaceholder()
@@ -63,13 +66,13 @@ fun PullRequestsList(
                 item(key = "append_error") {
                     ErrorContent(
                         error = appendState.error,
-                        onRetry = { pullRequests.retry() },
+                        onRetry = { repositories.retry() },
                     )
                 }
             }
 
             is LoadState.NotLoading -> {
-                if (appendState.endOfPaginationReached && pullRequests.itemCount > 0) {
+                if (appendState.endOfPaginationReached && repositories.itemCount > 0) {
                     item(key = "append_end") {
                         EndOfListContent(message = stringResource(id = R.string.no_more_items_to_display))
                     }

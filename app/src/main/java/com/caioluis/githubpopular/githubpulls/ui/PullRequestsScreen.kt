@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.ui.githubpulls
+package com.caioluis.githubpopular.githubpulls.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,8 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.caioluis.githubpopular.githubpulls.viewmodel.GetPullRequestsViewModel
 import com.caioluis.githubpopular.ui.ErrorContent
-import com.caioluis.githubpopular.viewmodel.GetPullRequestsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
