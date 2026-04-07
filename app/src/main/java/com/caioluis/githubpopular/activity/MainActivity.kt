@@ -12,6 +12,7 @@ import com.caioluis.githubpopular.githubpulls.ui.PullRequestsScreen
 import com.caioluis.githubpopular.theme.GitHubPopularTheme
 import com.caioluis.githubpopular.ui.MainScreen
 import dagger.hilt.android.AndroidEntryPoint
+import java.net.URLDecoder
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -45,7 +46,8 @@ class MainActivity : ComponentActivity() {
                             navArgument("repositoryName") { type = NavType.StringType },
                         ),
                     ) { backStackEntry ->
-                        val pullUrl = backStackEntry.arguments?.getString("pullUrl") ?: ""
+                        val encodedPullUrl = backStackEntry.arguments?.getString("pullUrl") ?: ""
+                        val pullUrl = URLDecoder.decode(encodedPullUrl, StandardCharsets.UTF_8.toString())
                         val repositoryId = backStackEntry.arguments?.getInt("repositoryId") ?: 0
                         val repositoryName = backStackEntry.arguments?.getString("repositoryName") ?: ""
 
