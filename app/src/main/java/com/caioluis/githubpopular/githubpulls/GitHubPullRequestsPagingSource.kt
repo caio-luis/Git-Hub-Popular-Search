@@ -2,9 +2,9 @@ package com.caioluis.githubpopular.githubpulls
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.caioluis.githubpopular.core.common.utils.LogUtil
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubPullRequest
 import com.caioluis.githubpopular.domain.bridge.usecase.GetPullRequestsUseCase
+import timber.log.Timber
 
 class GitHubPullRequestsPagingSource(
     private val getPullRequestsUseCase: GetPullRequestsUseCase,
@@ -33,11 +33,7 @@ class GitHubPullRequestsPagingSource(
                 nextKey = if (pullRequests.isEmpty()) null else page + 1,
             )
         } catch (e: Exception) {
-            LogUtil.e(
-                tag = GitHubPullRequestsPagingSource::class.simpleName,
-                message = e.message,
-                throwable = e,
-            )
+            Timber.e(e, "Error loading pull requests page $page for url $pullUrl")
             LoadResult.Error(e)
         }
     }

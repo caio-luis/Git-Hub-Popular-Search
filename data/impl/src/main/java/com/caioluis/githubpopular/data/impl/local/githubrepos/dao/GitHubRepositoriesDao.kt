@@ -1,5 +1,6 @@
 package com.caioluis.githubpopular.data.impl.local.githubrepos.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -11,15 +12,9 @@ interface GitHubRepositoriesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveRepositories(gitHubRepositories: List<LocalGitHubRepository>)
 
-    @Query(
-        "SELECT * FROM GitHubRepositories WHERE page=:page AND language=:language " +
-            "COLLATE NOCASE ORDER BY stargazersCount DESC",
-    )
-    suspend fun getAllRepositories(
-        page: Int,
-        language: String,
-    ): List<LocalGitHubRepository>
+    @Query("SELECT * FROM GitHubRepositories ORDER BY stargazersCount DESC")
+    fun getPagedRepositories(): PagingSource<Int, LocalGitHubRepository>
 
-    @Query("DELETE FROM GitHubRepositories WHERE language=:language COLLATE NOCASE")
-    suspend fun deleteReposByLanguage(language: String)
+    @Query("DELETE FROM GitHubRepositories")
+    suspend fun clearRepositories()
 }

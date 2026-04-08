@@ -8,6 +8,7 @@ dependencies {
 
     implementation(libs.kotlinx.coroutines)
     implementation(libs.hilt.core)
+    implementation(libs.androidx.paging.common)
 
     ksp(libs.hilt.core.compiler)
 

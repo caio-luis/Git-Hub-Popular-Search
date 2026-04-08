@@ -23,14 +23,16 @@ dependencies {
     implementation(libs.kotlinx.coroutines)
     implementation(libs.hilt.android)
     implementation(libs.room.ktx)
+    implementation(libs.room.paging)
     implementation(libs.square.retrofit)
-
     implementation(libs.square.okhttp)
     implementation(libs.kotlinx.serialization.converter)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.square.okhttp.logging.interceptor)
     implementation(libs.room.common)
     implementation(libs.androidx.sqlite)
+    implementation(libs.androidx.paging.common)
+    implementation(libs.timber)
 
     ksp(libs.room.compiler)
     ksp(libs.hilt.compiler)

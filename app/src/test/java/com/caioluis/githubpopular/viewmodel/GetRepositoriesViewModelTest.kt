@@ -1,78 +1,81 @@
 package com.caioluis.githubpopular.viewmodel
 
-import android.util.Log
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.caioluis.githubpopular.MainDispatcherRule
+import androidx.paging.PagingData
 import com.caioluis.githubpopular.domain.bridge.usecase.GetRepositoriesUseCase
+import com.caioluis.githubpopular.githubrepos.mapper.UiGitHubRepoMapper
 import com.caioluis.githubpopular.githubrepos.viewmodel.GetRepositoriesViewModel
-import com.caioluis.githubpopular.mapper.Fixtures.domainGitHubRepository
-import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
+import io.mockk.verify
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertNotNull
+import kotlinx.coroutines.test.setMain
+import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
-@ExperimentalCoroutinesApi
+@OptIn(ExperimentalCoroutinesApi::class)
 class GetRepositoriesViewModelTest {
-    @get:Rule
-    var instantExecutorRule = InstantTaskExecutorRule()
 
-    private val testDispatcher = StandardTestDispatcher()
+    private val getRepositoriesUseCase: GetRepositoriesUseCase = mockk()
+    private val domainMapper: UiGitHubRepoMapper = mockk()
 
-    @get:Rule
-    val coroutineRule = MainDispatcherRule(testDispatcher)
-
-    private lateinit var getRepositoriesUseCase: GetRepositoriesUseCase
     private lateinit var viewModel: GetRepositoriesViewModel
 
+    private val unconfinedDispatcher = UnconfinedTestDispatcher()
+
     @Before
-    fun setUp() {
-        mockkStatic(Log::class)
-        every { Log.e(any(), any()) } returns 0
+    fun setup() {
+        Dispatchers.setMain(unconfinedDispatcher)
+        viewModel = GetRepositoriesViewModel(getRepositoriesUseCase, domainMapper)
+    }
 
-        getRepositoriesUseCase = mockk(relaxed = true)
-        viewModel = GetRepositoriesViewModel(getRepositoriesUseCase)
+    @After
+    fun teardown() {
+        Dispatchers.resetMain()
     }
 
     @Test
-    fun `repositories - should return flow of PagingData`() = runTest(testDispatcher) {
-        // given
-        coEvery { getRepositoriesUseCase.loadRepositories(any(), any()) } returns listOf(
-            domainGitHubRepository,
-        )
+    fun `loadList should update selectedLanguage and not fetch again if language is the same`() = runTest(unconfinedDispatcher) {
+        val language = "Kotlin"
+        every { getRepositoriesUseCase.loadRepositories(any()) } returns flowOf(PagingData.empty())
 
-        // when
-        viewModel.loadList("Kotlin")
-        val pagingDataFlow = viewModel.repositories
+        val job = backgroundScope.launch {
+            viewModel.repositories.collect {}
+        }
 
-        // then
-        val pagingData = pagingDataFlow.first()
-        assertNotNull(pagingData)
+        viewModel.loadList(language)
+        viewModel.loadList(language)
+
+        assertEquals(language, viewModel.selectedLanguage.value)
+        verify(exactly = 1) { getRepositoriesUseCase.loadRepositories(language) }
+
+        job.cancel()
     }
 
     @Test
-    fun `repositories - should emit new PagingData when language changes`() = runTest(testDispatcher) {
-        // given
-        coEvery { getRepositoriesUseCase.loadRepositories(any(), any()) } returns listOf(
-            domainGitHubRepository,
-        )
+    fun `loadList with different languages should fetch new data`() = runTest(unconfinedDispatcher) {
+        val initialLanguage = "Java"
+        val newLanguage = "Kotlin"
+        every { getRepositoriesUseCase.loadRepositories(any()) } returns flowOf(PagingData.empty())
 
-        // when
-        viewModel.loadList("Kotlin")
-        val firstPagingData = viewModel.repositories.first()
+        val job = backgroundScope.launch {
+            viewModel.repositories.collect {}
+        }
 
-        viewModel.loadList("Java")
-        val secondPagingData = viewModel.repositories.first()
+        viewModel.loadList(initialLanguage)
+        viewModel.loadList(newLanguage)
 
-        // then
-        assertNotNull(firstPagingData)
-        assertNotNull(secondPagingData)
+        assertEquals(newLanguage, viewModel.selectedLanguage.value)
+        verify(exactly = 1) { getRepositoriesUseCase.loadRepositories(initialLanguage) }
+        verify(exactly = 1) { getRepositoriesUseCase.loadRepositories(newLanguage) }
+
+        job.cancel()
     }
 }

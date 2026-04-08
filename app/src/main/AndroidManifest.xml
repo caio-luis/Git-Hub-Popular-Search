@@ -6,7 +6,8 @@
 
     <application
         android:name=".GitHubPopularApplication"
-        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -14,8 +15,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name="com.caioluis.githubpopular.activity.MainActivity"
-            android:exported="true"
-            android:screenOrientation="portrait">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

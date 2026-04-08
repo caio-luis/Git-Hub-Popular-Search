@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.app.compat)
     implementation(libs.kotlinx.coroutines)
     implementation(libs.hilt.android)
+    implementation(libs.timber)
 
     ksp(libs.androidx.lifecycle.common)
     ksp(libs.bumptech.glide.compiler)

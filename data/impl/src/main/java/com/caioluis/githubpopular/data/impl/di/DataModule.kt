@@ -1,25 +1,23 @@
 package com.caioluis.githubpopular.data.impl.di
 
-import ServiceBuilder
 import android.content.Context
+import com.caioluis.githubpopular.core.common.ServiceBuilder
 import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.core.common.exception.ErrorMapperImpl
 import com.caioluis.githubpopular.data.impl.BuildConfig
 import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
-import com.caioluis.githubpopular.data.impl.local.githubpullrequests.PullRequestsLocalSource
-import com.caioluis.githubpopular.data.impl.local.githubpullrequests.PullRequestsLocalSourceImpl
-import com.caioluis.githubpopular.data.impl.local.githubpullrequests.dao.GitHubPullRequestsDao
-import com.caioluis.githubpopular.data.impl.local.githubrepos.LocalSource
-import com.caioluis.githubpopular.data.impl.local.githubrepos.LocalSourceImpl
+import com.caioluis.githubpopular.data.impl.local.githubpulls.PullRequestsLocalSource
+import com.caioluis.githubpopular.data.impl.local.githubpulls.PullRequestsLocalSourceImpl
+import com.caioluis.githubpopular.data.impl.local.githubpulls.dao.GitHubPullRequestsDao
 import com.caioluis.githubpopular.data.impl.local.githubrepos.dao.GitHubRepositoriesDao
-import com.caioluis.githubpopular.data.impl.remote.GitHubPullRequestsRepositoryImpl
-import com.caioluis.githubpopular.data.impl.remote.GitHubReposRepositoryImpl
-import com.caioluis.githubpopular.data.impl.remote.PullRequestsRemoteSource
-import com.caioluis.githubpopular.data.impl.remote.PullRequestsRemoteSourceImpl
-import com.caioluis.githubpopular.data.impl.remote.RemoteSource
-import com.caioluis.githubpopular.data.impl.remote.RemoteSourceImpl
-import com.caioluis.githubpopular.data.impl.remote.service.GitHubPullRequestsService
-import com.caioluis.githubpopular.data.impl.remote.service.GitHubRepositoriesService
+import com.caioluis.githubpopular.data.impl.remote.githubpullrequests.PullRequestsRemoteSource
+import com.caioluis.githubpopular.data.impl.remote.githubpullrequests.PullRequestsRemoteSourceImpl
+import com.caioluis.githubpopular.data.impl.remote.githubpullrequests.repository.GitHubPullRequestsRepositoryImpl
+import com.caioluis.githubpopular.data.impl.remote.githubpullrequests.service.GitHubPullRequestsService
+import com.caioluis.githubpopular.data.impl.remote.githubrepos.GithubReposRemoteSource
+import com.caioluis.githubpopular.data.impl.remote.githubrepos.GithubReposRemoteSourceImpl
+import com.caioluis.githubpopular.data.impl.remote.githubrepos.repository.GitHubReposRepositoryImpl
+import com.caioluis.githubpopular.data.impl.remote.githubrepos.service.GitHubRepositoriesService
 import com.caioluis.githubpopular.domain.bridge.repository.GitHubPullRequestsRepository
 import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
 import dagger.Binds
@@ -34,10 +32,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 interface DataModule {
     @Binds
-    fun bindRemoteSource(impl: RemoteSourceImpl): RemoteSource
-
-    @Binds
-    fun bindLocalSource(impl: LocalSourceImpl): LocalSource
+    fun bindRemoteSource(impl: GithubReposRemoteSourceImpl): GithubReposRemoteSource
 
     @Binds
     fun bindPullRequestsLocalSource(impl: PullRequestsLocalSourceImpl): PullRequestsLocalSource
