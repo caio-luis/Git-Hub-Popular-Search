@@ -1,21 +1,24 @@
 package com.caioluis.githubpopular.data.impl.local.githubrepos.dao
 
-import android.content.Context
+import androidx.paging.PagingSource
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.caioluis.githubpopular.data.impl.Fixtures
 import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [34])
+@Config(manifest = Config.NONE)
 class GitHubRepositoriesDaoTest {
 
     private lateinit var database: GitHubReposDataBase
@@ -23,85 +26,89 @@ class GitHubRepositoriesDaoTest {
 
     @Before
     fun setup() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        database = Room.inMemoryDatabaseBuilder(context, GitHubReposDataBase::class.java)
-            .allowMainThreadQueries()
-            .build()
+        database = Room.inMemoryDatabaseBuilder(
+            ApplicationProvider.getApplicationContext(),
+            GitHubReposDataBase::class.java,
+        ).allowMainThreadQueries().build()
+
         dao = database.gitHubRepositoriesDao()
     }
 
     @After
-    fun tearDown() {
+    fun teardown() {
         database.close()
     }
 
     @Test
-    fun `save and get repositories`() = runTest {
-        val page = 1
-        val language = "Kotlin"
-        val repository = Fixtures.localGitHubRepository
+    fun `saveRepositories should insert data successfully`() = runTest {
+        val repository = Fixtures.createLocalGitHubRepository()
 
         dao.saveRepositories(listOf(repository))
 
-        val result = dao.getAllRepositories(page, language)
+        val result = loadPagedData()
         assertEquals(1, result.size)
-        assertEquals(repository, result[0])
+        assertEquals(repository, result.first())
     }
 
     @Test
-    fun `delete repos by language`() = runTest {
-        val language = "Kotlin"
-        val repository = Fixtures.localGitHubRepository
+    fun `saveRepositories should replace data on conflict`() = runTest {
+        val initialRepository =
+            Fixtures.createLocalGitHubRepository(id = 1).copy(title = "Old Title")
+        val updatedRepository =
+            Fixtures.createLocalGitHubRepository(id = 1).copy(title = "New Title")
 
-        dao.saveRepositories(listOf(repository))
-        dao.deleteReposByLanguage(language)
+        dao.saveRepositories(listOf(initialRepository))
+        dao.saveRepositories(listOf(updatedRepository))
 
-        val result = dao.getAllRepositories(1, language)
-        assertEquals(0, result.size)
-    }
-
-    @Test
-    fun `get all repositories filters by page and language`() = runTest {
-        val repo1 = Fixtures.createLocalGitHubRepository(
-            id = 1,
-            page = 1,
-            language = "Kotlin",
-            stargazersCount = 100,
-        )
-        val repo2 = Fixtures.createLocalGitHubRepository(
-            id = 2,
-            page = 2,
-            language = "Kotlin",
-            stargazersCount = 200,
-        )
-        val repo3 = Fixtures.createLocalGitHubRepository(
-            id = 3,
-            page = 1,
-            language = "Java",
-            stargazersCount = 150,
-        )
-
-        dao.saveRepositories(listOf(repo1, repo2, repo3))
-
-        val resultPage1Kotlin = dao.getAllRepositories(1, "Kotlin")
-        assertEquals(1, resultPage1Kotlin.size)
-        assertEquals(repo1, resultPage1Kotlin[0])
-    }
-
-    @Test
-    fun `get all repositories is case insensitive for language`() = runTest {
-        val page = 1
-        val language = "kotlin"
-        val repository = Fixtures.createLocalGitHubRepository(
-            id = 1,
-            page = page,
-            language = "Kotlin",
-        )
-
-        dao.saveRepositories(listOf(repository))
-
-        val result = dao.getAllRepositories(page, language)
+        val result = loadPagedData()
         assertEquals(1, result.size)
-        assertEquals(repository, result[0])
+        assertEquals("New Title", result.first().title)
+    }
+
+    @Test
+    fun `getPagedRepositories should return data ordered by stargazersCount descending`() = runTest {
+        val repoWith10Stars =
+            Fixtures.createLocalGitHubRepository(id = 1).copy(stargazersCount = 10)
+        val repoWith50Stars =
+            Fixtures.createLocalGitHubRepository(id = 2).copy(stargazersCount = 50)
+        val repoWith30Stars =
+            Fixtures.createLocalGitHubRepository(id = 3).copy(stargazersCount = 30)
+
+        dao.saveRepositories(listOf(repoWith10Stars, repoWith50Stars, repoWith30Stars))
+
+        val result = loadPagedData()
+
+        assertEquals(3, result.size)
+        assertEquals(repoWith50Stars.id, result[0].id)
+        assertEquals(repoWith30Stars.id, result[1].id)
+        assertEquals(repoWith10Stars.id, result[2].id)
+    }
+
+    @Test
+    fun `clearRepositories should delete all data`() = runTest {
+        val repositories = listOf(
+            Fixtures.createLocalGitHubRepository(id = 1),
+            Fixtures.createLocalGitHubRepository(id = 2),
+        )
+        dao.saveRepositories(repositories)
+
+        dao.clearRepositories()
+
+        val result = loadPagedData()
+        assertTrue(result.isEmpty())
+    }
+
+    private suspend fun loadPagedData(): List<com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubRepository> {
+        val pagingSource = dao.getPagedRepositories()
+        val loadResult = pagingSource.load(
+            PagingSource.LoadParams.Refresh(
+                key = null,
+                loadSize = 10,
+                placeholdersEnabled = false,
+            ),
+        )
+
+        assertTrue(loadResult is PagingSource.LoadResult.Page)
+        return (loadResult as PagingSource.LoadResult.Page).data
     }
 }

@@ -8,9 +8,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CloudOff
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Schedule
-import androidx.compose.material.icons.filled.Wifi
+import androidx.compose.material.icons.filled.WifiOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -22,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.caioluis.githubpopular.R
 import com.caioluis.githubpopular.core.common.exception.AppException
+import com.caioluis.githubpopular.core.common.exception.ErrorMapperImpl
 
 @Composable
 fun ErrorContent(
@@ -29,9 +31,11 @@ fun ErrorContent(
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val uiState = when (error) {
+    val appException = (error as? AppException) ?: ErrorMapperImpl().map(error ?: Exception())
+
+    val uiState = when (appException) {
         is AppException.NetworkException -> ErrorUiState(
-            icon = Icons.Default.Wifi,
+            icon = Icons.Default.WifiOff,
             message = stringResource(R.string.error_network_message),
             actionText = stringResource(R.string.error_retry_action),
             contentDescription = stringResource(R.string.error_icon_network),
@@ -45,10 +49,17 @@ fun ErrorContent(
         )
 
         is AppException.ServerException -> ErrorUiState(
-            icon = Icons.Default.Error,
+            icon = Icons.Default.CloudOff,
             message = stringResource(R.string.error_server_message),
             actionText = stringResource(R.string.error_retry_action),
             contentDescription = stringResource(R.string.error_icon_server),
+        )
+
+        is AppException.ParsingException -> ErrorUiState(
+            icon = Icons.Default.Error,
+            message = stringResource(R.string.error_parsing_message),
+            actionText = stringResource(R.string.error_retry_action),
+            contentDescription = stringResource(R.string.error_icon_parsing),
         )
 
         else -> ErrorUiState(
@@ -86,23 +97,23 @@ fun ErrorContent(
 @Preview
 @Composable
 fun ErrorContentPreviewNetwork() {
-    ErrorContent(error = AppException.NetworkException(), onRetry = {})
+    ErrorContent(error = AppException.NetworkException(Throwable()), onRetry = {})
 }
 
 @Preview
 @Composable
 fun ErrorContentPreviewTimeout() {
-    ErrorContent(error = AppException.TimeoutException(), onRetry = {})
+    ErrorContent(error = AppException.TimeoutException(Throwable()), onRetry = {})
 }
 
 @Preview
 @Composable
 fun ErrorContentPreviewServer() {
-    ErrorContent(error = AppException.ServerException(), onRetry = {})
+    ErrorContent(error = AppException.ServerException(Throwable()), onRetry = {})
 }
 
 @Preview
 @Composable
 fun ErrorContentPreviewUnknown() {
-    ErrorContent(error = Exception("An error occurred"), onRetry = {})
+    ErrorContent(error = Exception(), onRetry = {})
 }

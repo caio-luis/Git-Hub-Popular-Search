@@ -2,13 +2,15 @@
     <string name="app_name">Git Hub Popular Repositories</string>
     <string name="no_items_to_display">Não há items para exibir</string>
     <string name="no_more_items_to_display">Não há mais items para exibir</string>
-    <string name="error_network_message">Sem conexão. Verifique sua internet.</string>
+    <string name="error_network_message">Sem conexão. Verifique a sua internet.</string>
     <string name="error_timeout_message">Solicitação expirou. Tente novamente.</string>
     <string name="error_unknown_message">Ocorreu um erro inesperado. Tente novamente.</string>
+    <string name="error_parsing_message">Ocorreu um erro ao processar os dados. Por favor, tente novamente.</string>
     <string name="error_retry_action">Tentar novamente</string>
     <string name="error_server_message">Servidor indisponível. Tente mais tarde.</string>
     <string name="error_icon_network">Ícone de erro de rede</string>
     <string name="error_icon_timeout">Ícone de erro de tempo limite</string>
     <string name="error_icon_server">Ícone de erro de servidor</string>
     <string name="error_icon_unknown">Ícone de erro desconhecido</string>
+    <string name="error_icon_parsing">Ícone de erro de leitura de dados</string>
 </resources>
