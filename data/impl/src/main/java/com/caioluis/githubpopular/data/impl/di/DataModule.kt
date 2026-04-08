@@ -2,6 +2,8 @@ package com.caioluis.githubpopular.data.impl.di
 
 import ServiceBuilder
 import android.content.Context
+import com.caioluis.githubpopular.core.common.exception.ErrorMapper
+import com.caioluis.githubpopular.core.common.exception.ErrorMapperImpl
 import com.caioluis.githubpopular.data.impl.BuildConfig
 import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
 import com.caioluis.githubpopular.data.impl.local.githubpullrequests.PullRequestsLocalSource
@@ -48,6 +50,9 @@ interface DataModule {
 
     @Binds
     fun bindGitHubPullRequestsRepository(impl: GitHubPullRequestsRepositoryImpl): GitHubPullRequestsRepository
+
+    @Binds
+    fun bindErrorMapper(impl: ErrorMapperImpl): ErrorMapper
 
     companion object {
         @Provides
