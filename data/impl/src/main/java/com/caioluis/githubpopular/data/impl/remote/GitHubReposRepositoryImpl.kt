@@ -1,5 +1,6 @@
 package com.caioluis.githubpopular.data.impl.remote
 
+import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.core.common.utils.LogUtil
 import com.caioluis.githubpopular.data.bridge.mappers.toDomain
 import com.caioluis.githubpopular.data.impl.local.githubrepos.LocalSource
@@ -12,6 +13,7 @@ class GitHubReposRepositoryImpl
 constructor(
     private val remoteSource: RemoteSource,
     private val localSource: LocalSource,
+    private val errorMapper: ErrorMapper,
 ) : GitHubReposRepository {
     override suspend fun getGitHubRepositories(
         page: Int,
@@ -27,12 +29,13 @@ constructor(
         localSource.getFromCache(page, language)
             .takeIf { it.isNotEmpty() }
             ?: run {
+                val appException = errorMapper.map(previousError)
                 LogUtil.e(
                     tag = GitHubReposRepositoryImpl::class.simpleName,
-                    message = previousError.message,
-                    throwable = previousError,
+                    message = appException.message,
+                    throwable = appException,
                 )
-                throw previousError
+                throw appException
             }
     }
 }
