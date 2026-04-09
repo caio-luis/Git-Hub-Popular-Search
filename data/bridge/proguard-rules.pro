@@ -19,10 +19,7 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keepattributes *Annotation*, InnerClasses
 -dontwarn java.lang.invoke.StringConcatFactory
 
--keep class com.caioluis.githubpopular.data.bridge.local.dao.** { *; }
--keep class com.caioluis.githubpopular.data.bridge.local.model.** { *; }
--keep class com.caioluis.githubpopular.data.bridge.remote.githubrepos.** { *; }
--keep class com.caioluis.githubpopular.domain.bridge.entity.** { *; }
--keep class com.caioluis.githubpopular.data.bridge.mappers.** { *; }
