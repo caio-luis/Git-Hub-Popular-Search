@@ -23,17 +23,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.caioluis.githubpopular.R
 import com.caioluis.githubpopular.core.common.exception.AppException
-import com.caioluis.githubpopular.core.common.exception.ErrorMapperImpl
 
 @Composable
 fun ErrorContent(
-    error: Throwable?,
+    error: AppException,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val appException = (error as? AppException) ?: ErrorMapperImpl().map(error ?: Exception())
-
-    val uiState = when (appException) {
+    val uiState = when (error) {
         is AppException.NetworkException -> ErrorUiState(
             icon = Icons.Default.WifiOff,
             message = stringResource(R.string.error_network_message),
@@ -115,5 +112,5 @@ fun ErrorContentPreviewServer() {
 @Preview
 @Composable
 fun ErrorContentPreviewUnknown() {
-    ErrorContent(error = Exception(), onRetry = {})
+    ErrorContent(error = AppException.UnknownException(Throwable()), onRetry = {})
 }

@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.caioluis.githubpopular.core.common.exception.AppException
+import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.domain.bridge.usecase.GetRepositoriesUseCase
 import com.caioluis.githubpopular.githubrepos.mapper.UiGitHubRepoMapper
 import com.caioluis.githubpopular.githubrepos.model.UiGitHubRepo
@@ -25,6 +27,7 @@ import javax.inject.Inject
 class GetRepositoriesViewModel @Inject constructor(
     private val getRepositoriesUseCase: GetRepositoriesUseCase,
     private val domainMapper: UiGitHubRepoMapper,
+    private val errorMapper: ErrorMapper,
 ) : ViewModel() {
     private val _selectedLanguage = MutableStateFlow<String?>(null)
     val selectedLanguage: StateFlow<String?> = _selectedLanguage.asStateFlow()
@@ -43,4 +46,6 @@ class GetRepositoriesViewModel @Inject constructor(
     fun loadList(language: String) {
         _selectedLanguage.value = language
     }
+
+    fun mapToAppException(error: Throwable): AppException = (error as? AppException) ?: errorMapper.map(error)
 }

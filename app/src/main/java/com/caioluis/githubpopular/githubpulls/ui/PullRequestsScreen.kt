@@ -67,13 +67,14 @@ fun PullRequestsScreen(
 
             if (refreshState is LoadState.Error && pullRequests.itemCount == 0) {
                 ErrorContent(
-                    error = refreshState.error,
+                    error = getPullRequestsViewModel.mapToAppException(refreshState.error),
                     onRetry = { pullRequests.retry() },
                 )
             } else {
                 key(repositoryId) {
                     PullRequestsList(
                         pullRequests = pullRequests,
+                        mapError = getPullRequestsViewModel::mapToAppException,
                     )
                 }
             }

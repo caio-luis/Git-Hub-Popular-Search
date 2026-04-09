@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.caioluis.githubpopular.R
+import com.caioluis.githubpopular.core.common.exception.AppException
 import com.caioluis.githubpopular.githubrepos.model.UiGitHubRepo
 import com.caioluis.githubpopular.ui.EmptyContent
 import com.caioluis.githubpopular.ui.EndOfListContent
@@ -21,6 +22,7 @@ import com.caioluis.githubpopular.ui.ErrorContent
 fun RepositoriesList(
     repositories: LazyPagingItems<UiGitHubRepo>,
     onRepositoryClick: (UiGitHubRepo) -> Unit,
+    mapError: (Throwable) -> AppException,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
@@ -65,7 +67,7 @@ fun RepositoriesList(
             is LoadState.Error -> {
                 item(key = "append_error") {
                     ErrorContent(
-                        error = appendState.error,
+                        error = mapError(appendState.error),
                         onRetry = { repositories.retry() },
                     )
                 }

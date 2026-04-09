@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.map
+import com.caioluis.githubpopular.core.common.exception.AppException
+import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.domain.bridge.usecase.GetPullRequestsUseCase
 import com.caioluis.githubpopular.githubpulls.mapper.PullRequestUiMapper
 import com.caioluis.githubpopular.githubpulls.model.UiGitHubPullRequest
@@ -23,6 +25,7 @@ import javax.inject.Inject
 class GetPullRequestsViewModel @Inject constructor(
     private val getPullRequestsUseCase: GetPullRequestsUseCase,
     private val pullRequestUiMapper: PullRequestUiMapper,
+    private val errorMapper: ErrorMapper,
 ) : ViewModel() {
     private data class PullRequestsRequest(
         val pullUrl: String,
@@ -50,4 +53,6 @@ class GetPullRequestsViewModel @Inject constructor(
             repositoryId = repositoryId,
         )
     }
+
+    fun mapToAppException(error: Throwable): AppException = (error as? AppException) ?: errorMapper.map(error)
 }

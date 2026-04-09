@@ -2,8 +2,6 @@ package com.caioluis.githubpopular.data.impl.di
 
 import android.content.Context
 import com.caioluis.githubpopular.core.common.ServiceBuilder
-import com.caioluis.githubpopular.core.common.exception.ErrorMapper
-import com.caioluis.githubpopular.core.common.exception.ErrorMapperImpl
 import com.caioluis.githubpopular.data.impl.BuildConfig
 import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
 import com.caioluis.githubpopular.data.impl.local.githubpulls.dao.GitHubPullRequestsDao
@@ -38,30 +36,35 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 interface DataModule {
     @Binds
+    @Singleton
     fun bindRemoteSource(impl: GithubReposRemoteSourceImpl): GithubReposRemoteSource
 
     @Binds
+    @Singleton
     fun bindPullRequestsRemoteSource(impl: PullRequestsRemoteSourceImpl): PullRequestsRemoteSource
 
     @Binds
+    @Singleton
     fun bindGitHubReposRepository(impl: GitHubReposRepositoryImpl): GitHubReposRepository
 
     @Binds
+    @Singleton
     fun bindGitHubPullRequestsRepository(impl: GitHubPullRequestsRepositoryImpl): GitHubPullRequestsRepository
 
     @Binds
-    fun bindErrorMapper(impl: ErrorMapperImpl): ErrorMapper
-
-    @Binds
+    @Singleton
     fun bindRemoteGitHubRepositoryMapper(impl: RemoteGitHubRepositoryMapperImpl): RemoteGitHubRepositoryMapper
 
     @Binds
+    @Singleton
     fun bindRemotePullRequestMapper(impl: RemotePullRequestMapperImpl): RemotePullRequestMapper
 
     @Binds
+    @Singleton
     fun bindLocalGitHubRepositoryMapper(impl: LocalGitHubRepositoryMapperImpl): LocalGitHubRepositoryMapper
 
     @Binds
+    @Singleton
     fun bindLocalGitHubPullRequestMapper(impl: LocalGitHubPullRequestMapperImpl): LocalGitHubPullRequestMapper
 
     companion object {
@@ -80,9 +83,11 @@ interface DataModule {
         ): GitHubReposDataBase = GitHubReposDataBase.getInstance(context)
 
         @Provides
+        @Singleton
         fun provideGitHubRepositoriesDao(dataBase: GitHubReposDataBase): GitHubRepositoriesDao = dataBase.gitHubRepositoriesDao()
 
         @Provides
+        @Singleton
         fun provideGitHubPullRequestsDao(dataBase: GitHubReposDataBase): GitHubPullRequestsDao = dataBase.gitHubPullRequestsDao()
     }
 }
