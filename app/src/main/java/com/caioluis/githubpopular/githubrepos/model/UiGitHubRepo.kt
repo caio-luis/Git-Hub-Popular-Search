@@ -1,5 +1,8 @@
 package com.caioluis.githubpopular.githubrepos.model
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 data class UiGitHubRepo(
     val id: Int = 0,
     val title: String = "",

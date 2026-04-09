@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.ksp.plugin)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -38,6 +39,7 @@ dependencies {
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
+    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.lifecycle.common)

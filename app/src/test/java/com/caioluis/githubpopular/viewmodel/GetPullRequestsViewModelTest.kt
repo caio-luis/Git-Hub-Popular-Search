@@ -1,5 +1,6 @@
 package com.caioluis.githubpopular.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.paging.PagingData
 import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.domain.bridge.usecase.GetPullRequestsUseCase
@@ -35,7 +36,18 @@ class GetPullRequestsViewModelTest {
     @Before
     fun setup() {
         Dispatchers.setMain(unconfinedDispatcher)
-        viewModel = GetPullRequestsViewModel(getPullRequestsUseCase, pullRequestUiMapper, errorMapper)
+        viewModel = GetPullRequestsViewModel(
+            savedStateHandle = SavedStateHandle(
+                mapOf(
+                    "pullUrl" to "https://api.github.com/repos/user/repo/pulls",
+                    "repositoryId" to Fixtures.REPOSITORY_ID,
+                    "repositoryName" to "repo",
+                ),
+            ),
+            getPullRequestsUseCase = getPullRequestsUseCase,
+            pullRequestUiMapper = pullRequestUiMapper,
+            errorMapper = errorMapper,
+        )
     }
 
     @After
