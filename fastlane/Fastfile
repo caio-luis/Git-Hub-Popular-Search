@@ -20,9 +20,9 @@ platform :android do
     sh("cd .. && ./gradlew --no-daemon #{options[:task]}")
   end
 
-  desc "Runs spotless formatting validation"
+  desc "Runs spotless formatting validation and detekt static analysis"
   lane :lint do
-    run_gradle_from_root(task: "spotlessCheck")
+    run_gradle_from_root(task: "spotlessCheck detekt")
   end
 
   desc "Runs all the tests for all variants"

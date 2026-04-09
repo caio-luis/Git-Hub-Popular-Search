@@ -56,7 +56,7 @@ jobs:
       #   /root/.gradle         – Gradle wrapper + dependency cache (persistent)
       #   /bundle               – Bundler gem cache (persistent)
       # BUNDLE_PATH=/bundle tells Bundler where to install / look for gems.
-      - name: Run Spotless checks inside Docker container
+      - name: Run Spotless and Detekt checks inside Docker container
         run: |
           docker run --rm \
             --init \
@@ -150,4 +150,5 @@ jobs:
             **/build/reports/tests/**
             **/build/test-results/**
             **/build/reports/jacoco/**
+            **/build/reports/detekt/**
 

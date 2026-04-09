@@ -6,12 +6,14 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.ksp.plugin) apply false
     alias(libs.plugins.spotless) apply false
+    alias(libs.plugins.detekt) apply false
     alias(libs.plugins.hilt.android) apply false
     alias(libs.plugins.dependency.analysis)
 }
 
 subprojects {
     apply(plugin = "com.diffplug.spotless")
+    apply(plugin = "io.gitlab.arturbosch.detekt")
 
     configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         kotlin {
@@ -29,6 +31,19 @@ subprojects {
             ktlint()
         }
     }
+
+    configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {
+        buildUponDefaultConfig = true
+        config.setFrom(files("$rootDir/detekt.yml"))
+        source.setFrom(
+            files(
+                "src/main/java",
+                "src/main/kotlin",
+                "src/test/java",
+                "src/test/kotlin"
+            )
+        )
+    }
 }
 
 tasks.register("clean", Delete::class) {
@@ -36,7 +51,7 @@ tasks.register("clean", Delete::class) {
 }
 
 tasks.register("installGitHooks") {
-    description = "Installs git hooks to run spotlessCheck before commit"
+    description = "Installs git hooks to run spotlessCheck and detekt before commit"
     group = "git hooks"
 
     doLast {
@@ -49,6 +64,14 @@ tasks.register("installGitHooks") {
             #!/bin/sh
             echo "Running spotlessCheck..."
             ./gradlew spotlessCheck
+            SPOTLESS_EXIT=$?
+            echo "Running detekt..."
+            ./gradlew detekt
+            DETEKT_EXIT=$?
+            if [ ${'$'}SPOTLESS_EXIT -ne 0 ] || [ ${'$'}DETEKT_EXIT -ne 0 ]; then
+              echo "Pre-commit checks failed."
+              exit 1
+            fi
         """.trimIndent()
 
         if (!preCommitFile.exists() || preCommitFile.readText().trim() != scriptContent.trim()) {

@@ -3,6 +3,7 @@ package com.caioluis.githubpopular.githubpulls.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,14 +40,6 @@ fun PullRequestItem(
     onClick: (UiGitHubPullRequest) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
-    val imageRequest = remember(pullRequest.avatarUrl, context) {
-        ImageRequest.Builder(context)
-            .data(pullRequest.avatarUrl)
-            .crossfade(true)
-            .build()
-    }
-
     Card(
         onClick = { onClick(pullRequest) },
         modifier = modifier.fillMaxWidth(),
@@ -62,55 +55,82 @@ fun PullRequestItem(
                 .height(IntrinsicSize.Min)
                 .padding(12.dp),
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(end = 12.dp),
-            ) {
-                AsyncImage(
-                    model = imageRequest,
-                    contentDescription = "User image",
-                    placeholder = painterResource(id = R.drawable.ic_star),
-                    error = painterResource(id = R.drawable.ic_star),
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop,
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = pullRequest.userName,
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                    ),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
-            ) {
-                Text(
-                    text = pullRequest.title,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                    ),
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    text = pullRequest.body,
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 10,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
+            PullRequestOwnerSection(
+                avatarUrl = pullRequest.avatarUrl,
+                userName = pullRequest.userName,
+            )
+            PullRequestDetailsSection(pullRequest = pullRequest)
         }
+    }
+}
+
+@Composable
+private fun PullRequestOwnerSection(
+    avatarUrl: String,
+    userName: String,
+    modifier: Modifier = Modifier,
+) {
+    val context = LocalContext.current
+    val imageRequest = remember(avatarUrl, context) {
+        ImageRequest.Builder(context)
+            .data(avatarUrl)
+            .crossfade(true)
+            .build()
+    }
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.padding(end = 12.dp),
+    ) {
+        AsyncImage(
+            model = imageRequest,
+            contentDescription = "User image",
+            placeholder = painterResource(id = R.drawable.ic_star),
+            error = painterResource(id = R.drawable.ic_star),
+            modifier = Modifier
+                .size(80.dp)
+                .clip(CircleShape),
+            contentScale = ContentScale.Crop,
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = userName,
+            style = MaterialTheme.typography.bodySmall.copy(
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+            ),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
+
+@Composable
+private fun RowScope.PullRequestDetailsSection(
+    pullRequest: UiGitHubPullRequest,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .weight(1f)
+            .fillMaxHeight(),
+    ) {
+        Text(
+            text = pullRequest.title,
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+            ),
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            text = pullRequest.body,
+            style = MaterialTheme.typography.bodyMedium,
+            maxLines = 10,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 

@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -41,14 +42,6 @@ fun RepositoryItem(
     onClick: (UiGitHubRepo) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
-    val imageRequest = remember(repository.avatarUrl, context) {
-        ImageRequest.Builder(context)
-            .data(repository.avatarUrl)
-            .crossfade(true)
-            .build()
-    }
-
     Card(
         onClick = { onClick(repository) },
         modifier = modifier.fillMaxWidth(),
@@ -64,83 +57,121 @@ fun RepositoryItem(
                 .height(IntrinsicSize.Min)
                 .padding(12.dp),
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier.padding(end = 12.dp),
-            ) {
-                AsyncImage(
-                    model = imageRequest,
-                    contentDescription = "User image",
-                    placeholder = painterResource(id = R.drawable.ic_star),
-                    error = painterResource(id = R.drawable.ic_star),
-                    modifier = Modifier
-                        .size(80.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop,
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    text = repository.userName,
-                    style = MaterialTheme.typography.bodySmall.copy(
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.Bold,
-                    ),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
-
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxHeight(),
-            ) {
-                Text(
-                    text = repository.title,
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Bold,
-                    ),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                Text(
-                    text = repository.description,
-                    style = MaterialTheme.typography.bodyMedium,
-                    maxLines = 3,
-                    overflow = TextOverflow.Ellipsis,
-                )
-
-                Spacer(modifier = Modifier.weight(1f))
-                Spacer(modifier = Modifier.height(10.dp))
-
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_star),
-                        contentDescription = "Stars",
-                        modifier = Modifier.size(16.dp),
-                    )
-                    Spacer(modifier = Modifier.width(5.dp))
-                    Text(
-                        text = repository.stargazersCount.toString(),
-                        style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(end = 10.dp),
-                    )
-
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_forks),
-                        contentDescription = "Forks",
-                        modifier = Modifier.size(16.dp),
-                    )
-                    Spacer(modifier = Modifier.width(5.dp))
-                    Text(
-                        text = repository.forksCount.toString(),
-                        style = MaterialTheme.typography.bodySmall,
-                    )
-                }
-            }
+            RepositoryOwnerSection(
+                avatarUrl = repository.avatarUrl,
+                userName = repository.userName,
+            )
+            RepositoryDetailsSection(repository = repository)
         }
+    }
+}
+
+@Composable
+private fun RepositoryOwnerSection(
+    avatarUrl: String,
+    userName: String,
+    modifier: Modifier = Modifier,
+) {
+    val context = LocalContext.current
+    val imageRequest = remember(avatarUrl, context) {
+        ImageRequest.Builder(context)
+            .data(avatarUrl)
+            .crossfade(true)
+            .build()
+    }
+
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier.padding(end = 12.dp),
+    ) {
+        AsyncImage(
+            model = imageRequest,
+            contentDescription = "User image",
+            placeholder = painterResource(id = R.drawable.ic_star),
+            error = painterResource(id = R.drawable.ic_star),
+            modifier = Modifier
+                .size(80.dp)
+                .clip(CircleShape),
+            contentScale = ContentScale.Crop,
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            text = userName,
+            style = MaterialTheme.typography.bodySmall.copy(
+                fontSize = 12.sp,
+                fontWeight = FontWeight.Bold,
+            ),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+    }
+}
+
+@Composable
+private fun RowScope.RepositoryDetailsSection(
+    repository: UiGitHubRepo,
+    modifier: Modifier = Modifier,
+) {
+    Column(
+        modifier = modifier
+            .weight(1f)
+            .fillMaxHeight(),
+    ) {
+        Text(
+            text = repository.title,
+            style = MaterialTheme.typography.titleMedium.copy(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Bold,
+            ),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
+        Spacer(modifier = Modifier.height(10.dp))
+        Text(
+            text = repository.description,
+            style = MaterialTheme.typography.bodyMedium,
+            maxLines = 3,
+            overflow = TextOverflow.Ellipsis,
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.height(10.dp))
+
+        RepositoryStatsRow(repository = repository)
+    }
+}
+
+@Composable
+private fun RepositoryStatsRow(
+    repository: UiGitHubRepo,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier,
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_star),
+            contentDescription = "Stars",
+            modifier = Modifier.size(16.dp),
+        )
+        Spacer(modifier = Modifier.width(5.dp))
+        Text(
+            text = repository.stargazersCount.toString(),
+            style = MaterialTheme.typography.bodySmall,
+            modifier = Modifier.padding(end = 10.dp),
+        )
+
+        Image(
+            painter = painterResource(id = R.drawable.ic_forks),
+            contentDescription = "Forks",
+            modifier = Modifier.size(16.dp),
+        )
+        Spacer(modifier = Modifier.width(5.dp))
+        Text(
+            text = repository.forksCount.toString(),
+            style = MaterialTheme.typography.bodySmall,
+        )
     }
 }
 

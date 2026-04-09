@@ -16,11 +16,17 @@ class GithubPullRequestsLocalSourceImpl @Inject constructor(
     private val pullRequestRemoteKeysDao: PullRequestRemoteKeysDao,
 ) : GithubPullRequestsLocalSource {
 
-    override suspend fun getRemoteKey(repositoryId: Int): PullRequestRemoteKey? = pullRequestRemoteKeysDao.remoteKeyByRepositoryId(repositoryId)
+    override suspend fun getRemoteKey(
+        repositoryId: Int,
+    ): PullRequestRemoteKey? = pullRequestRemoteKeysDao.remoteKeyByRepositoryId(repositoryId)
 
-    override suspend fun deleteRemoteKey(repositoryId: Int) = pullRequestRemoteKeysDao.deleteByRepositoryId(repositoryId)
+    override suspend fun deleteRemoteKey(
+        repositoryId: Int,
+    ) = pullRequestRemoteKeysDao.deleteByRepositoryId(repositoryId)
 
-    override suspend fun insertRemoteKey(remoteKey: PullRequestRemoteKey) = pullRequestRemoteKeysDao.insertOrReplace(remoteKey)
+    override suspend fun insertRemoteKey(
+        remoteKey: PullRequestRemoteKey,
+    ) = pullRequestRemoteKeysDao.insertOrReplace(remoteKey)
 
     override suspend fun savePullRequests(pullRequests: List<LocalGitHubPullRequest>) {
         Timber.d("Saving %d pull requests to Room", pullRequests.size)
@@ -32,9 +38,15 @@ class GithubPullRequestsLocalSourceImpl @Inject constructor(
         pullRequestsDao.deletePullRequestsByRepositoryId(repositoryId)
     }
 
-    override suspend fun countPullRequestsByRepositoryId(repositoryId: Int): Int = pullRequestsDao.countPullRequestsByRepositoryId(repositoryId)
+    override suspend fun countPullRequestsByRepositoryId(
+        repositoryId: Int,
+    ): Int = pullRequestsDao.countPullRequestsByRepositoryId(repositoryId)
 
-    override fun getPagedPullRequests(repositoryId: Int): PagingSource<Int, LocalGitHubPullRequest> = pullRequestsDao.getPagedPullRequests(repositoryId)
+    override fun getPagedPullRequests(
+        repositoryId: Int,
+    ): PagingSource<Int, LocalGitHubPullRequest> = pullRequestsDao.getPagedPullRequests(repositoryId)
 
-    override suspend fun <R> withTransaction(block: suspend () -> R): R = localDatabase.withTransaction { block() }
+    override suspend fun <R> withTransaction(
+        block: suspend () -> R,
+    ): R = localDatabase.withTransaction { block() }
 }

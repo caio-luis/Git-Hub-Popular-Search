@@ -41,7 +41,7 @@ class ContextExtensionsTest {
     @Test
     fun `open browser intent should show toast when start activity fails`() {
         val context = object : ContextWrapper(ApplicationProvider.getApplicationContext()) {
-            override fun startActivity(intent: Intent?): Unit = throw IllegalStateException("cannot open")
+            override fun startActivity(intent: Intent?): Unit = error("cannot open")
         }
 
         context.openBrowserIntent("https://github.com")
