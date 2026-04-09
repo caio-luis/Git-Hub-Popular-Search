@@ -3,6 +3,8 @@ package com.caioluis.githubpopular.data.impl.remote.githubrepos
 import androidx.paging.ExperimentalPagingApi
 import com.caioluis.githubpopular.data.impl.local.githubrepos.GithubReposLocalSource
 import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubRepositoryMapper
+import com.caioluis.githubpopular.data.impl.remote.githubrepos.mediator.GitHubReposRemoteMediator
+import com.caioluis.githubpopular.data.impl.remote.githubrepos.mediator.GithubReposRemoteMediatorFactory
 import com.caioluis.githubpopular.data.impl.remote.githubrepos.repository.GitHubReposRepositoryImpl
 import io.mockk.every
 import io.mockk.mockk

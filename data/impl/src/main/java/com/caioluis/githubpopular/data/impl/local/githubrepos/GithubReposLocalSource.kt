@@ -15,6 +15,8 @@ interface GithubReposLocalSource {
 
     suspend fun clearRepositories(language: String)
 
+    suspend fun countRepositoriesByLanguage(language: String): Int
+
     fun getPagedRepositories(language: String): PagingSource<Int, LocalGitHubRepository>
 
     suspend fun <R> withTransaction(block: suspend () -> R): R

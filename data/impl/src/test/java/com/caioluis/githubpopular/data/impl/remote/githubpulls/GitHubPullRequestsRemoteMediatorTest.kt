@@ -12,7 +12,8 @@ import com.caioluis.githubpopular.data.impl.Fixtures
 import com.caioluis.githubpopular.data.impl.local.githubpulls.GithubPullRequestsLocalSource
 import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubPullRequestMapperImpl
 import com.caioluis.githubpopular.data.impl.mapper.RemotePullRequestMapperImpl
-import com.caioluis.githubpopular.data.impl.remote.githubpullrequests.PullRequestsRemoteSource
+import com.caioluis.githubpopular.data.impl.remote.githubpulls.mediator.GitHubPullRequestsRemoteMediator
+import com.caioluis.githubpopular.data.impl.remote.githubpulls.source.PullRequestsRemoteSource
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every

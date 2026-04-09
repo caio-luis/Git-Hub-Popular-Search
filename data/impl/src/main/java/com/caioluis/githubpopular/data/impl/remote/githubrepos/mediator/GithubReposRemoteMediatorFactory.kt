@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.data.impl.remote.githubrepos
+package com.caioluis.githubpopular.data.impl.remote.githubrepos.mediator
 
 import dagger.assisted.AssistedFactory
 

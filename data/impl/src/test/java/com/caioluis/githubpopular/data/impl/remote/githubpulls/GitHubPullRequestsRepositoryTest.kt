@@ -1,16 +1,16 @@
-package com.caioluis.githubpopular.data.impl.remote.githubrepos
+package com.caioluis.githubpopular.data.impl.remote.githubpulls
 
 import androidx.paging.ExperimentalPagingApi
 import com.caioluis.githubpopular.data.impl.Fixtures
 import com.caioluis.githubpopular.data.impl.local.githubpulls.GithubPullRequestsLocalSource
 import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubPullRequestMapper
-import com.caioluis.githubpopular.data.impl.remote.githubpulls.GitHubPullRequestsRemoteMediator
-import com.caioluis.githubpopular.data.impl.remote.githubpulls.GithubPullRequestsRemoteMediatorFactory
+import com.caioluis.githubpopular.data.impl.remote.githubpulls.mediator.GitHubPullRequestsRemoteMediator
+import com.caioluis.githubpopular.data.impl.remote.githubpulls.mediator.GithubPullRequestsRemoteMediatorFactory
 import com.caioluis.githubpopular.data.impl.remote.githubpulls.repository.GitHubPullRequestsRepositoryImpl
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Assert.assertNotNull
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 
@@ -47,7 +47,7 @@ class GitHubPullRequestsRepositoryTest {
 
         val result = repository.getPullRequests(pullUrl, repositoryId)
 
-        assertNotNull(result)
+        Assert.assertNotNull(result)
 
         verify(exactly = 1) {
             remoteMediatorFactory.create(
