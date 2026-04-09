@@ -25,6 +25,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -86,7 +89,7 @@ private fun RepositoryOwnerSection(
     ) {
         AsyncImage(
             model = imageRequest,
-            contentDescription = "User image",
+            contentDescription = stringResource(R.string.cd_owner_avatar, userName),
             placeholder = painterResource(id = R.drawable.ic_star),
             error = painterResource(id = R.drawable.ic_star),
             modifier = Modifier
@@ -146,13 +149,18 @@ private fun RepositoryStatsRow(
     repository: UiGitHubRepo,
     modifier: Modifier = Modifier,
 ) {
+    val starsDescription = stringResource(
+        R.string.cd_repository_stats,
+        repository.stargazersCount,
+        repository.forksCount,
+    )
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier,
+        modifier = modifier.clearAndSetSemantics { contentDescription = starsDescription },
     ) {
         Image(
             painter = painterResource(id = R.drawable.ic_star),
-            contentDescription = "Stars",
+            contentDescription = null,
             modifier = Modifier.size(16.dp),
         )
         Spacer(modifier = Modifier.width(5.dp))
@@ -164,7 +172,7 @@ private fun RepositoryStatsRow(
 
         Image(
             painter = painterResource(id = R.drawable.ic_forks),
-            contentDescription = "Forks",
+            contentDescription = null,
             modifier = Modifier.size(16.dp),
         )
         Spacer(modifier = Modifier.width(5.dp))

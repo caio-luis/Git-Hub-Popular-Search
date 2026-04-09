@@ -18,10 +18,12 @@ import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.caioluis.githubpopular.R
 import com.caioluis.githubpopular.core.common.extensions.openBrowserIntent
 import com.caioluis.githubpopular.githubpulls.model.UiGitHubPullRequest
 import com.caioluis.githubpopular.githubpulls.viewmodel.GetPullRequestsViewModel
@@ -54,7 +56,7 @@ fun PullRequestsScreen(
                     IconButton(onClick = onBackClick) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "Back",
+                            contentDescription = stringResource(R.string.cd_navigate_back),
                         )
                     }
                 },
