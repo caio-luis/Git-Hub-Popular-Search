@@ -83,8 +83,9 @@ class GitHubReposRemoteMediator @AssistedInject constructor(
             }
 
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
+        } catch (cancellation: CancellationException) {
+            throw cancellation
         } catch (exception: Exception) {
-            if (exception is CancellationException) throw exception
             handleLoadException(loadType, exception)
         }
     }

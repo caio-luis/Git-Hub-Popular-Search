@@ -10,5 +10,7 @@ import javax.inject.Inject
 class GetRepositoriesUseCaseImpl @Inject constructor(
     private val gitHubReposRepository: GitHubReposRepository,
 ) : GetRepositoriesUseCase {
-    override fun loadRepositories(language: String): Flow<PagingData<DomainGitHubRepository>> = gitHubReposRepository.getGitHubRepositories(language)
+    override fun loadRepositories(
+        language: String,
+    ): Flow<PagingData<DomainGitHubRepository>> = gitHubReposRepository.getGitHubRepositories(language)
 }

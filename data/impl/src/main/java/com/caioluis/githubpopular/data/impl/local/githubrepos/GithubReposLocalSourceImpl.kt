@@ -16,11 +16,17 @@ class GithubReposLocalSourceImpl @Inject constructor(
     private val remoteKeysDao: GitHubReposRemoteKeysDao,
 ) : GithubReposLocalSource {
 
-    override suspend fun getRemoteKey(language: String): GitHubReposRemoteKey? = remoteKeysDao.remoteKeyByQuery(language)
+    override suspend fun getRemoteKey(
+        language: String,
+    ): GitHubReposRemoteKey? = remoteKeysDao.remoteKeyByQuery(language)
 
-    override suspend fun deleteRemoteKey(language: String) = remoteKeysDao.deleteByQuery(language)
+    override suspend fun deleteRemoteKey(
+        language: String,
+    ) = remoteKeysDao.deleteByQuery(language)
 
-    override suspend fun insertRemoteKey(remoteKey: GitHubReposRemoteKey) = remoteKeysDao.insertOrReplace(remoteKey)
+    override suspend fun insertRemoteKey(
+        remoteKey: GitHubReposRemoteKey,
+    ) = remoteKeysDao.insertOrReplace(remoteKey)
 
     override suspend fun saveRepositories(repositories: List<LocalGitHubRepository>) {
         Timber.d("Saving %d repositories to Room", repositories.size)
@@ -32,9 +38,15 @@ class GithubReposLocalSourceImpl @Inject constructor(
         repositoriesDao.clearRepositories(language)
     }
 
-    override suspend fun countRepositoriesByLanguage(language: String): Int = repositoriesDao.countRepositoriesByLanguage(language)
+    override suspend fun countRepositoriesByLanguage(
+        language: String,
+    ): Int = repositoriesDao.countRepositoriesByLanguage(language)
 
-    override fun getPagedRepositories(language: String): PagingSource<Int, LocalGitHubRepository> = repositoriesDao.getPagedRepositories(language)
+    override fun getPagedRepositories(
+        language: String,
+    ): PagingSource<Int, LocalGitHubRepository> = repositoriesDao.getPagedRepositories(language)
 
-    override suspend fun <R> withTransaction(block: suspend () -> R): R = localDatabase.withTransaction { block() }
+    override suspend fun <R> withTransaction(
+        block: suspend () -> R,
+    ): R = localDatabase.withTransaction { block() }
 }

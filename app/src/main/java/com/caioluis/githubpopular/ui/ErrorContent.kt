@@ -94,23 +94,35 @@ fun ErrorContent(
 @Preview
 @Composable
 fun ErrorContentPreviewNetwork() {
-    ErrorContent(error = AppException.NetworkException(Throwable()), onRetry = {})
+    ErrorContent(
+        error = AppException.NetworkException(Throwable("Preview network error")),
+        onRetry = {},
+    )
 }
 
 @Preview
 @Composable
 fun ErrorContentPreviewTimeout() {
-    ErrorContent(error = AppException.TimeoutException(Throwable()), onRetry = {})
+    ErrorContent(
+        error = AppException.TimeoutException(Throwable("Preview timeout error")),
+        onRetry = {},
+    )
 }
 
 @Preview
 @Composable
 fun ErrorContentPreviewServer() {
-    ErrorContent(error = AppException.ServerException(Throwable()), onRetry = {})
+    ErrorContent(
+        error = AppException.ServerException(Throwable("Preview server error")),
+        onRetry = {},
+    )
 }
 
 @Preview
 @Composable
 fun ErrorContentPreviewUnknown() {
-    ErrorContent(error = AppException.UnknownException(Throwable()), onRetry = {})
+    ErrorContent(
+        error = AppException.UnknownException(Throwable("Preview unknown error")),
+        onRetry = {},
+    )
 }

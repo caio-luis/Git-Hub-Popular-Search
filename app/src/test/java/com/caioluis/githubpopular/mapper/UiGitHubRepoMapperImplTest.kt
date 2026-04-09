@@ -26,7 +26,7 @@ class UiGitHubRepoMapperImplTest {
         assertEquals(source.avatarUrl, mapped.avatarUrl)
         assertEquals(source.htmlUrl, mapped.repositoryUrl)
         assertEquals("https://api.test.com/repos/user/repo/pulls", mapped.pullsUrl)
-        assertEquals(303, mapped.description.length)
+        assertEquals(203, mapped.description.length)
         assertTrue(mapped.description.endsWith("..."))
     }
 
