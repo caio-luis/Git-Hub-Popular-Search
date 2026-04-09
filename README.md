@@ -1,58 +1,373 @@
-# Git-Hub-Popular-Search
+# 🔍 GitHub Popular Search
 
-**GitHubPopular** is a modern Android application designed to demonstrate advanced development practices, architectural patterns, and the use of the latest Jetpack libraries. The app allows users to search for and list the most popular repositories on GitHub by programming language.
+Aplicativo Android nativo que consome a [GitHub REST API](https://docs.github.com/en/rest) para listar os repositórios mais populares (por estrelas) de uma linguagem de programação selecionada e exibir seus pull requests abertos.
 
-## 🏗 Architecture & Design Patterns
+O projeto foi construído com foco em **escalabilidade**, **testabilidade** e **separação de responsabilidades**, aplicando Clean Architecture com MVVM em uma estrutura multi-módulo com split `bridge`/`impl` para eliminar dependências circulares.
 
-The project follows **Clean Architecture** principles combined with **MVVM (Model-View-ViewModel)**, ensuring separation of concerns, scalability, and testability.
+---
 
-- **Modularization**: The project is structured into multi-modules to enforce separation of concerns:
-  - **App Module**: Presentation layer using **Jetpack Compose**.
-  - **Domain Layer** (`domain:bridge`, `domain:impl`): Contains pure business logic, use cases, and repository interfaces.
-  - **Data Layer** (`data:bridge`, `data:impl`): Handles data retrieval (Network & Database).
-  - **Build Logic**: Custom Gradle Convention Plugins for reusable build configuration.
-  
-- **Dependency Inversion**: Utilizes a **Bridge & Implementation** pattern to decouple modules and avoid circular dependencies, allowing feature modules to depend only on abstractions.
-- **Repository Pattern**: Mediates data access between remote sources (API) and local cache (Database).
+## 📋 Índice
 
-## 🛠 Tech Stack
+- [Funcionalidades](#-funcionalidades)
+- [Arquitetura](#-arquitetura)
+  - [Fluxo de dados](#fluxo-de-dados)
+  - [Padrão Bridge / Impl](#padrão-bridge--impl)
+  - [Diagrama de dependências](#diagrama-de-dependências)
+- [Stack tecnológica](#-stack-tecnológica)
+- [Pré-requisitos](#-pré-requisitos)
+- [Como rodar localmente](#-como-rodar-localmente)
+- [Comandos úteis](#-comandos-úteis)
+- [Testes](#-testes)
+- [Qualidade de código](#-qualidade-de-código)
+- [CI/CD com Fastlane](#-cicd-com-fastlane)
 
-### Languages & Core
-- **[Kotlin](https://kotlinlang.org/)**: 100% Kotlin codebase.
-- **[Coroutines](https://kotlinlang.org/docs/coroutines-overview.html) & [Flow](https://kotlinlang.org/docs/flow.html)**: For asynchronous operations and reactive data stream handling.
+---
 
-### User Interface (UI)
-- **[Jetpack Compose](https://developer.android.com/jetpack/compose)**: Modern, declarative UI toolkit (Material 3).
-- **[Navigation Compose](https://developer.android.com/jetpack/compose/navigation)**: For seamless navigation between screens.
-- **[Coil](https://coil-kt.github.io/coil/)**: Lightweight image loading library backed by Kotlin Coroutines.
+## ✨ Funcionalidades
 
-### Networking & Data
-- **[Retrofit](https://square.github.io/retrofit/)**: Type-safe HTTP client.
-- **[Kotlin Serialization](https://kotlinlang.org/docs/serialization.html)**: Official Kotlin serialization library, offering efficient, type-safe, and reflection-free JSON parsing.
-- **[OkHttp](https://square.github.io/okhttp/)**: HTTP client with logging interceptors.
-- **[Room](https://developer.android.com/training/data-storage/room)**: Local persistence library (SQLite abstraction).
-- **[Paging 3](https://developer.android.com/topic/libraries/architecture/paging/v3)**: Efficiently loads and displays pages of data.
+| Feature | Descrição |
+|---|---|
+| **Listagem de repositórios** | Busca paginada dos repositórios mais estrelados por linguagem via GitHub Search API, com scroll infinito. |
+| **Seleção de linguagem** | Dropdown com 24 linguagens (Kotlin, Swift, Python, Rust, Go, etc.) para filtro dinâmico. |
+| **Pull requests** | Ao clicar em um repositório, exibe a lista paginada de pull requests abertos. |
+| **Offline-first** | Cache local com Room — se a rede falhar durante um refresh, dados cacheados são exibidos automaticamente. |
+| **Pull-to-refresh** | Suporte nativo a Material 3 `PullToRefreshBox` em ambas as telas. |
+| **Tratamento de erros** | Mapeamento centralizado de exceções (`ErrorMapper`) com feedback visual por tipo de erro (rede, timeout, servidor, parsing). |
+| **Deep link / navegação type-safe** | Rotas serializáveis com `@Serializable` — sem encoding/decoding manual de URLs. |
+| **Process death recovery** | Estado de navegação e filtros preservados via `SavedStateHandle`. |
 
-### Dependency Injection
-- **[Dagger Hilt](https://dagger.dev/hilt/)**: Standard for dependency injection in Android.
+---
 
-### Build, Quality & Tools
-- **[Gradle Version Catalogs](https://docs.gradle.org/current/userguide/platforms.html)**: Centralized dependency management via `libs.versions.toml`.
-- **[Convention Plugins](https://docs.gradle.org/current/samples/sample_convention_plugins.html)**: Custom plugins to share build logic across modules.
-- **[KSP (Kotlin Symbol Processing)](https://kotlinlang.org/docs/ksp-overview.html)**: Faster alternative to KAPT for code generation (used by Room).
-- **[Spotless](https://github.com/diffplug/spotless)**: Enforces consistent code formatting.
-- **[LeakCanary](https://square.github.io/leakcanary/)**: Memory leak detection during development.
-- **[Dependency Analysis](https://github.com/autonomousapps/dependency-analysis-android-gradle-plugin)**: Tool to analyze and optimize project dependencies.
-- **[Fastlane](https://fastlane.tools/)**: Automation tool for building and testing Android apps.
+## 🏗 Arquitetura
 
-### Testing
-- **[Mockk](https://mockk.io/)**: Mocking library for Kotlin.
-- **[Robolectric](https://robolectric.org/)**: Runs Android unit tests on the JVM.
-- **[JUnit 4](https://junit.org/junit4/)**: Standard testing framework.
+### Visão geral dos módulos
 
-## 💡 Strategic Decisions & Best Practices
+O projeto segue **Clean Architecture** com a separação em camadas, organizada em módulos Gradle independentes:
 
-- **Kotlin Serialization**: Chosen for its seamless integration with the Kotlin ecosystem, type safety, and reflection-free JSON parsing, offering better performance and future-proofing compared to reflection-based libraries like Gson.
-- **Coroutines vs RxJava**: Coroutines provide a lighter, more idiomatic way to handle concurrency in Kotlin compared to RxJava, perfectly fitting the project's scope.
-- **Offline Support**: Room is used to cache data, improving user experience under poor network conditions.
-- **Strict Dependency Management**: Usage of `dependency-analysis` plugin ensures no unused or misconfigured dependencies exist in the project.
+| Módulo | Responsabilidade | Plugin Gradle |
+|---|---|---|
+| `:app` | UI (Jetpack Compose), Navigation, ViewModels, Mappers UI, entry point Hilt | `githubpopular.android.application` |
+| `:domain:bridge` | Interfaces de Use Cases, interfaces de Repositories, entidades de domínio | `githubpopular.jvm.library` |
+| `:domain:impl` | Implementações concretas dos Use Cases + Hilt bindings | `githubpopular.jvm.library` |
+| `:data:bridge` | Definições de entidades Room (`@Entity`), modelos remotos (`@Serializable`), Remote Keys | `githubpopular.android.library` |
+| `:data:impl` | Retrofit Services, Room Database/DAOs, Repository implementations, RemoteMediators, Mappers, Hilt bindings | `githubpopular.android.library` |
+| `:core:common` | Configuração de rede (`NetworkModule`), error handling centralizado, extensões utilitárias | `githubpopular.android.library` |
+| `build-logic/convention` | Convention plugins compartilhados (compileSdk, minSdk, JVM target, JaCoCo) | — |
+
+### Fluxo de dados
+
+#### Repositórios
+
+```
+MainScreen (Compose)
+  └→ GetRepositoriesViewModel
+       ├─ selectedLanguage: SavedStateHandle-backed StateFlow<String?>
+       └─ repositories: filterNotNull() → flatMapLatest → cachedIn(viewModelScope)
+            └→ GetRepositoriesUseCase (domain:bridge interface)
+                 └→ GetRepositoriesUseCaseImpl (domain:impl)
+                      └→ GitHubReposRepository (domain:bridge interface)
+                           └→ GitHubReposRepositoryImpl (data:impl)
+                                ├─ Pager(config, remoteMediator, pagingSourceFactory)
+                                ├─ PagingSource ← Room (GitHubRepositoriesDao)
+                                └─ RemoteMediator → Retrofit (GitHubRepositoriesService)
+                                     └→ GitHub API: GET /search/repositories?q=language:{lang}&sort=stars&page={n}
+```
+
+#### Pull Requests
+
+```
+PullRequestsScreen (Compose)
+  └→ GetPullRequestsViewModel
+       ├─ requestState: MutableStateFlow<PullRequestsRequest?>
+       └─ pullRequests: filterNotNull() → flatMapLatest → cachedIn(viewModelScope)
+            └→ GetPullRequestsUseCase → GitHubPullRequestsRepositoryImpl
+                 ├─ PagingSource ← Room (GitHubPullRequestsDao)
+                 └─ RemoteMediator → Retrofit (GitHubPullRequestsService)
+                      └→ GitHub API: GET {pulls_url}?page={n}
+```
+
+**Estratégia offline-first:** Ambos os `RemoteMediator` implementam fallback para cache — quando um `REFRESH` falha e existem dados em cache no Room, o mediator retorna `MediatorResult.Success` em vez de propagar o erro. Falhas em `APPEND` (paginação) são sempre propagadas.
+
+### Padrão Bridge / Impl
+
+O split `bridge`/`impl` é a estratégia para **desacoplar contratos de implementações**:
+
+- **`bridge`** — contém apenas interfaces e data classes (contratos públicos). Módulos que precisam de um contrato dependem apenas do `bridge`.
+- **`impl`** — contém as implementações concretas + bindings Hilt. Somente o `:app` (e módulos de teste) dependem dos `impl`.
+
+Isso evita dependências circulares e permite que, por exemplo, `:domain:bridge` não precise conhecer Room ou Retrofit.
+
+### Diagrama de dependências
+
+![Diagrama de dependências entre módulos](images/modules-dependency-graph.png)
+
+## 🛠 Stack tecnológica
+
+### Core
+
+| Tecnologia | Versão | Uso |
+|---|---|---|
+| **Kotlin** | 2.3.20 | Linguagem principal |
+| **AGP (Android Gradle Plugin)** | 9.1.0 | Build system |
+| **Compile SDK / Target SDK** | 36 | API level |
+| **Min SDK** | 23 | Android 6.0+ |
+| **JVM Target** | 21 | Java toolchain |
+
+### UI
+
+| Biblioteca | Uso |
+|---|---|
+| **Jetpack Compose** | Toolkit declarativo de UI |
+| **Material 3** | Design system (TopAppBar, Cards, PullToRefreshBox, ExposedDropdownMenu) |
+| **Navigation Compose** | Navegação type-safe com rotas `@Serializable` |
+| **Coil** | Carregamento assíncrono de imagens (avatares) |
+| **Lifecycle Runtime Compose** | `collectAsStateWithLifecycle` para observação lifecycle-aware |
+
+### Networking
+
+| Biblioteca | Uso |
+|---|---|
+| **Retrofit** | Cliente HTTP type-safe para a GitHub API |
+| **OkHttp** | HTTP client com logging interceptor (apenas em debug) |
+| **kotlinx.serialization** | Serialização/deserialização JSON (substituindo Gson/Moshi) |
+
+### Persistência
+
+| Biblioteca | Uso |
+|---|---|
+| **Room** | Banco de dados SQLite com type-safety em compile time |
+| **Room Paging** | Integração Room + Paging 3 para `PagingSource` direto do banco |
+
+### Paginação
+
+| Biblioteca | Uso |
+|---|---|
+| **Paging 3** | Scroll infinito com `RemoteMediator` (network + cache), `Pager`, `LazyPagingItems` |
+
+### Injeção de dependência
+
+| Biblioteca | Uso |
+|---|---|
+| **Hilt** | DI com geração de código em compile time via KSP |
+| **Hilt Navigation Compose** | `hiltViewModel()` scoped à nav destination |
+
+### Qualidade & Tooling
+
+| Ferramenta | Uso |
+|---|---|
+| **Spotless** + **ktlint** | Formatação automática de código Kotlin |
+| **Detekt** | Análise estática de código com regras customizadas (`detekt.yml`) |
+| **JaCoCo** | Cobertura de testes com threshold mínimo de **90%** |
+| **LeakCanary** | Detecção de memory leaks em debug builds |
+| **Timber** | Logging estruturado (plantado apenas em debug) |
+| **KSP** | Processamento de anotações (Room, Hilt, Glide) |
+| **Dependency Analysis** | Análise de dependências não utilizadas/mal configuradas |
+| **Pre-commit hook** | Git hook automático que roda `spotlessCheck` + `detekt` antes de cada commit |
+
+### Testes
+
+| Biblioteca | Uso |
+|---|---|
+| **JUnit 4** | Framework de testes unitários |
+| **MockK** | Mocking framework idiomático para Kotlin |
+| **kotlinx-coroutines-test** | `UnconfinedTestDispatcher`, `runTest` para testar coroutines |
+| **Paging Testing** | Utilitários para testar flows de `PagingData` |
+| **Robolectric** | Testes unitários que necessitam de Android framework |
+
+### CI/CD
+
+| Ferramenta | Uso |
+|---|---|
+| **Fastlane** | Automação de build, testes, coverage e deploy |
+| **build-logic/convention** | Convention plugins para padronização de build entre módulos |
+
+---
+
+## 📌 Pré-requisitos
+
+| Requisito | Versão mínima                                                 |
+|---|---------------------------------------------------------------|
+| **Android Studio** | Panda 2 (2025.3.2) ou superior                                |
+| **JDK** | 21 (o projeto configura via Gradle Toolchain automaticamente) |
+| **Gradle** | Wrapper incluído — não precisa instalar separadamente         |
+| **Ruby + Bundler** | Necessário apenas para comandos Fastlane                      |
+
+> ⚠️ **O projeto usa a GitHub REST API pública** (sem autenticação). O rate limit é de **10 requests/minuto** para usuários não autenticados. Se você quiser aumentar esse limite, configure um [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens).
+
+---
+
+## 🚀 Como rodar localmente
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/caio-luis/Git-Hub-Popular-Search.git
+cd Git-Hub-Popular-Search
+```
+
+### 2. Abra no Android Studio
+
+- **File → Open** → selecione o diretório raiz do projeto.
+- Aguarde o Gradle sync finalizar (pode levar alguns minutos na primeira vez).
+
+### 3. Rode o app
+
+- Selecione um emulador ou dispositivo físico com **API 23+**.
+- Clique em **Run ▶️** ou use o atalho `Shift + F10`.
+
+### Via linha de comando
+
+```bash
+# Build de todos os variants
+./gradlew assemble
+
+# Instalar debug no dispositivo conectado
+./gradlew installDebug
+```
+
+---
+
+## 🔧 Comandos úteis
+
+| Comando | Descrição |
+|---|---|
+| `./gradlew assemble` | Build de todos os variants |
+| `./gradlew test` | Roda todos os testes unitários |
+| `./gradlew :app:test` | Roda apenas os testes do módulo `:app` |
+| `./gradlew spotlessCheck` | Verifica formatação do código |
+| `./gradlew spotlessApply` | Aplica formatação automática |
+| `./gradlew detekt` | Roda análise estática |
+| `./gradlew jacocoTestReport` | Gera relatório de cobertura de testes |
+| `./gradlew jacocoTestCoverageVerification` | Verifica threshold mínimo de cobertura (90%) |
+| `./gradlew installGitHooks` | Instala pre-commit hook (spotless + detekt) |
+| `./gradlew clean` | Limpa build (também instala git hooks automaticamente) |
+
+---
+
+## 🧪 Testes
+
+Os testes ficam organizados por módulo em `src/test/`, cobrindo ViewModels, Mappers, Navigation, UI, DAOs, RemoteMediators, Repositories, RemoteSources, Use Cases e utilitários do core.
+
+### Padrões de teste adotados
+
+- **ViewModels**: `MainDispatcherRule` com `UnconfinedTestDispatcher` para substituir `Dispatchers.Main`.
+- **RemoteMediators**: Mock de `withTransaction` e DAOs diretamente — sem necessidade de instrumentação.
+- **Mappers**: Testes unitários puros, sem dependência de Android.
+- **Navigation**: Testes de serialização de rotas usando `kotlinx.serialization.json.Json` — sem APIs Android.
+- **Cobertura**: JaCoCo configurado com threshold mínimo de **90%** (excluindo classes geradas, DI, models, UI, etc.).
+
+### Rodar testes
+
+```bash
+# Todos os testes
+./gradlew test
+
+# Módulo específico
+./gradlew :data:impl:test
+./gradlew :domain:impl:test
+./gradlew :core:common:test
+
+# Com relatório de cobertura
+./gradlew jacocoTestReport
+# Relatório HTML: {module}/build/reports/jacoco/jacocoTestReport/html/index.html
+```
+
+---
+
+## 🔒 Qualidade de código
+
+### Spotless + ktlint
+
+Formatação automática aplicada a todos os submódulos. Composable functions são excluídas da regra de naming.
+
+### Detekt
+
+Análise estática com regras customizadas em [`detekt.yml`](detekt.yml):
+
+- `LongParameterList` → threshold 8 (funções), 10 (construtores), ignora `@Composable`
+- `CyclomaticComplexMethod` → threshold 15
+- `MaxLineLength` → 140 caracteres
+- `MagicNumber` → desabilitado
+- `WildcardImport` → habilitado
+- `UnsafeCallOnNullableType` → habilitado
+
+### Pre-commit hook
+
+Instalado automaticamente via `./gradlew clean` ou `./gradlew installGitHooks`. Executa `spotlessCheck` e `detekt` antes de cada commit — se falhar, o commit é bloqueado.
+
+---
+
+## 🚢 CI/CD com Fastlane
+
+### Configuração local
+
+O Fastlane é gerenciado via **Bundler** para garantir versões consistentes. Siga os passos abaixo para rodar localmente:
+
+#### 1. Instale o Ruby (caso não tenha)
+
+Recomenda-se usar um gerenciador de versões como o [rbenv](https://github.com/rbenv/rbenv):
+
+```bash
+# macOS (Homebrew)
+brew install rbenv
+rbenv install 3.2.2
+rbenv global 3.2.2
+
+# Linux (via rbenv-installer)
+curl -fsSL https://github.com/rbenv/rbenv-installer/raw/HEAD/bin/rbenv-installer | bash
+rbenv install 3.2.2
+rbenv global 3.2.2
+```
+
+> Verifique com `ruby --version` se a versão está correta antes de continuar.
+
+#### 2. Instale o Bundler
+
+```bash
+gem install bundler
+```
+
+#### 3. Instale as dependências do projeto (na raiz do repositório)
+
+```bash
+bundle install
+```
+
+Isso instalará o Fastlane e todos os plugins declarados no `Gemfile`, de forma isolada do Ruby do sistema.
+
+#### 4. Execute as lanes
+
+```bash
+# Lanes disponíveis
+bundle exec fastlane android lint       # spotlessCheck + detekt
+bundle exec fastlane android test       # todos os testes
+bundle exec fastlane android coverage   # verificação de cobertura JaCoCo
+bundle exec fastlane android assemble   # build de todos os variants
+bundle exec fastlane android ci         # lint → test → coverage → assemble (pipeline completo)
+bundle exec fastlane android beta       # build release + Crashlytics Beta
+bundle exec fastlane android deploy     # build release + upload Play Store
+```
+
+> **Dica:** sempre use `bundle exec fastlane` (e não `fastlane` diretamente) para garantir que a versão correta definida no `Gemfile.lock` seja utilizada.
+
+---
+
+## 📝 Decisões técnicas relevantes
+
+| Decisão | Motivação |
+|---|---|
+| **Multi-módulo com bridge/impl** | Elimina dependências circulares, acelera builds incrementais, facilita substituição de implementações. |
+| **`RemoteMediator` + Room como single source of truth** | Estratégia offline-first recomendada pelo Google — dados sempre vêm do Room, mediator sincroniza com a rede. |
+| **Mappers como interfaces injetadas** | Testabilidade: podem ser mockados independentemente. Consistência: mesmo padrão em todas as camadas. |
+| **`SavedStateHandle` para estados reativos** | Sobrevive a process death. `StateFlow` derivado via `getStateFlow()` emite automaticamente ao salvar novo valor. |
+| **`@Serializable` navigation routes** | Type-safety em compile time. Sem parsing manual de strings/URIs. |
+| **Convention plugins em `build-logic`** | Configuração DRY — compileSdk, minSdk, JVM target, JaCoCo definidos uma vez e compartilhados entre todos os módulos. |
+| **Spotless + Detekt + pre-commit hook** | Qualidade garantida antes do código chegar ao repositório remoto. |
+| **JaCoCo com threshold de 90%** | Força manutenção de alta cobertura de testes em todo código de negócio. |
+| **`kotlinx.serialization` ao invés de Gson/Moshi** | Performance superior, integração nativa com Kotlin, suporte a Compose Navigation e Retrofit converter. |
+
+---
+
+## 📄 Licença
+
+Este projeto é open source e pode ser utilizado como referência.
