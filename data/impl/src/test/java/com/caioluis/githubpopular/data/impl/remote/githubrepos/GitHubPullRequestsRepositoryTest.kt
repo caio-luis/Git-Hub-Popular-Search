@@ -2,7 +2,7 @@ package com.caioluis.githubpopular.data.impl.remote.githubrepos
 
 import androidx.paging.ExperimentalPagingApi
 import com.caioluis.githubpopular.data.impl.Fixtures
-import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
+import com.caioluis.githubpopular.data.impl.local.githubpulls.GithubPullRequestsLocalSource
 import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubPullRequestMapper
 import com.caioluis.githubpopular.data.impl.remote.githubpulls.GitHubPullRequestsRemoteMediator
 import com.caioluis.githubpopular.data.impl.remote.githubpulls.GithubPullRequestsRemoteMediatorFactory
@@ -17,7 +17,7 @@ import org.junit.Test
 @OptIn(ExperimentalPagingApi::class)
 class GitHubPullRequestsRepositoryTest {
 
-    private val localDatabase = mockk<GitHubReposDataBase>()
+    private val localSource = mockk<GithubPullRequestsLocalSource>(relaxed = true)
     private val remoteMediatorFactory = mockk<GithubPullRequestsRemoteMediatorFactory>()
     private val localGitHubPullRequestMapper = mockk<LocalGitHubPullRequestMapper>()
     private val remoteMediator = mockk<GitHubPullRequestsRemoteMediator>()
@@ -27,7 +27,7 @@ class GitHubPullRequestsRepositoryTest {
     @Before
     fun setUp() {
         repository = GitHubPullRequestsRepositoryImpl(
-            localDatabase = localDatabase,
+            localSource = localSource,
             remoteMediatorFactory = remoteMediatorFactory,
             localGitHubPullRequestMapper = localGitHubPullRequestMapper,
         )
@@ -44,7 +44,6 @@ class GitHubPullRequestsRepositoryTest {
                 repositoryId = repositoryId,
             )
         } returns remoteMediator
-        every { localDatabase.gitHubPullRequestsDao() } returns mockk(relaxed = true)
 
         val result = repository.getPullRequests(pullUrl, repositoryId)
 

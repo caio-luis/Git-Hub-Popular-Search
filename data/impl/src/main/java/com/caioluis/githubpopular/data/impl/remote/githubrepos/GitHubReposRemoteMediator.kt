@@ -4,12 +4,11 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import androidx.room.withTransaction
 import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.GitHubReposRemoteKey
 import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.LocalGitHubRepository
 import com.caioluis.githubpopular.data.bridge.remote.githubrepos.model.RemoteGitHubRepository
-import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
+import com.caioluis.githubpopular.data.impl.local.githubrepos.GithubReposLocalSource
 import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubRepositoryMapper
 import com.caioluis.githubpopular.data.impl.mapper.RemoteGitHubRepositoryMapper
 import dagger.assisted.Assisted
@@ -20,7 +19,7 @@ import kotlinx.coroutines.CancellationException
 class GitHubReposRemoteMediator @AssistedInject constructor(
     @Assisted private val language: String,
     private val remoteSource: GithubReposRemoteSource,
-    private val localDatabase: GitHubReposDataBase,
+    private val localSource: GithubReposLocalSource,
     private val errorMapper: ErrorMapper,
     private val remoteGitHubRepositoryMapper: RemoteGitHubRepositoryMapper,
     private val localGitHubRepositoryMapper: LocalGitHubRepositoryMapper,
@@ -36,7 +35,7 @@ class GitHubReposRemoteMediator @AssistedInject constructor(
             LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
 
             LoadType.APPEND -> {
-                val remoteKey = localDatabase.remoteKeysDao().remoteKeyByQuery(language)
+                val remoteKey = localSource.getRemoteKey(language)
                 remoteKey?.nextPage ?: return MediatorResult.Success(endOfPaginationReached = true)
             }
         }
@@ -46,14 +45,14 @@ class GitHubReposRemoteMediator @AssistedInject constructor(
                 remoteSource.fetchFromRemote(page, language)
             val endOfPaginationReached = remoteRepositories.isEmpty()
 
-            localDatabase.withTransaction {
+            localSource.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    localDatabase.remoteKeysDao().deleteByQuery(language)
-                    localDatabase.gitHubRepositoriesDao().clearRepositories(language)
+                    localSource.deleteRemoteKey(language)
+                    localSource.clearRepositories(language)
                 }
 
                 val nextPage = if (endOfPaginationReached) null else page + 1
-                localDatabase.remoteKeysDao().insertOrReplace(
+                localSource.insertRemoteKey(
                     GitHubReposRemoteKey(queryLanguage = language, nextPage = nextPage),
                 )
 
@@ -68,7 +67,7 @@ class GitHubReposRemoteMediator @AssistedInject constructor(
                         }
                         .map(localGitHubRepositoryMapper::mapToLocal)
 
-                localDatabase.gitHubRepositoriesDao().saveRepositories(localEntities)
+                localSource.saveRepositories(localEntities)
             }
 
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)

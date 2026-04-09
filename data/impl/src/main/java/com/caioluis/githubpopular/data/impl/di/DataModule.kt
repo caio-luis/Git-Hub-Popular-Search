@@ -2,7 +2,13 @@ package com.caioluis.githubpopular.data.impl.di
 
 import android.content.Context
 import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
+import com.caioluis.githubpopular.data.impl.local.GitHubReposRemoteKeysDao
+import com.caioluis.githubpopular.data.impl.local.PullRequestRemoteKeysDao
+import com.caioluis.githubpopular.data.impl.local.githubpulls.GithubPullRequestsLocalSource
+import com.caioluis.githubpopular.data.impl.local.githubpulls.GithubPullRequestsLocalSourceImpl
 import com.caioluis.githubpopular.data.impl.local.githubpulls.dao.GitHubPullRequestsDao
+import com.caioluis.githubpopular.data.impl.local.githubrepos.GithubReposLocalSource
+import com.caioluis.githubpopular.data.impl.local.githubrepos.GithubReposLocalSourceImpl
 import com.caioluis.githubpopular.data.impl.local.githubrepos.dao.GitHubRepositoriesDao
 import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubPullRequestMapper
 import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubPullRequestMapperImpl
@@ -39,6 +45,12 @@ interface DataModule {
 
     @Binds
     fun bindPullRequestsRemoteSource(impl: PullRequestsRemoteSourceImpl): PullRequestsRemoteSource
+
+    @Binds
+    fun bindReposLocalSource(impl: GithubReposLocalSourceImpl): GithubReposLocalSource
+
+    @Binds
+    fun bindPullRequestsLocalSource(impl: GithubPullRequestsLocalSourceImpl): GithubPullRequestsLocalSource
 
     @Binds
     @Singleton
@@ -86,5 +98,13 @@ interface DataModule {
         @Provides
         @Singleton
         fun provideGitHubPullRequestsDao(dataBase: GitHubReposDataBase): GitHubPullRequestsDao = dataBase.gitHubPullRequestsDao()
+
+        @Provides
+        @Singleton
+        fun provideGitHubReposRemoteKeysDao(dataBase: GitHubReposDataBase): GitHubReposRemoteKeysDao = dataBase.remoteKeysDao()
+
+        @Provides
+        @Singleton
+        fun providePullRequestRemoteKeysDao(dataBase: GitHubReposDataBase): PullRequestRemoteKeysDao = dataBase.pullRequestRemoteKeysDao()
     }
 }
