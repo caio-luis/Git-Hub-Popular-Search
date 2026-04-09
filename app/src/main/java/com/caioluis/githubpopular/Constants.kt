@@ -2,7 +2,7 @@ package com.caioluis.githubpopular
 
 object Constants {
     val languages =
-        sortedSetOf(
+        setOf(
             "Kotlin",
             "Swift",
             "Javascript",

@@ -14,6 +14,7 @@ import com.caioluis.githubpopular.data.impl.remote.githubpulls.source.PullReques
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CancellationException
+import timber.log.Timber
 
 @OptIn(ExperimentalPagingApi::class)
 class GitHubPullRequestsRemoteMediator @AssistedInject constructor(
@@ -42,9 +43,18 @@ class GitHubPullRequestsRemoteMediator @AssistedInject constructor(
             }
         }
 
+        Timber.d("Mediator load: loadType=%s, page=%d, repositoryId=%d", loadType, page, repositoryId)
+
         return try {
             val remotePullRequests = remoteSource.fetchPullRequests(pullUrl, page)
             val endOfPaginationReached = remotePullRequests.isEmpty()
+
+            Timber.d(
+                "Fetched %d pull requests from network: endOfPagination=%b, repositoryId=%d",
+                remotePullRequests.size,
+                endOfPaginationReached,
+                repositoryId,
+            )
 
             localSource.withTransaction {
                 if (loadType == LoadType.REFRESH) {
@@ -70,6 +80,11 @@ class GitHubPullRequestsRemoteMediator @AssistedInject constructor(
                         )
                     },
                 )
+                Timber.d(
+                    "Persisted %d pull requests to Room: repositoryId=%d",
+                    remotePullRequests.size,
+                    repositoryId,
+                )
             }
 
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
@@ -83,10 +98,13 @@ class GitHubPullRequestsRemoteMediator @AssistedInject constructor(
         loadType: LoadType,
         exception: Exception,
     ): MediatorResult {
+        Timber.w(exception, "Mediator load failed: loadType=%s, repositoryId=%d", loadType, repositoryId)
+
         if (loadType == LoadType.REFRESH) {
             val cachedItems = localSource.countPullRequestsByRepositoryId(repositoryId)
 
             if (cachedItems > 0) {
+                Timber.i("Falling back to %d cached pull requests: repositoryId=%d", cachedItems, repositoryId)
                 return MediatorResult.Success(endOfPaginationReached = false)
             }
         }

@@ -16,8 +16,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.caioluis.githubpopular.Constants
+import com.caioluis.githubpopular.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +44,7 @@ fun LanguageSelector(
                 value = selectedLanguage,
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("Language") },
+                label = { Text(stringResource(R.string.main_screen_language_selector_title)) },
                 trailingIcon = {
                     ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
                 },

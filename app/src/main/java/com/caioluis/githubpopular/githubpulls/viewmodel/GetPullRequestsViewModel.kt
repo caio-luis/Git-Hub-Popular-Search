@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -57,6 +58,7 @@ class GetPullRequestsViewModel @Inject constructor(
             .cachedIn(viewModelScope)
 
     fun loadList(pullUrl: String, repositoryId: Int, repositoryName: String? = null) {
+        Timber.d("loadList triggered: repositoryId=%d, repositoryName=%s, pullUrl=%s", repositoryId, repositoryName, pullUrl)
         savedStateHandle[PULL_URL_KEY] = pullUrl
         savedStateHandle[REPOSITORY_ID_KEY] = repositoryId
         if (repositoryName != null) {

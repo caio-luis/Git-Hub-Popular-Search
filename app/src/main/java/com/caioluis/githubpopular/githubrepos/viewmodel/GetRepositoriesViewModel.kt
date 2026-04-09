@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,6 +46,7 @@ class GetRepositoriesViewModel @Inject constructor(
         .cachedIn(viewModelScope)
 
     fun loadList(language: String) {
+        Timber.d("loadList triggered: language=%s", language)
         savedStateHandle[SELECTED_LANGUAGE_KEY] = language
     }
 

@@ -20,7 +20,7 @@ class UiGitHubRepoMapperImpl @Inject constructor() : UiGitHubRepoMapper {
     )
 
     companion object {
-        private const val DESCRIPTION_CHAR_LIMIT = 300
+        private const val DESCRIPTION_CHAR_LIMIT = 200
         private const val PULLS_URL_SUFFIX = "{/number}"
     }
 }

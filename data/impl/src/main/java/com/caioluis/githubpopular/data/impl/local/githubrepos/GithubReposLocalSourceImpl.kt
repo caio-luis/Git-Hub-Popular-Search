@@ -7,6 +7,7 @@ import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.LocalGitH
 import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
 import com.caioluis.githubpopular.data.impl.local.GitHubReposRemoteKeysDao
 import com.caioluis.githubpopular.data.impl.local.githubrepos.dao.GitHubRepositoriesDao
+import timber.log.Timber
 import javax.inject.Inject
 
 class GithubReposLocalSourceImpl @Inject constructor(
@@ -21,9 +22,15 @@ class GithubReposLocalSourceImpl @Inject constructor(
 
     override suspend fun insertRemoteKey(remoteKey: GitHubReposRemoteKey) = remoteKeysDao.insertOrReplace(remoteKey)
 
-    override suspend fun saveRepositories(repositories: List<LocalGitHubRepository>) = repositoriesDao.saveRepositories(repositories)
+    override suspend fun saveRepositories(repositories: List<LocalGitHubRepository>) {
+        Timber.d("Saving %d repositories to Room", repositories.size)
+        repositoriesDao.saveRepositories(repositories)
+    }
 
-    override suspend fun clearRepositories(language: String) = repositoriesDao.clearRepositories(language)
+    override suspend fun clearRepositories(language: String) {
+        Timber.d("Clearing repositories from Room: language=%s", language)
+        repositoriesDao.clearRepositories(language)
+    }
 
     override suspend fun countRepositoriesByLanguage(language: String): Int = repositoriesDao.countRepositoriesByLanguage(language)
 
