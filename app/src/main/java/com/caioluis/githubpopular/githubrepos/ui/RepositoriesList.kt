@@ -18,6 +18,11 @@ import com.caioluis.githubpopular.ui.EmptyContent
 import com.caioluis.githubpopular.ui.EndOfListContent
 import com.caioluis.githubpopular.ui.ErrorContent
 
+private const val KEY_PLACEHOLDER_PREFIX = "placeholder_"
+private const val KEY_APPEND_LOADING = "append_loading"
+private const val KEY_APPEND_ERROR = "append_error"
+private const val KEY_APPEND_END = "append_end"
+
 @Composable
 fun RepositoriesList(
     repositories: LazyPagingItems<UiGitHubRepo>,
@@ -42,7 +47,7 @@ fun RepositoriesList(
             count = repositories.itemCount,
             key = { index ->
                 val item = repositories.peek(index)
-                item?.id ?: "placeholder_$index"
+                item?.id ?: "$KEY_PLACEHOLDER_PREFIX$index"
             },
         ) { index ->
             val repository = repositories[index]
@@ -59,13 +64,13 @@ fun RepositoriesList(
 
         when (val appendState = repositories.loadState.append) {
             is LoadState.Loading -> {
-                item(key = "append_loading") {
+                item(key = KEY_APPEND_LOADING) {
                     RepositoryItemPlaceholder()
                 }
             }
 
             is LoadState.Error -> {
-                item(key = "append_error") {
+                item(key = KEY_APPEND_ERROR) {
                     ErrorContent(
                         error = mapError(appendState.error),
                         onRetry = { repositories.retry() },
@@ -75,7 +80,7 @@ fun RepositoriesList(
 
             is LoadState.NotLoading -> {
                 if (appendState.endOfPaginationReached && repositories.itemCount > 0) {
-                    item(key = "append_end") {
+                    item(key = KEY_APPEND_END) {
                         EndOfListContent(message = stringResource(id = R.string.no_more_items_to_display))
                     }
                 }

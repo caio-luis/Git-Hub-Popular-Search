@@ -7,6 +7,7 @@ import com.caioluis.githubpopular.data.bridge.local.githubpulls.entity.PullReque
 import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
 import com.caioluis.githubpopular.data.impl.local.PullRequestRemoteKeysDao
 import com.caioluis.githubpopular.data.impl.local.githubpulls.dao.GitHubPullRequestsDao
+import timber.log.Timber
 import javax.inject.Inject
 
 class GithubPullRequestsLocalSourceImpl @Inject constructor(
@@ -21,9 +22,15 @@ class GithubPullRequestsLocalSourceImpl @Inject constructor(
 
     override suspend fun insertRemoteKey(remoteKey: PullRequestRemoteKey) = pullRequestRemoteKeysDao.insertOrReplace(remoteKey)
 
-    override suspend fun savePullRequests(pullRequests: List<LocalGitHubPullRequest>) = pullRequestsDao.savePullRequests(pullRequests)
+    override suspend fun savePullRequests(pullRequests: List<LocalGitHubPullRequest>) {
+        Timber.d("Saving %d pull requests to Room", pullRequests.size)
+        pullRequestsDao.savePullRequests(pullRequests)
+    }
 
-    override suspend fun deletePullRequestsByRepositoryId(repositoryId: Int) = pullRequestsDao.deletePullRequestsByRepositoryId(repositoryId)
+    override suspend fun deletePullRequestsByRepositoryId(repositoryId: Int) {
+        Timber.d("Deleting pull requests from Room: repositoryId=%d", repositoryId)
+        pullRequestsDao.deletePullRequestsByRepositoryId(repositoryId)
+    }
 
     override suspend fun countPullRequestsByRepositoryId(repositoryId: Int): Int = pullRequestsDao.countPullRequestsByRepositoryId(repositoryId)
 

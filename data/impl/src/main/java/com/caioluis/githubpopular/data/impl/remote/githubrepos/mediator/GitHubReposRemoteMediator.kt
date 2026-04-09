@@ -15,6 +15,7 @@ import com.caioluis.githubpopular.data.impl.remote.githubrepos.source.GithubRepo
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CancellationException
+import timber.log.Timber
 
 @OptIn(ExperimentalPagingApi::class)
 class GitHubReposRemoteMediator @AssistedInject constructor(
@@ -41,10 +42,19 @@ class GitHubReposRemoteMediator @AssistedInject constructor(
             }
         }
 
+        Timber.d("Mediator load: loadType=%s, page=%d, language=%s", loadType, page, language)
+
         return try {
             val remoteRepositories: List<RemoteGitHubRepository> =
                 remoteSource.fetchFromRemote(page, language)
             val endOfPaginationReached = remoteRepositories.isEmpty()
+
+            Timber.d(
+                "Fetched %d repositories from network: endOfPagination=%b, language=%s",
+                remoteRepositories.size,
+                endOfPaginationReached,
+                language,
+            )
 
             localSource.withTransaction {
                 if (loadType == LoadType.REFRESH) {
@@ -69,6 +79,7 @@ class GitHubReposRemoteMediator @AssistedInject constructor(
                         .map(localGitHubRepositoryMapper::mapToLocal)
 
                 localSource.saveRepositories(localEntities)
+                Timber.d("Persisted %d repositories to Room: language=%s", localEntities.size, language)
             }
 
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
@@ -82,10 +93,13 @@ class GitHubReposRemoteMediator @AssistedInject constructor(
         loadType: LoadType,
         exception: Exception,
     ): MediatorResult {
+        Timber.w(exception, "Mediator load failed: loadType=%s, language=%s", loadType, language)
+
         if (loadType == LoadType.REFRESH) {
             val cachedItems = localSource.countRepositoriesByLanguage(language)
 
             if (cachedItems > 0) {
+                Timber.i("Falling back to %d cached repositories: language=%s", cachedItems, language)
                 return MediatorResult.Success(endOfPaginationReached = false)
             }
         }

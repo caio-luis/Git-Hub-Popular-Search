@@ -2,6 +2,7 @@ package com.caioluis.githubpopular.data.impl.remote.githubrepos.source
 
 import com.caioluis.githubpopular.data.bridge.remote.githubrepos.model.RemoteGitHubRepository
 import com.caioluis.githubpopular.data.impl.remote.githubrepos.service.GitHubRepositoriesService
+import timber.log.Timber
 import javax.inject.Inject
 
 class GithubReposRemoteSourceImpl
@@ -12,7 +13,10 @@ constructor(
     override suspend fun fetchFromRemote(
         page: Int,
         language: String,
-    ): List<RemoteGitHubRepository> = gitHubRepositoriesService
-        .getGitHubRepositories(page = page, language = language)
-        .repositories
+    ): List<RemoteGitHubRepository> {
+        Timber.d("Fetching repositories from network: page=%d, language=%s", page, language)
+        return gitHubRepositoriesService
+            .getGitHubRepositories(page = page, language = language)
+            .repositories
+    }
 }

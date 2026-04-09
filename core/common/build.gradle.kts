@@ -23,6 +23,7 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.serialization.converter)
     implementation(libs.hilt.android)
+    implementation(libs.timber)
 
     ksp(libs.hilt.compiler)
 
