@@ -21,4 +21,3 @@
 #-renamesourcefileattribute SourceFile
 -dontwarn java.lang.invoke.StringConcatFactory
 
--keep class com.caioluis.githubpopular.core.common.** { *; }
