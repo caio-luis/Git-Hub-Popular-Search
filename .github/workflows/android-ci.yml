@@ -14,28 +14,19 @@ jobs:
         uses: actions/checkout@v4
 
       # ── Docker image ──────────────────────────────────────────────────────
-      # Layer cache is stored on the external drive so it survives reboots and
-      # system updates; only layers whose Dockerfile instructions changed are
-      # ever rebuilt.
+      # Plain `docker build` uses Docker's own overlay layer cache, which is
+      # already persistent on the self-hosted machine between runs.
+      # No external BuildKit builder is created, so there is no socket lookup.
       - name: Ensure host cache directories exist
         run: |
-          mkdir -p /media/caio-luis/hdzao/docker-cache
           mkdir -p /media/caio-luis/hdzao/.gradle
           mkdir -p /media/caio-luis/hdzao/bundle
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Build CI Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .github/docker
-          file: .github/docker/Dockerfile
-          tags: ci-android:latest
-          # load makes the image available to `docker run` on this host
-          load: true
-          cache-from: type=local,src=/media/caio-luis/hdzao/docker-cache
-          cache-to: type=local,dest=/media/caio-luis/hdzao/docker-cache,mode=max
+        run: |
+          DOCKER_BUILDKIT=1 docker build \
+            --tag ci-android:latest \
+            .github/docker
 
       # ── CI steps (all run inside the container) ───────────────────────────
       # Volumes:
