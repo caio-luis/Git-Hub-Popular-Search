@@ -13,17 +13,49 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Verify Java version
-        run: java -version
+      # ── Docker image ──────────────────────────────────────────────────────
+      # Layer cache is stored on the external drive so it survives reboots and
+      # system updates; only layers whose Dockerfile instructions changed are
+      # ever rebuilt.
+      - name: Ensure host cache directories exist
+        run: |
+          mkdir -p /media/caio-luis/hdzao/docker-cache
+          mkdir -p /media/caio-luis/hdzao/.gradle
+          mkdir -p /media/caio-luis/hdzao/bundle
 
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - name: Install Ruby gems
-        run: bundle install --jobs 4 --retry 3
+      - name: Build CI Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .github/docker
+          file: .github/docker/Dockerfile
+          tags: ci-android:latest
+          # load makes the image available to `docker run` on this host
+          load: true
+          cache-from: type=local,src=/media/caio-luis/hdzao/docker-cache
+          cache-to: type=local,dest=/media/caio-luis/hdzao/docker-cache,mode=max
 
-      - name: Run build with Fastlane
-        run: bundle exec fastlane assemble
-
-      - name: Run tests with Fastlane
-        run: bundle exec fastlane test
+      # ── CI steps (all run inside the container) ───────────────────────────
+      # Volumes:
+      #   /workspace            – project source (read/write)
+      #   /root/.gradle         – Gradle wrapper + dependency cache (persistent)
+      #   /bundle               – Bundler gem cache (persistent)
+      # BUNDLE_PATH=/bundle tells Bundler where to install / look for gems.
+      - name: Run CI inside Docker container
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}:/workspace" \
+            -v "/media/caio-luis/hdzao/.gradle:/root/.gradle" \
+            -v "/media/caio-luis/hdzao/bundle:/bundle" \
+            -e BUNDLE_PATH=/bundle \
+            -w /workspace \
+            ci-android:latest \
+            bash -c "
+              set -euo pipefail
+              chmod +x gradlew
+              bundle install --jobs 4 --retry 3
+              bundle exec fastlane assemble
+              bundle exec fastlane test
+            "
