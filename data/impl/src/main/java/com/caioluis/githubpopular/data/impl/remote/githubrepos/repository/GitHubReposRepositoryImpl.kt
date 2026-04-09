@@ -5,7 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.caioluis.githubpopular.data.bridge.mappers.toDomain
+import com.caioluis.githubpopular.data.bridge.mappers.LocalGitHubRepositoryMapper
 import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
 import com.caioluis.githubpopular.data.impl.remote.githubrepos.GithubReposRemoteMediatorFactory
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
@@ -17,11 +17,12 @@ import javax.inject.Inject
 class GitHubReposRepositoryImpl @Inject constructor(
     private val localDatabase: GitHubReposDataBase,
     private val remoteMediatorFactory: GithubReposRemoteMediatorFactory,
+    private val localGitHubRepositoryMapper: LocalGitHubRepositoryMapper,
 ) : GitHubReposRepository {
 
     @OptIn(ExperimentalPagingApi::class)
     override fun getGitHubRepositories(language: String): Flow<PagingData<DomainGitHubRepository>> {
-        val pagingSourceFactory = { localDatabase.gitHubRepositoriesDao().getPagedRepositories() }
+        val pagingSourceFactory = { localDatabase.gitHubRepositoriesDao().getPagedRepositories(language) }
 
         return Pager(
             config = PagingConfig(
@@ -32,9 +33,7 @@ class GitHubReposRepositoryImpl @Inject constructor(
             remoteMediator = remoteMediatorFactory.create(language),
             pagingSourceFactory = pagingSourceFactory,
         ).flow.map { pagingData ->
-            pagingData.map { localRepo ->
-                localRepo.toDomain()
-            }
+            pagingData.map(localGitHubRepositoryMapper::mapToDomain)
         }
     }
 }

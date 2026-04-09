@@ -1,11 +1,13 @@
 package com.caioluis.githubpopular.domain.impl.usecases
 
+import androidx.paging.PagingData
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
-import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import org.junit.Assert.assertSame
 import org.junit.Test
 
 class GetRepositoriesUseCaseTest {
@@ -13,26 +15,12 @@ class GetRepositoriesUseCaseTest {
     private val getReposUseCase = GetRepositoriesUseCaseImpl(gitHubReposRepository)
 
     @Test
-    fun `loadRepositories returns expected result`() = runTest {
-        // Arrange
-        val expected = listOf(DomainGitHubRepository())
-        coEvery { gitHubReposRepository.getGitHubRepositories(any(), any()) } returns expected
+    fun `loadRepositories returns expected flow`() {
+        val expected: Flow<PagingData<DomainGitHubRepository>> = flowOf(PagingData.empty())
+        every { gitHubReposRepository.getGitHubRepositories("Kotlin") } returns expected
 
-        // Act
-        val result = getReposUseCase.loadRepositories(1, "Kotlin")
+        val result = getReposUseCase.loadRepositories("Kotlin")
 
-        // Assert
-        assertEquals(expected, result)
-    }
-
-    @Test(expected = Exception::class)
-    fun `loadRepositories returns failure`() = runTest {
-        // Arrange
-        val exception = Exception()
-
-        coEvery { gitHubReposRepository.getGitHubRepositories(any(), any()) } throws exception
-
-        // Act
-        getReposUseCase.loadRepositories(1, "Kotlin")
+        assertSame(expected, result)
     }
 }

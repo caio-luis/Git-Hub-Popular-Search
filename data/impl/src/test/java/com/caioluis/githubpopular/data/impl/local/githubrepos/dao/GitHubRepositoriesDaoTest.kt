@@ -3,6 +3,7 @@ package com.caioluis.githubpopular.data.impl.local.githubrepos.dao
 import androidx.paging.PagingSource
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.LocalGitHubRepository
 import com.caioluis.githubpopular.data.impl.Fixtures
 import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -45,7 +46,7 @@ class GitHubRepositoriesDaoTest {
 
         dao.saveRepositories(listOf(repository))
 
-        val result = loadPagedData()
+        val result = loadPagedData(Fixtures.DEFAULT_LANGUAGE)
         assertEquals(1, result.size)
         assertEquals(repository, result.first())
     }
@@ -60,7 +61,7 @@ class GitHubRepositoriesDaoTest {
         dao.saveRepositories(listOf(initialRepository))
         dao.saveRepositories(listOf(updatedRepository))
 
-        val result = loadPagedData()
+        val result = loadPagedData(Fixtures.DEFAULT_LANGUAGE)
         assertEquals(1, result.size)
         assertEquals("New Title", result.first().title)
     }
@@ -76,7 +77,7 @@ class GitHubRepositoriesDaoTest {
 
         dao.saveRepositories(listOf(repoWith10Stars, repoWith50Stars, repoWith30Stars))
 
-        val result = loadPagedData()
+        val result = loadPagedData(Fixtures.DEFAULT_LANGUAGE)
 
         assertEquals(3, result.size)
         assertEquals(repoWith50Stars.id, result[0].id)
@@ -85,21 +86,37 @@ class GitHubRepositoriesDaoTest {
     }
 
     @Test
-    fun `clearRepositories should delete all data`() = runTest {
+    fun `getPagedRepositories should return only selected language data`() = runTest {
+        val kotlinRepo = Fixtures.createLocalGitHubRepository(id = 1, language = "Kotlin")
+        val swiftRepo = Fixtures.createLocalGitHubRepository(id = 2, language = "Swift")
+
+        dao.saveRepositories(listOf(kotlinRepo, swiftRepo))
+
+        val result = loadPagedData("Swift")
+        assertEquals(1, result.size)
+        assertEquals(swiftRepo.id, result.first().id)
+    }
+
+    @Test
+    fun `clearRepositories should delete only selected language data`() = runTest {
         val repositories = listOf(
-            Fixtures.createLocalGitHubRepository(id = 1),
-            Fixtures.createLocalGitHubRepository(id = 2),
+            Fixtures.createLocalGitHubRepository(id = 1, language = "Kotlin"),
+            Fixtures.createLocalGitHubRepository(id = 2, language = "Swift"),
         )
         dao.saveRepositories(repositories)
 
-        dao.clearRepositories()
+        dao.clearRepositories("Kotlin")
 
-        val result = loadPagedData()
-        assertTrue(result.isEmpty())
+        val kotlinResult = loadPagedData("Kotlin")
+        val swiftResult = loadPagedData("Swift")
+
+        assertTrue(kotlinResult.isEmpty())
+        assertEquals(1, swiftResult.size)
+        assertEquals(2, swiftResult.first().id)
     }
 
-    private suspend fun loadPagedData(): List<com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubRepository> {
-        val pagingSource = dao.getPagedRepositories()
+    private suspend fun loadPagedData(language: String): List<LocalGitHubRepository> {
+        val pagingSource = dao.getPagedRepositories(language)
         val loadResult = pagingSource.load(
             PagingSource.LoadParams.Refresh(
                 key = null,

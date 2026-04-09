@@ -1,0 +1,49 @@
+package com.caioluis.githubpopular.data.impl.remote.githubpulls.repository
+
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.map
+import com.caioluis.githubpopular.data.bridge.mappers.LocalGitHubPullRequestMapper
+import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
+import com.caioluis.githubpopular.data.impl.remote.githubpulls.GithubPullRequestsRemoteMediatorFactory
+import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubPullRequest
+import com.caioluis.githubpopular.domain.bridge.repository.GitHubPullRequestsRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+
+class GitHubPullRequestsRepositoryImpl
+@Inject
+constructor(
+    private val localDatabase: GitHubReposDataBase,
+    private val remoteMediatorFactory: GithubPullRequestsRemoteMediatorFactory,
+    private val localGitHubPullRequestMapper: LocalGitHubPullRequestMapper,
+) : GitHubPullRequestsRepository {
+
+    @OptIn(ExperimentalPagingApi::class)
+    override fun getPullRequests(
+        pullUrl: String,
+        repositoryId: Int,
+    ): Flow<PagingData<DomainGitHubPullRequest>> {
+        val pagingSourceFactory = {
+            localDatabase.gitHubPullRequestsDao().getPagedPullRequests(repositoryId)
+        }
+
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                prefetchDistance = 3,
+                enablePlaceholders = true,
+            ),
+            remoteMediator = remoteMediatorFactory.create(
+                pullUrl = pullUrl,
+                repositoryId = repositoryId,
+            ),
+            pagingSourceFactory = pagingSourceFactory,
+        ).flow.map { pagingData ->
+            pagingData.map(localGitHubPullRequestMapper::mapToDomain)
+        }
+    }
+}

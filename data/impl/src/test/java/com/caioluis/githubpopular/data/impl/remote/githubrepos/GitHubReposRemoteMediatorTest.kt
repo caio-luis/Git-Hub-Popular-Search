@@ -8,11 +8,13 @@ import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.caioluis.githubpopular.core.common.exception.AppException
 import com.caioluis.githubpopular.core.common.exception.ErrorMapper
-import com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubRepository
+import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.LocalGitHubRepository
 import com.caioluis.githubpopular.data.impl.Fixtures
 import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
+import com.caioluis.githubpopular.data.impl.local.GitHubReposRemoteKeysDao
 import com.caioluis.githubpopular.data.impl.local.githubrepos.dao.GitHubRepositoriesDao
-import com.caioluis.githubpopular.data.impl.local.githubrepos.dao.RemoteKeysDao
+import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubRepositoryMapperImpl
+import com.caioluis.githubpopular.data.impl.mapper.RemoteGitHubRepositoryMapperImpl
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -38,7 +40,10 @@ class GitHubReposRemoteMediatorTest {
     private val localDatabase: GitHubReposDataBase = mockk()
     private val errorMapper: ErrorMapper = mockk()
 
-    private val remoteKeysDao: RemoteKeysDao = mockk(relaxed = true)
+    private val remoteGitHubRepositoryMapper = RemoteGitHubRepositoryMapperImpl()
+    private val localGitHubRepositoryMapper = LocalGitHubRepositoryMapperImpl()
+
+    private val remoteKeysDao: GitHubReposRemoteKeysDao = mockk(relaxed = true)
     private val gitHubRepositoriesDao: GitHubRepositoriesDao = mockk(relaxed = true)
 
     private lateinit var mediator: GitHubReposRemoteMediator
@@ -67,6 +72,8 @@ class GitHubReposRemoteMediatorTest {
             remoteSource = remoteSource,
             localDatabase = localDatabase,
             errorMapper = errorMapper,
+            remoteGitHubRepositoryMapper = remoteGitHubRepositoryMapper,
+            localGitHubRepositoryMapper = localGitHubRepositoryMapper,
         )
     }
 
@@ -133,7 +140,7 @@ class GitHubReposRemoteMediatorTest {
         assertTrue((result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
 
         coVerify { remoteKeysDao.deleteByQuery(Fixtures.DEFAULT_LANGUAGE) }
-        coVerify { gitHubRepositoriesDao.clearRepositories() }
+        coVerify { gitHubRepositoriesDao.clearRepositories(Fixtures.DEFAULT_LANGUAGE) }
         coVerify { remoteKeysDao.insertOrReplace(Fixtures.createRemoteKey(nextPage = null)) }
         coVerify { gitHubRepositoriesDao.saveRepositories(emptyList()) }
     }

@@ -1,5 +1,6 @@
-package com.caioluis.githubpopular.data.bridge.remote.model
+package com.caioluis.githubpopular.data.bridge.remote.githubpulls.model
 
+import com.caioluis.githubpopular.data.bridge.remote.githubrepos.model.RemoteRepositoryOwner
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

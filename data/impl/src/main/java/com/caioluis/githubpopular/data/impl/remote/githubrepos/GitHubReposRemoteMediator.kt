@@ -6,11 +6,11 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.caioluis.githubpopular.core.common.exception.ErrorMapper
-import com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubRepository
-import com.caioluis.githubpopular.data.bridge.local.model.RemoteKey
-import com.caioluis.githubpopular.data.bridge.mappers.toDomain
-import com.caioluis.githubpopular.data.bridge.mappers.toLocal
-import com.caioluis.githubpopular.data.bridge.remote.model.RemoteGitHubRepository
+import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.GitHubReposRemoteKey
+import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.LocalGitHubRepository
+import com.caioluis.githubpopular.data.bridge.mappers.LocalGitHubRepositoryMapper
+import com.caioluis.githubpopular.data.bridge.mappers.RemoteGitHubRepositoryMapper
+import com.caioluis.githubpopular.data.bridge.remote.githubrepos.model.RemoteGitHubRepository
 import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
@@ -23,6 +23,8 @@ class GitHubReposRemoteMediator @AssistedInject constructor(
     private val remoteSource: GithubReposRemoteSource,
     private val localDatabase: GitHubReposDataBase,
     private val errorMapper: ErrorMapper,
+    private val remoteGitHubRepositoryMapper: RemoteGitHubRepositoryMapper,
+    private val localGitHubRepositoryMapper: LocalGitHubRepositoryMapper,
 ) : RemoteMediator<Int, LocalGitHubRepository>() {
 
     override suspend fun load(
@@ -54,23 +56,27 @@ class GitHubReposRemoteMediator @AssistedInject constructor(
             localDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     localDatabase.remoteKeysDao().deleteByQuery(language)
-                    localDatabase.gitHubRepositoriesDao().clearRepositories()
+                    localDatabase.gitHubRepositoriesDao().clearRepositories(language)
                 }
 
                 val nextPage = if (endOfPaginationReached) null else page?.plus(1)
                 localDatabase.remoteKeysDao().insertOrReplace(
-                    RemoteKey(queryLanguage = language, nextPage = nextPage),
+                    GitHubReposRemoteKey(queryLanguage = language, nextPage = nextPage),
                 )
 
                 val localEntities: List<LocalGitHubRepository> =
-                    remoteRepositories.mapNotNull {
-                        page?.let { remoteModel ->
-                            it?.toDomain(
-                                remoteModel,
-                                language,
-                            )
+                    remoteRepositories.mapNotNull { remoteRepository ->
+                        page?.let { currentPage ->
+                            remoteRepository?.let {
+                                remoteGitHubRepositoryMapper.mapToDomain(
+                                    remoteRepository = it,
+                                    page = currentPage,
+                                    language = language,
+                                )
+                            }
                         }
-                    }.map { it.toLocal() }
+                    }.map(localGitHubRepositoryMapper::mapToLocal)
+
                 localDatabase.gitHubRepositoriesDao().saveRepositories(localEntities)
             }
 

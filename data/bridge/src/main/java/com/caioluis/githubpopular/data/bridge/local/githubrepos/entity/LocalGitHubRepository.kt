@@ -1,10 +1,10 @@
-package com.caioluis.githubpopular.data.bridge.local.model
+package com.caioluis.githubpopular.data.bridge.local.githubrepos.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.caioluis.githubpopular.data.bridge.local.LocalConstants.GIT_HUB_REPOSITORIES_TABLE_NAME
+import com.caioluis.githubpopular.data.bridge.local.LocalConstants
 
-@Entity(tableName = GIT_HUB_REPOSITORIES_TABLE_NAME)
+@Entity(tableName = LocalConstants.GIT_HUB_REPOSITORIES_TABLE_NAME)
 data class LocalGitHubRepository(
     @PrimaryKey(autoGenerate = false)
     val id: Int,

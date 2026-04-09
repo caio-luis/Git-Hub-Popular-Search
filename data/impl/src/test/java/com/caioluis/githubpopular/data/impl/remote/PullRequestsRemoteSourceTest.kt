@@ -2,7 +2,7 @@ package com.caioluis.githubpopular.data.impl.remote
 
 import com.caioluis.githubpopular.data.impl.Fixtures
 import com.caioluis.githubpopular.data.impl.remote.githubpullrequests.PullRequestsRemoteSourceImpl
-import com.caioluis.githubpopular.data.impl.remote.githubpullrequests.service.GitHubPullRequestsService
+import com.caioluis.githubpopular.data.impl.remote.githubpulls.service.GitHubPullRequestsService
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
