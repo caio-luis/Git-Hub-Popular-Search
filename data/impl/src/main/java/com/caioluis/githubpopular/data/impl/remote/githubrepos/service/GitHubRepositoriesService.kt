@@ -13,5 +13,5 @@ interface GitHubRepositoriesService {
         @Query("q") language: String = DEFAULT_LANGUAGE_QUERY_BEGIN + DEFAULT_LANGUAGE,
         @Query("sort") sort: String = "stars",
         @Query("page") page: Int,
-    ): RemoteGitHubRepositories?
+    ): RemoteGitHubRepositories
 }

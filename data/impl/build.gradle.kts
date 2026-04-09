@@ -7,11 +7,6 @@ plugins {
 
 android {
     namespace = "com.caioluis.githubpopular.data.impl"
-
-    defaultConfig {
-        buildFeatures.buildConfig = true
-        buildConfigField("String", "API_BASE_URL", "\"https://api.github.com/\"")
-    }
 }
 
 dependencies {

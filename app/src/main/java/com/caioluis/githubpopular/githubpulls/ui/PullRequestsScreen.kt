@@ -13,11 +13,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.caioluis.githubpopular.core.common.extensions.openBrowserIntent
@@ -33,6 +35,7 @@ fun PullRequestsScreen(
 ) {
     val context = LocalContext.current
     val pullRequests = getPullRequestsViewModel.pullRequests.collectAsLazyPagingItems()
+    val repositoryName by getPullRequestsViewModel.repositoryName.collectAsStateWithLifecycle()
     val pullToRefreshState = rememberPullToRefreshState()
     val onPullRequestClick = remember(context) {
         { pullRequest: UiGitHubPullRequest ->
@@ -45,7 +48,7 @@ fun PullRequestsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = getPullRequestsViewModel.repositoryName) },
+                title = { Text(text = repositoryName) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(

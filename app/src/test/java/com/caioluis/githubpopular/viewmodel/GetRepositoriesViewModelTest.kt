@@ -8,20 +8,17 @@ import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.domain.bridge.usecase.GetRepositoriesUseCase
 import com.caioluis.githubpopular.githubrepos.mapper.UiGitHubRepoMapper
 import com.caioluis.githubpopular.githubrepos.viewmodel.GetRepositoriesViewModel
+import com.caioluis.githubpopular.rules.MainDispatcherRule
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -33,11 +30,11 @@ class GetRepositoriesViewModelTest {
 
     private lateinit var viewModel: GetRepositoriesViewModel
 
-    private val unconfinedDispatcher = UnconfinedTestDispatcher()
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     @Before
     fun setup() {
-        Dispatchers.setMain(unconfinedDispatcher)
         viewModel = GetRepositoriesViewModel(
             savedStateHandle = SavedStateHandle(),
             getRepositoriesUseCase = getRepositoriesUseCase,
@@ -46,13 +43,8 @@ class GetRepositoriesViewModelTest {
         )
     }
 
-    @After
-    fun teardown() {
-        Dispatchers.resetMain()
-    }
-
     @Test
-    fun `loadList should update selectedLanguage and not fetch again if language is the same`() = runTest(unconfinedDispatcher) {
+    fun `loadList should update selectedLanguage and not fetch again if language is the same`() = runTest(mainDispatcherRule.dispatcher) {
         val language = "Kotlin"
         every { getRepositoriesUseCase.loadRepositories(any()) } returns flowOf(PagingData.empty())
 
@@ -70,7 +62,7 @@ class GetRepositoriesViewModelTest {
     }
 
     @Test
-    fun `loadList with different languages should fetch new data`() = runTest(unconfinedDispatcher) {
+    fun `loadList with different languages should fetch new data`() = runTest(mainDispatcherRule.dispatcher) {
         val initialLanguage = "Java"
         val newLanguage = "Kotlin"
         every { getRepositoriesUseCase.loadRepositories(any()) } returns flowOf(PagingData.empty())

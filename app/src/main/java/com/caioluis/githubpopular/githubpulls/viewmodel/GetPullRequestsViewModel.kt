@@ -14,6 +14,7 @@ import com.caioluis.githubpopular.githubpulls.model.UiGitHubPullRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
@@ -36,8 +37,11 @@ class GetPullRequestsViewModel @Inject constructor(
 
     private val pullUrl = savedStateHandle.getStateFlow<String?>(PULL_URL_KEY, null)
     private val repositoryId = savedStateHandle.getStateFlow<Int?>(REPOSITORY_ID_KEY, null)
+    val repositoryName: StateFlow<String> = savedStateHandle.getStateFlow(
+        REPOSITORY_NAME_KEY,
+        savedStateHandle.get<String>(REPOSITORY_NAME_KEY).orEmpty(),
+    )
 
-    val repositoryName: String = savedStateHandle.get<String>(REPOSITORY_NAME_KEY).orEmpty()
     val currentRepositoryId: Int? get() = repositoryId.value
 
     val pullRequests: Flow<PagingData<UiGitHubPullRequest>> =

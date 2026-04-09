@@ -100,7 +100,7 @@ object Fixtures {
     )
 
     fun createRemoteGitHubRepositoriesResponse(
-        repositories: List<RemoteGitHubRepository?>? = listOf(createRemoteGitHubRepository()),
+        repositories: List<RemoteGitHubRepository> = listOf(createRemoteGitHubRepository()),
     ) = RemoteGitHubRepositories(
         repositories = repositories,
     )

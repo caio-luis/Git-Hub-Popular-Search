@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class RemoteGitHubRepositories(
     @SerialName("items")
-    val repositories: List<RemoteGitHubRepository?>? = null,
+    val repositories: List<RemoteGitHubRepository> = emptyList(),
 )

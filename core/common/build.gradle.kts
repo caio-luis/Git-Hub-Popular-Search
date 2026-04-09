@@ -10,6 +10,7 @@ android {
 
     defaultConfig {
         buildFeatures.buildConfig = true
+        buildConfigField("String", "API_BASE_URL", "\"https://api.github.com/\"")
     }
 }
 

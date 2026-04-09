@@ -14,8 +14,7 @@ import com.caioluis.githubpopular.data.impl.mapper.RemotePullRequestMapper
 import com.caioluis.githubpopular.data.impl.remote.githubpullrequests.PullRequestsRemoteSource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import retrofit2.HttpException
-import java.io.IOException
+import kotlinx.coroutines.CancellationException
 
 @OptIn(ExperimentalPagingApi::class)
 class GitHubPullRequestsRemoteMediator @AssistedInject constructor(
@@ -38,9 +37,7 @@ class GitHubPullRequestsRemoteMediator @AssistedInject constructor(
             LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
 
             LoadType.APPEND -> {
-                val remoteKey = localDatabase.withTransaction {
-                    localDatabase.pullRequestRemoteKeysDao().remoteKeyByRepositoryId(repositoryId)
-                }
+                val remoteKey = localDatabase.pullRequestRemoteKeysDao().remoteKeyByRepositoryId(repositoryId)
 
                 remoteKey?.nextPage ?: return MediatorResult.Success(endOfPaginationReached = true)
             }
@@ -78,11 +75,8 @@ class GitHubPullRequestsRemoteMediator @AssistedInject constructor(
             }
 
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
-        } catch (exception: IOException) {
-            handleLoadException(loadType, exception)
-        } catch (exception: HttpException) {
-            handleLoadException(loadType, exception)
         } catch (exception: Exception) {
+            if (exception is CancellationException) throw exception
             handleLoadException(loadType, exception)
         }
     }
@@ -92,9 +86,7 @@ class GitHubPullRequestsRemoteMediator @AssistedInject constructor(
         exception: Exception,
     ): MediatorResult {
         if (loadType == LoadType.REFRESH) {
-            val cachedItems = localDatabase.withTransaction {
-                localDatabase.gitHubPullRequestsDao().countPullRequestsByRepositoryId(repositoryId)
-            }
+            val cachedItems = localDatabase.gitHubPullRequestsDao().countPullRequestsByRepositoryId(repositoryId)
 
             if (cachedItems > 0) {
                 return MediatorResult.Success(endOfPaginationReached = false)

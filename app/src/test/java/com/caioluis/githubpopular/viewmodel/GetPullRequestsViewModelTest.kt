@@ -8,20 +8,17 @@ import com.caioluis.githubpopular.domain.bridge.usecase.GetPullRequestsUseCase
 import com.caioluis.githubpopular.githubpulls.mapper.PullRequestUiMapper
 import com.caioluis.githubpopular.githubpulls.viewmodel.GetPullRequestsViewModel
 import com.caioluis.githubpopular.mapper.Fixtures
+import com.caioluis.githubpopular.rules.MainDispatcherRule
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -33,11 +30,11 @@ class GetPullRequestsViewModelTest {
 
     private lateinit var viewModel: GetPullRequestsViewModel
 
-    private val unconfinedDispatcher = UnconfinedTestDispatcher()
+    @get:Rule
+    val mainDispatcherRule = MainDispatcherRule()
 
     @Before
     fun setup() {
-        Dispatchers.setMain(unconfinedDispatcher)
         viewModel = GetPullRequestsViewModel(
             savedStateHandle = SavedStateHandle(
                 mapOf(
@@ -52,13 +49,8 @@ class GetPullRequestsViewModelTest {
         )
     }
 
-    @After
-    fun teardown() {
-        Dispatchers.resetMain()
-    }
-
     @Test
-    fun loadListShouldNotFetchAgainIfRepositoryRequestIsTheSame() = runTest(unconfinedDispatcher) {
+    fun loadListShouldNotFetchAgainIfRepositoryRequestIsTheSame() = runTest(mainDispatcherRule.dispatcher) {
         val pullUrl = "https://api.github.com/repos/user/repo/pulls"
         val repositoryId = Fixtures.REPOSITORY_ID
         every {
@@ -86,7 +78,7 @@ class GetPullRequestsViewModelTest {
     }
 
     @Test
-    fun loadListWithDifferentRepositoriesShouldFetchNewData() = runTest(unconfinedDispatcher) {
+    fun loadListWithDifferentRepositoriesShouldFetchNewData() = runTest(mainDispatcherRule.dispatcher) {
         val pullUrl = "https://api.github.com/repos/user/repo/pulls"
         val initialRepositoryId = 1
         val newRepositoryId = 2
@@ -122,7 +114,7 @@ class GetPullRequestsViewModelTest {
 
     @Test
     fun `repository metadata should be initialized from saved state and repository id should update`() {
-        assertEquals("repo", viewModel.repositoryName)
+        assertEquals("repo", viewModel.repositoryName.value)
         assertEquals(Fixtures.REPOSITORY_ID, viewModel.currentRepositoryId)
 
         viewModel.loadList(
@@ -132,7 +124,7 @@ class GetPullRequestsViewModelTest {
         )
 
         assertEquals(999, viewModel.currentRepositoryId)
-        assertEquals("repo", viewModel.repositoryName)
+        assertEquals("new-repo", viewModel.repositoryName.value)
     }
 
     @Test

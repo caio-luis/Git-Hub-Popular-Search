@@ -12,7 +12,7 @@ constructor(
     override suspend fun fetchFromRemote(
         page: Int,
         language: String,
-    ): List<RemoteGitHubRepository?>? = gitHubRepositoriesService
+    ): List<RemoteGitHubRepository> = gitHubRepositoriesService
         .getGitHubRepositories(page = page, language = language)
-        ?.repositories
+        .repositories
 }
