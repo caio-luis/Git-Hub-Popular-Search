@@ -7,5 +7,5 @@ interface GithubPullRequestsRemoteMediatorFactory {
     fun create(
         pullUrl: String,
         repositoryId: Int,
-    ): com.caioluis.githubpopular.data.impl.remote.githubpulls.GitHubPullRequestsRemoteMediator
+    ): GitHubPullRequestsRemoteMediator
 }

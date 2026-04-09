@@ -5,14 +5,11 @@ import androidx.paging.LoadType
 import androidx.paging.PagingConfig
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import androidx.room.withTransaction
 import com.caioluis.githubpopular.core.common.exception.AppException
 import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.data.bridge.local.githubpulls.entity.LocalGitHubPullRequest
 import com.caioluis.githubpopular.data.impl.Fixtures
-import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
-import com.caioluis.githubpopular.data.impl.local.PullRequestRemoteKeysDao
-import com.caioluis.githubpopular.data.impl.local.githubpulls.dao.GitHubPullRequestsDao
+import com.caioluis.githubpopular.data.impl.local.githubpulls.GithubPullRequestsLocalSource
 import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubPullRequestMapperImpl
 import com.caioluis.githubpopular.data.impl.mapper.RemotePullRequestMapperImpl
 import com.caioluis.githubpopular.data.impl.remote.githubpullrequests.PullRequestsRemoteSource
@@ -20,7 +17,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -38,14 +34,11 @@ import java.io.IOException
 class GitHubPullRequestsRemoteMediatorTest {
 
     private val remoteSource: PullRequestsRemoteSource = mockk()
-    private val localDatabase: GitHubReposDataBase = mockk()
+    private val localSource: GithubPullRequestsLocalSource = mockk(relaxed = true)
     private val errorMapper: ErrorMapper = mockk()
 
     private val remotePullRequestMapper = RemotePullRequestMapperImpl()
     private val localGitHubPullRequestMapper = LocalGitHubPullRequestMapperImpl()
-
-    private val pullRequestRemoteKeysDao: PullRequestRemoteKeysDao = mockk(relaxed = true)
-    private val gitHubPullRequestsDao: GitHubPullRequestsDao = mockk(relaxed = true)
 
     private lateinit var mediator: GitHubPullRequestsRemoteMediator
 
@@ -60,21 +53,15 @@ class GitHubPullRequestsRemoteMediatorTest {
 
     @Before
     fun setup() {
-        mockkStatic("androidx.room.RoomDatabaseKt")
-        coEvery {
-            localDatabase.withTransaction(any<suspend () -> Any>())
-        } coAnswers {
-            secondArg<suspend () -> Any>().invoke()
+        coEvery { localSource.withTransaction(any<suspend () -> Any>()) } coAnswers {
+            firstArg<suspend () -> Any>().invoke()
         }
-
-        every { localDatabase.pullRequestRemoteKeysDao() } returns pullRequestRemoteKeysDao
-        every { localDatabase.gitHubPullRequestsDao() } returns gitHubPullRequestsDao
 
         mediator = GitHubPullRequestsRemoteMediator(
             pullUrl = pullUrl,
             repositoryId = repositoryId,
             remoteSource = remoteSource,
-            localDatabase = localDatabase,
+            localSource = localSource,
             errorMapper = errorMapper,
             remotePullRequestMapper = remotePullRequestMapper,
             localGitHubPullRequestMapper = localGitHubPullRequestMapper,
@@ -98,7 +85,7 @@ class GitHubPullRequestsRemoteMediatorTest {
 
     @Test
     fun `load APPEND without remote key should return Success with endOfPaginationReached true`() = runTest {
-        coEvery { pullRequestRemoteKeysDao.remoteKeyByRepositoryId(repositoryId) } returns null
+        coEvery { localSource.getRemoteKey(repositoryId) } returns null
 
         val result = mediator.load(LoadType.APPEND, pagingState)
 
@@ -126,15 +113,15 @@ class GitHubPullRequestsRemoteMediatorTest {
         assertTrue(result is RemoteMediator.MediatorResult.Success)
         assertTrue(!(result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
 
-        coVerify { pullRequestRemoteKeysDao.deleteByRepositoryId(repositoryId) }
-        coVerify { gitHubPullRequestsDao.deletePullRequestsByRepositoryId(repositoryId) }
+        coVerify { localSource.deleteRemoteKey(repositoryId) }
+        coVerify { localSource.deletePullRequestsByRepositoryId(repositoryId) }
         coVerify {
-            pullRequestRemoteKeysDao.insertOrReplace(
+            localSource.insertRemoteKey(
                 Fixtures.createPullRequestRemoteKey(repositoryId = repositoryId, nextPage = 2),
             )
         }
         coVerify {
-            gitHubPullRequestsDao.savePullRequests(
+            localSource.savePullRequests(
                 listOf(
                     LocalGitHubPullRequest(
                         id = 10L,
@@ -168,7 +155,7 @@ class GitHubPullRequestsRemoteMediatorTest {
         val exception = IOException("No internet")
 
         coEvery { remoteSource.fetchPullRequests(any(), any()) } throws exception
-        coEvery { gitHubPullRequestsDao.countPullRequestsByRepositoryId(repositoryId) } returns 2
+        coEvery { localSource.countPullRequestsByRepositoryId(repositoryId) } returns 2
 
         val result = mediator.load(LoadType.REFRESH, pagingState)
 
@@ -183,7 +170,7 @@ class GitHubPullRequestsRemoteMediatorTest {
         val mappedException = AppException.NetworkException(exception)
 
         coEvery { remoteSource.fetchPullRequests(any(), any()) } throws exception
-        coEvery { gitHubPullRequestsDao.countPullRequestsByRepositoryId(repositoryId) } returns 0
+        coEvery { localSource.countPullRequestsByRepositoryId(repositoryId) } returns 0
         every { errorMapper.map(exception) } returns mappedException
 
         val result = mediator.load(LoadType.REFRESH, pagingState)
@@ -198,7 +185,7 @@ class GitHubPullRequestsRemoteMediatorTest {
         val mappedException = AppException.ServerException(exception)
 
         coEvery {
-            pullRequestRemoteKeysDao.remoteKeyByRepositoryId(repositoryId)
+            localSource.getRemoteKey(repositoryId)
         } returns Fixtures.createPullRequestRemoteKey(repositoryId = repositoryId, nextPage = 2)
         coEvery { remoteSource.fetchPullRequests(pullUrl, 2) } throws exception
         every { errorMapper.map(exception) } returns mappedException

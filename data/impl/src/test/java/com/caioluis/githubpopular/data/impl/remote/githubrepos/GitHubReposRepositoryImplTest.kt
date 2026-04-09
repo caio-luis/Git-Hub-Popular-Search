@@ -1,7 +1,7 @@
 package com.caioluis.githubpopular.data.impl.remote.githubrepos
 
 import androidx.paging.ExperimentalPagingApi
-import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
+import com.caioluis.githubpopular.data.impl.local.githubrepos.GithubReposLocalSource
 import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubRepositoryMapper
 import com.caioluis.githubpopular.data.impl.remote.githubrepos.repository.GitHubReposRepositoryImpl
 import io.mockk.every
@@ -14,7 +14,7 @@ import org.junit.Test
 @OptIn(ExperimentalPagingApi::class)
 class GitHubReposRepositoryImplTest {
 
-    private val localDatabase = mockk<GitHubReposDataBase>()
+    private val localSource = mockk<GithubReposLocalSource>(relaxed = true)
     private val remoteMediatorFactory = mockk<GithubReposRemoteMediatorFactory>()
     private val localGitHubRepositoryMapper = mockk<LocalGitHubRepositoryMapper>()
     private val remoteMediator = mockk<GitHubReposRemoteMediator>()
@@ -24,7 +24,7 @@ class GitHubReposRepositoryImplTest {
     @Before
     fun setup() {
         repository = GitHubReposRepositoryImpl(
-            localDatabase = localDatabase,
+            localSource = localSource,
             remoteMediatorFactory = remoteMediatorFactory,
             localGitHubRepositoryMapper = localGitHubRepositoryMapper,
         )
@@ -35,7 +35,6 @@ class GitHubReposRepositoryImplTest {
         val language = "Kotlin"
 
         every { remoteMediatorFactory.create(language) } returns remoteMediator
-        every { localDatabase.gitHubRepositoriesDao() } returns mockk(relaxed = true)
 
         val result = repository.getGitHubRepositories(language)
 

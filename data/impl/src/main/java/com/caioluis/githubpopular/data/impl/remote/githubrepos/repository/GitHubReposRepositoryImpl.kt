@@ -5,7 +5,7 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
+import com.caioluis.githubpopular.data.impl.local.githubrepos.GithubReposLocalSource
 import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubRepositoryMapper
 import com.caioluis.githubpopular.data.impl.remote.githubrepos.GithubReposRemoteMediatorFactory
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
@@ -15,14 +15,14 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class GitHubReposRepositoryImpl @Inject constructor(
-    private val localDatabase: GitHubReposDataBase,
+    private val localSource: GithubReposLocalSource,
     private val remoteMediatorFactory: GithubReposRemoteMediatorFactory,
     private val localGitHubRepositoryMapper: LocalGitHubRepositoryMapper,
 ) : GitHubReposRepository {
 
     @OptIn(ExperimentalPagingApi::class)
     override fun getGitHubRepositories(language: String): Flow<PagingData<DomainGitHubRepository>> {
-        val pagingSourceFactory = { localDatabase.gitHubRepositoriesDao().getPagedRepositories(language) }
+        val pagingSourceFactory = { localSource.getPagedRepositories(language) }
 
         return Pager(
             config = PagingConfig(

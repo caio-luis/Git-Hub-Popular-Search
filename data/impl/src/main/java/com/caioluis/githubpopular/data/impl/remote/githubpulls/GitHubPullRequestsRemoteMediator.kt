@@ -4,11 +4,10 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import androidx.room.withTransaction
 import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.data.bridge.local.githubpulls.entity.LocalGitHubPullRequest
 import com.caioluis.githubpopular.data.bridge.local.githubpulls.entity.PullRequestRemoteKey
-import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
+import com.caioluis.githubpopular.data.impl.local.githubpulls.GithubPullRequestsLocalSource
 import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubPullRequestMapper
 import com.caioluis.githubpopular.data.impl.mapper.RemotePullRequestMapper
 import com.caioluis.githubpopular.data.impl.remote.githubpullrequests.PullRequestsRemoteSource
@@ -21,7 +20,7 @@ class GitHubPullRequestsRemoteMediator @AssistedInject constructor(
     @Assisted private val pullUrl: String,
     @Assisted private val repositoryId: Int,
     private val remoteSource: PullRequestsRemoteSource,
-    private val localDatabase: GitHubReposDataBase,
+    private val localSource: GithubPullRequestsLocalSource,
     private val errorMapper: ErrorMapper,
     private val remotePullRequestMapper: RemotePullRequestMapper,
     private val localGitHubPullRequestMapper: LocalGitHubPullRequestMapper,
@@ -37,7 +36,7 @@ class GitHubPullRequestsRemoteMediator @AssistedInject constructor(
             LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
 
             LoadType.APPEND -> {
-                val remoteKey = localDatabase.pullRequestRemoteKeysDao().remoteKeyByRepositoryId(repositoryId)
+                val remoteKey = localSource.getRemoteKey(repositoryId)
 
                 remoteKey?.nextPage ?: return MediatorResult.Success(endOfPaginationReached = true)
             }
@@ -47,21 +46,20 @@ class GitHubPullRequestsRemoteMediator @AssistedInject constructor(
             val remotePullRequests = remoteSource.fetchPullRequests(pullUrl, page)
             val endOfPaginationReached = remotePullRequests.isEmpty()
 
-            localDatabase.withTransaction {
+            localSource.withTransaction {
                 if (loadType == LoadType.REFRESH) {
-                    localDatabase.pullRequestRemoteKeysDao().deleteByRepositoryId(repositoryId)
-                    localDatabase.gitHubPullRequestsDao()
-                        .deletePullRequestsByRepositoryId(repositoryId)
+                    localSource.deleteRemoteKey(repositoryId)
+                    localSource.deletePullRequestsByRepositoryId(repositoryId)
                 }
 
-                localDatabase.pullRequestRemoteKeysDao().insertOrReplace(
+                localSource.insertRemoteKey(
                     PullRequestRemoteKey(
                         repositoryId = repositoryId,
                         nextPage = if (endOfPaginationReached) null else page + 1,
                     ),
                 )
 
-                localDatabase.gitHubPullRequestsDao().savePullRequests(
+                localSource.savePullRequests(
                     remotePullRequests.mapIndexed { index, remotePullRequest ->
                         val domainPullRequest = remotePullRequestMapper.mapToDomain(remotePullRequest)
                         localGitHubPullRequestMapper.mapToLocal(
@@ -86,7 +84,7 @@ class GitHubPullRequestsRemoteMediator @AssistedInject constructor(
         exception: Exception,
     ): MediatorResult {
         if (loadType == LoadType.REFRESH) {
-            val cachedItems = localDatabase.gitHubPullRequestsDao().countPullRequestsByRepositoryId(repositoryId)
+            val cachedItems = localSource.countPullRequestsByRepositoryId(repositoryId)
 
             if (cachedItems > 0) {
                 return MediatorResult.Success(endOfPaginationReached = false)

@@ -5,21 +5,17 @@ import androidx.paging.LoadType
 import androidx.paging.PagingConfig
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import androidx.room.withTransaction
 import com.caioluis.githubpopular.core.common.exception.AppException
 import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.LocalGitHubRepository
 import com.caioluis.githubpopular.data.impl.Fixtures
-import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
-import com.caioluis.githubpopular.data.impl.local.GitHubReposRemoteKeysDao
-import com.caioluis.githubpopular.data.impl.local.githubrepos.dao.GitHubRepositoriesDao
+import com.caioluis.githubpopular.data.impl.local.githubrepos.GithubReposLocalSource
 import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubRepositoryMapperImpl
 import com.caioluis.githubpopular.data.impl.mapper.RemoteGitHubRepositoryMapperImpl
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -37,14 +33,11 @@ import java.io.IOException
 class GitHubReposRemoteMediatorTest {
 
     private val remoteSource: GithubReposRemoteSource = mockk()
-    private val localDatabase: GitHubReposDataBase = mockk()
+    private val localSource: GithubReposLocalSource = mockk(relaxed = true)
     private val errorMapper: ErrorMapper = mockk()
 
     private val remoteGitHubRepositoryMapper = RemoteGitHubRepositoryMapperImpl()
     private val localGitHubRepositoryMapper = LocalGitHubRepositoryMapperImpl()
-
-    private val remoteKeysDao: GitHubReposRemoteKeysDao = mockk(relaxed = true)
-    private val gitHubRepositoriesDao: GitHubRepositoriesDao = mockk(relaxed = true)
 
     private lateinit var mediator: GitHubReposRemoteMediator
 
@@ -57,20 +50,14 @@ class GitHubReposRemoteMediatorTest {
 
     @Before
     fun setup() {
-        mockkStatic("androidx.room.RoomDatabaseKt")
-        coEvery {
-            localDatabase.withTransaction(any<suspend () -> Any>())
-        } coAnswers {
-            secondArg<suspend () -> Any>().invoke()
+        coEvery { localSource.withTransaction(any<suspend () -> Any>()) } coAnswers {
+            firstArg<suspend () -> Any>().invoke()
         }
-
-        every { localDatabase.remoteKeysDao() } returns remoteKeysDao
-        every { localDatabase.gitHubRepositoriesDao() } returns gitHubRepositoriesDao
 
         mediator = GitHubReposRemoteMediator(
             language = Fixtures.DEFAULT_LANGUAGE,
             remoteSource = remoteSource,
-            localDatabase = localDatabase,
+            localSource = localSource,
             errorMapper = errorMapper,
             remoteGitHubRepositoryMapper = remoteGitHubRepositoryMapper,
             localGitHubRepositoryMapper = localGitHubRepositoryMapper,
@@ -94,7 +81,7 @@ class GitHubReposRemoteMediatorTest {
 
     @Test
     fun `load APPEND without remote key should return Success with endOfPaginationReached true`() = runTest {
-        coEvery { remoteKeysDao.remoteKeyByQuery(Fixtures.DEFAULT_LANGUAGE) } returns null
+        coEvery { localSource.getRemoteKey(Fixtures.DEFAULT_LANGUAGE) } returns null
 
         val result = mediator.load(LoadType.APPEND, pagingState)
 
@@ -108,7 +95,7 @@ class GitHubReposRemoteMediatorTest {
         val nextPage = 2
         val remoteKey = Fixtures.createRemoteKey(nextPage = nextPage)
 
-        coEvery { remoteKeysDao.remoteKeyByQuery(Fixtures.DEFAULT_LANGUAGE) } returns remoteKey
+        coEvery { localSource.getRemoteKey(Fixtures.DEFAULT_LANGUAGE) } returns remoteKey
         coEvery {
             remoteSource.fetchFromRemote(
                 nextPage,
@@ -122,7 +109,7 @@ class GitHubReposRemoteMediatorTest {
         assertTrue((result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
 
         coVerify(exactly = 1) { remoteSource.fetchFromRemote(nextPage, Fixtures.DEFAULT_LANGUAGE) }
-        coVerify { remoteKeysDao.insertOrReplace(Fixtures.createRemoteKey(nextPage = null)) }
+        coVerify { localSource.insertRemoteKey(Fixtures.createRemoteKey(nextPage = null)) }
     }
 
     @Test
@@ -131,7 +118,7 @@ class GitHubReposRemoteMediatorTest {
         val remoteKey = Fixtures.createRemoteKey(nextPage = nextPage)
         val remoteRepository = Fixtures.createRemoteGitHubRepository(id = 7)
 
-        coEvery { remoteKeysDao.remoteKeyByQuery(Fixtures.DEFAULT_LANGUAGE) } returns remoteKey
+        coEvery { localSource.getRemoteKey(Fixtures.DEFAULT_LANGUAGE) } returns remoteKey
         coEvery {
             remoteSource.fetchFromRemote(nextPage, Fixtures.DEFAULT_LANGUAGE)
         } returns listOf(remoteRepository)
@@ -141,9 +128,9 @@ class GitHubReposRemoteMediatorTest {
         assertTrue(result is RemoteMediator.MediatorResult.Success)
         assertTrue(!(result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
 
-        coVerify { remoteKeysDao.insertOrReplace(Fixtures.createRemoteKey(nextPage = 3)) }
+        coVerify { localSource.insertRemoteKey(Fixtures.createRemoteKey(nextPage = 3)) }
         coVerify {
-            gitHubRepositoriesDao.saveRepositories(
+            localSource.saveRepositories(
                 listOf(
                     LocalGitHubRepository(
                         id = 7,
@@ -177,10 +164,10 @@ class GitHubReposRemoteMediatorTest {
         assertTrue(result is RemoteMediator.MediatorResult.Success)
         assertTrue((result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
 
-        coVerify { remoteKeysDao.deleteByQuery(Fixtures.DEFAULT_LANGUAGE) }
-        coVerify { gitHubRepositoriesDao.clearRepositories(Fixtures.DEFAULT_LANGUAGE) }
-        coVerify { remoteKeysDao.insertOrReplace(Fixtures.createRemoteKey(nextPage = null)) }
-        coVerify { gitHubRepositoriesDao.saveRepositories(emptyList()) }
+        coVerify { localSource.deleteRemoteKey(Fixtures.DEFAULT_LANGUAGE) }
+        coVerify { localSource.clearRepositories(Fixtures.DEFAULT_LANGUAGE) }
+        coVerify { localSource.insertRemoteKey(Fixtures.createRemoteKey(nextPage = null)) }
+        coVerify { localSource.saveRepositories(emptyList()) }
     }
 
     @Test
@@ -199,9 +186,9 @@ class GitHubReposRemoteMediatorTest {
         assertTrue(result is RemoteMediator.MediatorResult.Success)
         assertTrue(!(result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
 
-        coVerify { remoteKeysDao.insertOrReplace(Fixtures.createRemoteKey(nextPage = 2)) }
+        coVerify { localSource.insertRemoteKey(Fixtures.createRemoteKey(nextPage = 2)) }
         coVerify {
-            gitHubRepositoriesDao.saveRepositories(
+            localSource.saveRepositories(
                 listOf(
                     LocalGitHubRepository(
                         id = 21,
