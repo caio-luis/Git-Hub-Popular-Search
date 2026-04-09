@@ -76,7 +76,7 @@ fun MainScreen(
 
             if (repositories.itemCount == 0 && errorToShow != null) {
                 ErrorContent(
-                    error = errorToShow,
+                    error = getRepositoriesViewModel.mapToAppException(errorToShow),
                     onRetry = { repositories.retry() },
                 )
             } else {
@@ -84,6 +84,7 @@ fun MainScreen(
                     RepositoriesList(
                         repositories = repositories,
                         onRepositoryClick = onRepositoryClick,
+                        mapError = getRepositoriesViewModel::mapToAppException,
                     )
                 }
             }

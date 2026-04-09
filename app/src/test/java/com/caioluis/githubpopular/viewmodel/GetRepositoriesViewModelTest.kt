@@ -1,6 +1,7 @@
 package com.caioluis.githubpopular.viewmodel
 
 import androidx.paging.PagingData
+import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.domain.bridge.usecase.GetRepositoriesUseCase
 import com.caioluis.githubpopular.githubrepos.mapper.UiGitHubRepoMapper
 import com.caioluis.githubpopular.githubrepos.viewmodel.GetRepositoriesViewModel
@@ -25,6 +26,7 @@ class GetRepositoriesViewModelTest {
 
     private val getRepositoriesUseCase: GetRepositoriesUseCase = mockk()
     private val domainMapper: UiGitHubRepoMapper = mockk()
+    private val errorMapper: ErrorMapper = mockk()
 
     private lateinit var viewModel: GetRepositoriesViewModel
 
@@ -33,7 +35,7 @@ class GetRepositoriesViewModelTest {
     @Before
     fun setup() {
         Dispatchers.setMain(unconfinedDispatcher)
-        viewModel = GetRepositoriesViewModel(getRepositoriesUseCase, domainMapper)
+        viewModel = GetRepositoriesViewModel(getRepositoriesUseCase, domainMapper, errorMapper)
     }
 
     @After

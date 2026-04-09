@@ -1,6 +1,7 @@
 package com.caioluis.githubpopular.viewmodel
 
 import androidx.paging.PagingData
+import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.domain.bridge.usecase.GetPullRequestsUseCase
 import com.caioluis.githubpopular.githubpulls.mapper.PullRequestUiMapper
 import com.caioluis.githubpopular.githubpulls.viewmodel.GetPullRequestsViewModel
@@ -25,6 +26,7 @@ class GetPullRequestsViewModelTest {
 
     private val getPullRequestsUseCase: GetPullRequestsUseCase = mockk()
     private val pullRequestUiMapper: PullRequestUiMapper = mockk()
+    private val errorMapper: ErrorMapper = mockk()
 
     private lateinit var viewModel: GetPullRequestsViewModel
 
@@ -33,7 +35,7 @@ class GetPullRequestsViewModelTest {
     @Before
     fun setup() {
         Dispatchers.setMain(unconfinedDispatcher)
-        viewModel = GetPullRequestsViewModel(getPullRequestsUseCase, pullRequestUiMapper)
+        viewModel = GetPullRequestsViewModel(getPullRequestsUseCase, pullRequestUiMapper, errorMapper)
     }
 
     @After
