@@ -14,8 +14,7 @@ import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubRepositoryMapper
 import com.caioluis.githubpopular.data.impl.mapper.RemoteGitHubRepositoryMapper
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
-import retrofit2.HttpException
-import java.io.IOException
+import kotlinx.coroutines.CancellationException
 
 @OptIn(ExperimentalPagingApi::class)
 class GitHubReposRemoteMediator @AssistedInject constructor(
@@ -31,26 +30,20 @@ class GitHubReposRemoteMediator @AssistedInject constructor(
         loadType: LoadType,
         state: PagingState<Int, LocalGitHubRepository>,
     ): MediatorResult {
-        val page = when (loadType) {
+        val page: Int = when (loadType) {
             LoadType.REFRESH -> STARTING_PAGE_INDEX
 
             LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
 
             LoadType.APPEND -> {
-                val remoteKey = localDatabase.withTransaction {
-                    localDatabase.remoteKeysDao().remoteKeyByQuery(language)
-                }
-
-                if (remoteKey?.nextPage == null) {
-                    return MediatorResult.Success(endOfPaginationReached = true)
-                }
-                remoteKey.nextPage
+                val remoteKey = localDatabase.remoteKeysDao().remoteKeyByQuery(language)
+                remoteKey?.nextPage ?: return MediatorResult.Success(endOfPaginationReached = true)
             }
         }
 
         return try {
-            val remoteRepositories: List<RemoteGitHubRepository?> =
-                page?.let { remoteSource.fetchFromRemote(it, language) } ?: emptyList()
+            val remoteRepositories: List<RemoteGitHubRepository> =
+                remoteSource.fetchFromRemote(page, language)
             val endOfPaginationReached = remoteRepositories.isEmpty()
 
             localDatabase.withTransaction {
@@ -59,33 +52,28 @@ class GitHubReposRemoteMediator @AssistedInject constructor(
                     localDatabase.gitHubRepositoriesDao().clearRepositories(language)
                 }
 
-                val nextPage = if (endOfPaginationReached) null else page?.plus(1)
+                val nextPage = if (endOfPaginationReached) null else page + 1
                 localDatabase.remoteKeysDao().insertOrReplace(
                     GitHubReposRemoteKey(queryLanguage = language, nextPage = nextPage),
                 )
 
                 val localEntities: List<LocalGitHubRepository> =
-                    remoteRepositories.mapNotNull { remoteRepository ->
-                        page?.let { currentPage ->
-                            remoteRepository?.let {
-                                remoteGitHubRepositoryMapper.mapToDomain(
-                                    remoteRepository = it,
-                                    page = currentPage,
-                                    language = language,
-                                )
-                            }
+                    remoteRepositories
+                        .map { remoteRepository ->
+                            remoteGitHubRepositoryMapper.mapToDomain(
+                                remoteRepository = remoteRepository,
+                                page = page,
+                                language = language,
+                            )
                         }
-                    }.map(localGitHubRepositoryMapper::mapToLocal)
+                        .map(localGitHubRepositoryMapper::mapToLocal)
 
                 localDatabase.gitHubRepositoriesDao().saveRepositories(localEntities)
             }
 
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
-        } catch (exception: IOException) {
-            MediatorResult.Error(errorMapper.map(exception))
-        } catch (exception: HttpException) {
-            MediatorResult.Error(errorMapper.map(exception))
         } catch (exception: Exception) {
+            if (exception is CancellationException) throw exception
             MediatorResult.Error(errorMapper.map(exception))
         }
     }

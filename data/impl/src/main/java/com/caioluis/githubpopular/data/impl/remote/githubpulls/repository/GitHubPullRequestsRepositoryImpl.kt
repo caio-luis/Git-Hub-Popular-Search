@@ -33,8 +33,8 @@ constructor(
 
         return Pager(
             config = PagingConfig(
-                pageSize = 20,
-                prefetchDistance = 3,
+                pageSize = PAGE_SIZE,
+                prefetchDistance = PREFETCH_DISTANCE,
                 enablePlaceholders = true,
             ),
             remoteMediator = remoteMediatorFactory.create(
@@ -45,5 +45,10 @@ constructor(
         ).flow.map { pagingData ->
             pagingData.map(localGitHubPullRequestMapper::mapToDomain)
         }
+    }
+
+    companion object {
+        const val PAGE_SIZE = 20
+        const val PREFETCH_DISTANCE = 3
     }
 }

@@ -9,7 +9,6 @@ import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNull
 import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
@@ -81,18 +80,18 @@ class GithubReposRemoteSourceTest {
     }
 
     @Test
-    fun `fetchFromRemote should return null when service returns null`() = runTest {
+    fun `fetchFromRemote should return empty list when service returns no items`() = runTest {
         coEvery {
             gitHubRepositoriesService.getGitHubRepositories(
                 language = any(),
                 sort = any(),
                 page = Fixtures.STARTING_PAGE,
             )
-        } returns null
+        } returns Fixtures.createRemoteGitHubRepositoriesResponse(repositories = emptyList())
 
         val result = remoteSource.fetchFromRemote(Fixtures.STARTING_PAGE, Fixtures.DEFAULT_LANGUAGE)
 
-        assertNull(result)
+        assertEquals(emptyList<RemoteGitHubRepository>(), result)
         coVerify(exactly = 1) {
             gitHubRepositoriesService.getGitHubRepositories(
                 language = any(),

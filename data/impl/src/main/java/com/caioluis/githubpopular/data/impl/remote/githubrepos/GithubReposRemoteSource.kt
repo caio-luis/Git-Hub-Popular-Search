@@ -6,5 +6,5 @@ interface GithubReposRemoteSource {
     suspend fun fetchFromRemote(
         page: Int,
         language: String,
-    ): List<RemoteGitHubRepository?>?
+    ): List<RemoteGitHubRepository>
 }

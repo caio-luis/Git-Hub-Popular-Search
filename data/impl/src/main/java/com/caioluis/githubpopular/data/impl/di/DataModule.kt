@@ -1,8 +1,6 @@
 package com.caioluis.githubpopular.data.impl.di
 
 import android.content.Context
-import com.caioluis.githubpopular.core.common.ServiceBuilder
-import com.caioluis.githubpopular.data.impl.BuildConfig
 import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
 import com.caioluis.githubpopular.data.impl.local.githubpulls.dao.GitHubPullRequestsDao
 import com.caioluis.githubpopular.data.impl.local.githubrepos.dao.GitHubRepositoriesDao
@@ -30,17 +28,16 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 interface DataModule {
     @Binds
-    @Singleton
     fun bindRemoteSource(impl: GithubReposRemoteSourceImpl): GithubReposRemoteSource
 
     @Binds
-    @Singleton
     fun bindPullRequestsRemoteSource(impl: PullRequestsRemoteSourceImpl): PullRequestsRemoteSource
 
     @Binds
@@ -52,29 +49,29 @@ interface DataModule {
     fun bindGitHubPullRequestsRepository(impl: GitHubPullRequestsRepositoryImpl): GitHubPullRequestsRepository
 
     @Binds
-    @Singleton
     fun bindRemoteGitHubRepositoryMapper(impl: RemoteGitHubRepositoryMapperImpl): RemoteGitHubRepositoryMapper
 
     @Binds
-    @Singleton
     fun bindRemotePullRequestMapper(impl: RemotePullRequestMapperImpl): RemotePullRequestMapper
 
     @Binds
-    @Singleton
     fun bindLocalGitHubRepositoryMapper(impl: LocalGitHubRepositoryMapperImpl): LocalGitHubRepositoryMapper
 
     @Binds
-    @Singleton
     fun bindLocalGitHubPullRequestMapper(impl: LocalGitHubPullRequestMapperImpl): LocalGitHubPullRequestMapper
 
     companion object {
         @Provides
         @Singleton
-        fun provideGitHubRepositoriesService(): GitHubRepositoriesService = ServiceBuilder.Companion<GitHubRepositoriesService>(BuildConfig.API_BASE_URL)
+        fun provideGitHubRepositoriesService(
+            retrofit: Retrofit,
+        ): GitHubRepositoriesService = retrofit.create(GitHubRepositoriesService::class.java)
 
         @Provides
         @Singleton
-        fun provideGitHubPullRequestsService(): GitHubPullRequestsService = ServiceBuilder.Companion<GitHubPullRequestsService>(BuildConfig.API_BASE_URL)
+        fun provideGitHubPullRequestsService(
+            retrofit: Retrofit,
+        ): GitHubPullRequestsService = retrofit.create(GitHubPullRequestsService::class.java)
 
         @Provides
         @Singleton
