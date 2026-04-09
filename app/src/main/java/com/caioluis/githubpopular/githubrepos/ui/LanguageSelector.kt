@@ -17,12 +17,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.caioluis.githubpopular.Constants
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LanguageSelector(
     selectedLanguage: String,
-    languages: List<String>,
     onLanguageSelected: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -55,6 +55,8 @@ fun LanguageSelector(
                 expanded = isExpanded,
                 onDismissRequest = { isExpanded = false },
             ) {
+                val languages = remember { Constants.languages }
+
                 languages.forEach { language ->
                     DropdownMenuItem(
                         text = { Text(text = language) },

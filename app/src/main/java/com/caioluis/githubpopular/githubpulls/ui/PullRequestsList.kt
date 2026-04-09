@@ -22,6 +22,7 @@ import com.caioluis.githubpopular.ui.ErrorContent
 @Composable
 fun PullRequestsList(
     pullRequests: LazyPagingItems<UiGitHubPullRequest>,
+    onPullRequestClick: (UiGitHubPullRequest) -> Unit,
     mapError: (Throwable) -> AppException,
     modifier: Modifier = Modifier,
 ) {
@@ -48,7 +49,10 @@ fun PullRequestsList(
             val pullRequest = pullRequests[index]
 
             if (pullRequest != null) {
-                PullRequestItem(pullRequest = pullRequest)
+                PullRequestItem(
+                    pullRequest = pullRequest,
+                    onClick = onPullRequestClick,
+                )
             } else {
                 RepositoryItemPlaceholder()
             }

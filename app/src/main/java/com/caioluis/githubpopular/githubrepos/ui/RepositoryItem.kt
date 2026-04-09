@@ -17,6 +17,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,6 +33,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.caioluis.githubpopular.R
 import com.caioluis.githubpopular.githubrepos.model.UiGitHubRepo
+import com.caioluis.githubpopular.theme.GitHubPopularTheme
 
 @Composable
 fun RepositoryItem(
@@ -39,6 +41,14 @@ fun RepositoryItem(
     onClick: (UiGitHubRepo) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
+    val imageRequest = remember(repository.avatarUrl, context) {
+        ImageRequest.Builder(context)
+            .data(repository.avatarUrl)
+            .crossfade(true)
+            .build()
+    }
+
     Card(
         onClick = { onClick(repository) },
         modifier = modifier.fillMaxWidth(),
@@ -59,10 +69,7 @@ fun RepositoryItem(
                 modifier = Modifier.padding(end = 12.dp),
             ) {
                 AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(repository.avatarUrl)
-                        .crossfade(true)
-                        .build(),
+                    model = imageRequest,
                     contentDescription = "User image",
                     placeholder = painterResource(id = R.drawable.ic_star),
                     error = painterResource(id = R.drawable.ic_star),
@@ -140,14 +147,16 @@ fun RepositoryItem(
 @Preview(showBackground = true)
 @Composable
 fun RepositoryItemPreview() {
-    RepositoryItem(
-        repository = UiGitHubRepo(
-            title = "Example of title",
-            description = "This is a example of a kotlin repository description.",
-            stargazersCount = 1234565,
-            forksCount = 1234565,
-            userName = "User Name",
-        ),
-        onClick = {},
-    )
+    GitHubPopularTheme {
+        RepositoryItem(
+            repository = UiGitHubRepo(
+                title = "Example of title",
+                description = "This is a example of a kotlin repository description.",
+                stargazersCount = 1234565,
+                forksCount = 1234565,
+                userName = "User Name",
+            ),
+            onClick = {},
+        )
+    }
 }

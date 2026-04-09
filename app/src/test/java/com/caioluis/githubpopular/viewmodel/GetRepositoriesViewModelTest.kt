@@ -1,5 +1,6 @@
 package com.caioluis.githubpopular.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.paging.PagingData
 import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.domain.bridge.usecase.GetRepositoriesUseCase
@@ -35,7 +36,12 @@ class GetRepositoriesViewModelTest {
     @Before
     fun setup() {
         Dispatchers.setMain(unconfinedDispatcher)
-        viewModel = GetRepositoriesViewModel(getRepositoriesUseCase, domainMapper, errorMapper)
+        viewModel = GetRepositoriesViewModel(
+            savedStateHandle = SavedStateHandle(),
+            getRepositoriesUseCase = getRepositoriesUseCase,
+            domainMapper = domainMapper,
+            errorMapper = errorMapper,
+        )
     }
 
     @After

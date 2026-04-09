@@ -15,6 +15,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,18 +30,25 @@ import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.caioluis.githubpopular.R
-import com.caioluis.githubpopular.core.common.extensions.openBrowserIntent
 import com.caioluis.githubpopular.githubpulls.model.UiGitHubPullRequest
+import com.caioluis.githubpopular.theme.GitHubPopularTheme
 
 @Composable
 fun PullRequestItem(
     pullRequest: UiGitHubPullRequest,
+    onClick: (UiGitHubPullRequest) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
+    val imageRequest = remember(pullRequest.avatarUrl, context) {
+        ImageRequest.Builder(context)
+            .data(pullRequest.avatarUrl)
+            .crossfade(true)
+            .build()
+    }
 
     Card(
-        onClick = { context.openBrowserIntent(pullRequest.htmlUrl) },
+        onClick = { onClick(pullRequest) },
         modifier = modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(
@@ -59,10 +67,7 @@ fun PullRequestItem(
                 modifier = Modifier.padding(end = 12.dp),
             ) {
                 AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(pullRequest.avatarUrl)
-                        .crossfade(true)
-                        .build(),
+                    model = imageRequest,
                     contentDescription = "User image",
                     placeholder = painterResource(id = R.drawable.ic_star),
                     error = painterResource(id = R.drawable.ic_star),
@@ -112,11 +117,14 @@ fun PullRequestItem(
 @Preview(showBackground = true)
 @Composable
 fun PullRequestItemPreview() {
-    PullRequestItem(
-        pullRequest = UiGitHubPullRequest(
-            title = "Example of title",
-            body = "This is a example of a pull request body.",
-            userName = "User Name",
-        ),
-    )
+    GitHubPopularTheme {
+        PullRequestItem(
+            pullRequest = UiGitHubPullRequest(
+                title = "Example of title",
+                body = "This is a example of a pull request body.",
+                userName = "User Name",
+            ),
+            onClick = {},
+        )
+    }
 }

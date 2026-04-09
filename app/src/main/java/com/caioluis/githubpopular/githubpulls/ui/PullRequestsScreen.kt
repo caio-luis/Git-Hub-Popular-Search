@@ -13,29 +13,31 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.caioluis.githubpopular.core.common.extensions.openBrowserIntent
+import com.caioluis.githubpopular.githubpulls.model.UiGitHubPullRequest
 import com.caioluis.githubpopular.githubpulls.viewmodel.GetPullRequestsViewModel
 import com.caioluis.githubpopular.ui.ErrorContent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PullRequestsScreen(
-    pullUrl: String,
-    repositoryId: Int,
-    repositoryName: String,
     onBackClick: () -> Unit,
     getPullRequestsViewModel: GetPullRequestsViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
     val pullRequests = getPullRequestsViewModel.pullRequests.collectAsLazyPagingItems()
     val pullToRefreshState = rememberPullToRefreshState()
-
-    LaunchedEffect(pullUrl, repositoryId) {
-        getPullRequestsViewModel.loadList(pullUrl, repositoryId)
+    val onPullRequestClick = remember(context) {
+        { pullRequest: UiGitHubPullRequest ->
+            context.openBrowserIntent(pullRequest.htmlUrl)
+        }
     }
 
     val isRefreshing = pullRequests.loadState.refresh is LoadState.Loading
@@ -43,7 +45,7 @@ fun PullRequestsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = repositoryName) },
+                title = { Text(text = getPullRequestsViewModel.repositoryName) },
                 navigationIcon = {
                     IconButton(onClick = onBackClick) {
                         Icon(
@@ -71,9 +73,10 @@ fun PullRequestsScreen(
                     onRetry = { pullRequests.retry() },
                 )
             } else {
-                key(repositoryId) {
+                key(getPullRequestsViewModel.currentRepositoryId) {
                     PullRequestsList(
                         pullRequests = pullRequests,
+                        onPullRequestClick = onPullRequestClick,
                         mapError = getPullRequestsViewModel::mapToAppException,
                     )
                 }

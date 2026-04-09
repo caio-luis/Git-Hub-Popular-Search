@@ -7,18 +7,16 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.caioluis.githubpopular.Constants
 import com.caioluis.githubpopular.githubrepos.model.UiGitHubRepo
 import com.caioluis.githubpopular.githubrepos.ui.LanguageSelector
 import com.caioluis.githubpopular.githubrepos.ui.RepositoriesList
@@ -30,16 +28,15 @@ fun MainScreen(
     getRepositoriesViewModel: GetRepositoriesViewModel = hiltViewModel(),
 ) {
     val repositories = getRepositoriesViewModel.repositories.collectAsLazyPagingItems()
-    val viewModelSelectedLanguage by getRepositoriesViewModel.selectedLanguage.collectAsState()
-
-    var selectedLanguage by rememberSaveable {
-        mutableStateOf(viewModelSelectedLanguage ?: Constants.languages.firstOrNull() ?: "Kotlin")
-    }
+    val viewModelSelectedLanguage by getRepositoriesViewModel.selectedLanguage.collectAsStateWithLifecycle()
+    val selectedLanguage = viewModelSelectedLanguage ?: getRepositoriesViewModel.defaultLanguage()
 
     val pullToRefreshState = rememberPullToRefreshState()
 
-    LaunchedEffect(selectedLanguage) {
-        getRepositoriesViewModel.loadList(selectedLanguage)
+    LaunchedEffect(viewModelSelectedLanguage) {
+        if (viewModelSelectedLanguage == null) {
+            getRepositoriesViewModel.loadList(getRepositoriesViewModel.defaultLanguage())
+        }
     }
 
     val isRefreshing = repositories.loadState.refresh is LoadState.Loading
@@ -48,8 +45,7 @@ fun MainScreen(
         topBar = {
             LanguageSelector(
                 selectedLanguage = selectedLanguage,
-                languages = Constants.languages,
-                onLanguageSelected = { selectedLanguage = it },
+                onLanguageSelected = getRepositoriesViewModel::loadList,
             )
         },
     ) { innerPadding ->
