@@ -1,0 +1,25 @@
+# The Docker build context for the CI image is the .github/docker/ directory,
+# so only files in that folder are sent to the daemon.
+# This .dockerignore is a safety net in case the context is ever widened.
+
+# Android / Gradle artefacts
+build/
+.gradle/
+**/.gradle/
+**/build/
+
+# IDE files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Local config (never bake secrets into the image)
+local.properties
+*.jks
+*.keystore
+
+# VCS
+.git/
+**/.git/
+
