@@ -44,7 +44,7 @@ class GitHubPullRequestsRemoteMediatorTest {
     private lateinit var mediator: GitHubPullRequestsRemoteMediator
 
     private val repositoryId = Fixtures.REPOSITORY_ID
-    private val pullUrl = "https://api.github.com/repos/user/repo/pulls"
+    private val pullUrl = "https://api.test.com/repos/user/repo/pulls"
     private val pagingState = PagingState<Int, LocalGitHubPullRequest>(
         pages = emptyList(),
         anchorPosition = null,
@@ -124,7 +124,7 @@ class GitHubPullRequestsRemoteMediatorTest {
         coVerify {
             localSource.savePullRequests(
                 listOf(
-                    LocalGitHubPullRequest(
+                    Fixtures.createLocalGitHubPullRequest(
                         id = 10L,
                         htmlUrl = "url",
                         title = "title",
@@ -135,7 +135,7 @@ class GitHubPullRequestsRemoteMediatorTest {
                         page = 1,
                         orderInPage = 0,
                     ),
-                    LocalGitHubPullRequest(
+                    Fixtures.createLocalGitHubPullRequest(
                         id = 11L,
                         htmlUrl = "url",
                         title = "title",

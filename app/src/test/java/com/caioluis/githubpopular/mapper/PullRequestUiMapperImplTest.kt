@@ -10,7 +10,7 @@ class PullRequestUiMapperImplTest {
     private val mapper = PullRequestUiMapperImpl()
 
     @Test
-    fun mapToUiShouldTruncateBodyAndKeepEssentialFields() {
+    fun `map to ui should truncate body and keep essential fields`() {
         val source = Fixtures.createDomainGitHubPullRequest().copy(
             body = "a".repeat(260),
             title = "Improve cache fallback",
@@ -28,7 +28,7 @@ class PullRequestUiMapperImplTest {
     }
 
     @Test
-    fun mapToUiShouldKeepBodyWhenUnderLimit() {
+    fun `map to ui should keep body when under limit`() {
         val source = Fixtures.createDomainGitHubPullRequest().copy(body = "short body")
 
         val mapped = mapper.mapToUi(source)

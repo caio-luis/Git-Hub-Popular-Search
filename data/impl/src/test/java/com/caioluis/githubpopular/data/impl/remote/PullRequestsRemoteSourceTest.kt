@@ -16,30 +16,25 @@ class PullRequestsRemoteSourceTest {
 
     @Test
     fun `fetchPullRequests returns expected result`() = runTest {
-        // Arrange
-        val url = "https://api.github.com/repos/owner/repo/pulls"
+        val url = "https://api.test.com/repos/owner/repo/pulls"
         val page = 1
         val expected = listOf(Fixtures.createRemotePullRequest(id = 1L))
 
         coEvery { service.getPullRequests(url, page) } returns expected
 
-        // Act
         val result = remoteSource.fetchPullRequests(url, page)
 
-        // Assert
         assertEquals(expected, result)
     }
 
     @Test
     fun `fetchPullRequests throws exception when service fails`() {
-        // Arrange
-        val url = "https://api.github.com/repos/owner/repo/pulls"
+        val url = "https://api.test.com/repos/owner/repo/pulls"
         val page = 1
         val exception = Exception("Network error")
 
         coEvery { service.getPullRequests(url, page) } throws exception
 
-        // Act + Assert
         assertThrows(Exception::class.java) {
             runTest {
                 remoteSource.fetchPullRequests(url, page)

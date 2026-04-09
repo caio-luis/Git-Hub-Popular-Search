@@ -36,6 +36,7 @@ fun PullRequestsScreen(
     val context = LocalContext.current
     val pullRequests = getPullRequestsViewModel.pullRequests.collectAsLazyPagingItems()
     val repositoryName by getPullRequestsViewModel.repositoryName.collectAsStateWithLifecycle()
+    val currentRepositoryId by getPullRequestsViewModel.currentRepositoryId.collectAsStateWithLifecycle()
     val pullToRefreshState = rememberPullToRefreshState()
     val onPullRequestClick = remember(context) {
         { pullRequest: UiGitHubPullRequest ->
@@ -76,7 +77,7 @@ fun PullRequestsScreen(
                     onRetry = { pullRequests.retry() },
                 )
             } else {
-                key(getPullRequestsViewModel.currentRepositoryId) {
+                key(currentRepositoryId) {
                     PullRequestsList(
                         pullRequests = pullRequests,
                         onPullRequestClick = onPullRequestClick,

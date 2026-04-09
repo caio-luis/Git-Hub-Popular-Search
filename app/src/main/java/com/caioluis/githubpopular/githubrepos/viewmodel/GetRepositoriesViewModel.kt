@@ -16,7 +16,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -37,7 +36,6 @@ class GetRepositoriesViewModel @Inject constructor(
 
     val repositories: Flow<PagingData<UiGitHubRepo>> = selectedLanguage
         .filterNotNull()
-        .distinctUntilChanged()
         .flatMapLatest { language ->
             getRepositoriesUseCase.loadRepositories(language)
                 .map { pagingData ->
@@ -50,7 +48,7 @@ class GetRepositoriesViewModel @Inject constructor(
         savedStateHandle[SELECTED_LANGUAGE_KEY] = language
     }
 
-    fun mapToAppException(error: Throwable): AppException = (error as? AppException) ?: errorMapper.map(error)
+    fun mapToAppException(error: Throwable): AppException = errorMapper.map(error)
 
     fun defaultLanguage(): String = Constants.languages.firstOrNull() ?: DEFAULT_LANGUAGE
 

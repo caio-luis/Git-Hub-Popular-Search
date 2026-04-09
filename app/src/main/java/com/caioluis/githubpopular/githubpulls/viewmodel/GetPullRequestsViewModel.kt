@@ -14,9 +14,8 @@ import com.caioluis.githubpopular.githubpulls.model.UiGitHubPullRequest
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
@@ -35,28 +34,18 @@ class GetPullRequestsViewModel @Inject constructor(
         val repositoryId: Int,
     )
 
-    private val pullUrl = savedStateHandle.getStateFlow<String?>(PULL_URL_KEY, null)
-    private val repositoryId = savedStateHandle.getStateFlow<Int?>(REPOSITORY_ID_KEY, null)
-    val repositoryName: StateFlow<String> = savedStateHandle.getStateFlow(
-        REPOSITORY_NAME_KEY,
-        savedStateHandle.get<String>(REPOSITORY_NAME_KEY).orEmpty(),
+    private val requestState = MutableStateFlow(
+        pullRequestsRequestFromState(),
     )
 
-    val currentRepositoryId: Int? get() = repositoryId.value
+    val repositoryName: StateFlow<String> = savedStateHandle.getStateFlow(REPOSITORY_NAME_KEY, "")
+
+    val currentRepositoryId: StateFlow<Int?> =
+        savedStateHandle.getStateFlow(REPOSITORY_ID_KEY, null)
 
     val pullRequests: Flow<PagingData<UiGitHubPullRequest>> =
-        combine(pullUrl, repositoryId) { currentPullUrl, currentRepositoryId ->
-            if (currentPullUrl == null || currentRepositoryId == null) {
-                null
-            } else {
-                PullRequestsRequest(
-                    pullUrl = currentPullUrl,
-                    repositoryId = currentRepositoryId,
-                )
-            }
-        }
+        requestState
             .filterNotNull()
-            .distinctUntilChanged()
             .flatMapLatest { request ->
                 getPullRequestsUseCase.loadPullRequests(
                     pullUrl = request.pullUrl,
@@ -73,9 +62,28 @@ class GetPullRequestsViewModel @Inject constructor(
         if (repositoryName != null) {
             savedStateHandle[REPOSITORY_NAME_KEY] = repositoryName
         }
+
+        requestState.value = PullRequestsRequest(
+            pullUrl = pullUrl,
+            repositoryId = repositoryId,
+        )
     }
 
-    fun mapToAppException(error: Throwable): AppException = (error as? AppException) ?: errorMapper.map(error)
+    fun mapToAppException(error: Throwable): AppException = errorMapper.map(error)
+
+    private fun pullRequestsRequestFromState(): PullRequestsRequest? {
+        val pullUrl = savedStateHandle.get<String>(PULL_URL_KEY)
+        val repositoryId = savedStateHandle.get<Int>(REPOSITORY_ID_KEY)
+
+        return if (pullUrl != null && repositoryId != null) {
+            PullRequestsRequest(
+                pullUrl = pullUrl,
+                repositoryId = repositoryId,
+            )
+        } else {
+            null
+        }
+    }
 
     private companion object {
         const val PULL_URL_KEY = "pullUrl"

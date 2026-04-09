@@ -3,6 +3,7 @@ package com.caioluis.githubpopular.domain.impl.usecases
 import androidx.paging.PagingData
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubPullRequest
 import com.caioluis.githubpopular.domain.bridge.repository.GitHubPullRequestsRepository
+import com.caioluis.githubpopular.domain.bridge.usecase.GetPullRequestsUseCase
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.Flow
@@ -12,7 +13,8 @@ import org.junit.Test
 
 class GetPullRequestsUseCaseTest {
     private val gitHubPullRequestsRepository = mockk<GitHubPullRequestsRepository>()
-    private val getPullRequestsUseCase = GetPullRequestsUseCaseImpl(gitHubPullRequestsRepository)
+    private val getPullRequestsUseCase: GetPullRequestsUseCase =
+        GetPullRequestsUseCaseImpl(gitHubPullRequestsRepository)
 
     @Test
     fun `loadPullRequests returns expected flow`() {

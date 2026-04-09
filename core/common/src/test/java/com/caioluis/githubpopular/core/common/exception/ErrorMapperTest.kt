@@ -1,14 +1,12 @@
 package com.caioluis.githubpopular.core.common.exception
 
+import com.caioluis.githubpopular.core.common.Fixtures
 import kotlinx.serialization.SerializationException
-import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
 import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
-import retrofit2.HttpException
-import retrofit2.Response
 import java.io.IOException
 import java.net.ConnectException
 import java.net.SocketTimeoutException
@@ -59,7 +57,7 @@ class ErrorMapperTest {
     fun `all http error codes map to ServerException`() {
         val statusCodes = listOf(400, 401, 403, 404, 500, 502, 503, 599)
         for (statusCode in statusCodes) {
-            val httpException = createHttpException(statusCode)
+            val httpException = Fixtures.createHttpException(statusCode)
             val result = errorMapper.map(httpException)
             assertTrue(result is AppException.ServerException)
         }
@@ -97,9 +95,12 @@ class ErrorMapperTest {
         assertEquals(throwable, result.cause)
     }
 
-    private fun createHttpException(statusCode: Int): HttpException {
-        val responseBody = "".toResponseBody()
-        val mockResponse = Response.error<String>(statusCode, responseBody)
-        return HttpException(mockResponse)
+    @Test
+    fun `map AppException should return same instance`() {
+        val appException = AppException.NetworkException(Throwable("network"))
+
+        val result = errorMapper.map(appException)
+
+        assertEquals(appException, result)
     }
 }

@@ -10,7 +10,7 @@ class PullRequestsDestinationSerializationTest {
     @Test
     fun `serializes and deserializes destination with reserved URL chars`() {
         val destination = PullRequestsDestination(
-            pullUrl = "https://api.github.com/repos/user/repo/pulls?state=open&sort=updated#section%2F1",
+            pullUrl = "https://api.test.com/repos/user/repo/pulls?state=open&sort=updated#section%2F1",
             repositoryId = 42,
             repositoryName = "repo name + kotlin/android",
         )
