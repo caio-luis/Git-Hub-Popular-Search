@@ -59,6 +59,12 @@ class JacocoConventionPlugin : Plugin<Project> {
                 "android/**/*.*",
             )
 
+            val minimumCoverage = providers
+                .gradleProperty("githubpopular.jacoco.minimumCoverage")
+                .orElse("0.90")
+                .get()
+                .toBigDecimal()
+
             val configureReport: JacocoReport.() -> Unit = {
                 dependsOn(tasks.withType<Test>())
 
@@ -114,7 +120,7 @@ class JacocoConventionPlugin : Plugin<Project> {
                 violationRules {
                     rule {
                         limit {
-                            minimum = "0.90".toBigDecimal()
+                            minimum = minimumCoverage
                         }
                     }
                 }

@@ -40,27 +40,28 @@ class GetPullRequestsViewModel @Inject constructor(
     val repositoryName: String = savedStateHandle.get<String>(REPOSITORY_NAME_KEY).orEmpty()
     val currentRepositoryId: Int? get() = repositoryId.value
 
-    val pullRequests: Flow<PagingData<UiGitHubPullRequest>> = combine(pullUrl, repositoryId) { currentPullUrl, currentRepositoryId ->
-        if (currentPullUrl == null || currentRepositoryId == null) {
-            null
-        } else {
-            PullRequestsRequest(
-                pullUrl = currentPullUrl,
-                repositoryId = currentRepositoryId,
-            )
-        }
-    }
-        .filterNotNull()
-        .distinctUntilChanged()
-        .flatMapLatest { request ->
-            getPullRequestsUseCase.loadPullRequests(
-                pullUrl = request.pullUrl,
-                repositoryId = request.repositoryId,
-            ).map { pagingData ->
-                pagingData.map(pullRequestUiMapper::mapToUi)
+    val pullRequests: Flow<PagingData<UiGitHubPullRequest>> =
+        combine(pullUrl, repositoryId) { currentPullUrl, currentRepositoryId ->
+            if (currentPullUrl == null || currentRepositoryId == null) {
+                null
+            } else {
+                PullRequestsRequest(
+                    pullUrl = currentPullUrl,
+                    repositoryId = currentRepositoryId,
+                )
             }
         }
-        .cachedIn(viewModelScope)
+            .filterNotNull()
+            .distinctUntilChanged()
+            .flatMapLatest { request ->
+                getPullRequestsUseCase.loadPullRequests(
+                    pullUrl = request.pullUrl,
+                    repositoryId = request.repositoryId,
+                ).map { pagingData ->
+                    pagingData.map(pullRequestUiMapper::mapToUi)
+                }
+            }
+            .cachedIn(viewModelScope)
 
     fun loadList(pullUrl: String, repositoryId: Int, repositoryName: String? = null) {
         savedStateHandle[PULL_URL_KEY] = pullUrl

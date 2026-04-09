@@ -16,14 +16,36 @@
 default_platform(:android)
 
 platform :android do
+  private_lane :run_gradle_from_root do |options|
+    sh("cd .. && ./gradlew --no-daemon #{options[:task]}")
+  end
+
+  desc "Runs spotless formatting validation"
+  lane :lint do
+    run_gradle_from_root(task: "spotlessCheck")
+  end
+
   desc "Runs all the tests for all variants"
   lane :test do
-    gradle(task: "test")
+    run_gradle_from_root(task: "test")
+  end
+
+  desc "Verifies JaCoCo coverage for all modules configured with the coverage plugin"
+  lane :coverage do
+    run_gradle_from_root(task: "jacocoTestCoverageVerification")
   end
 
   desc "Assemble main outputs for all the variants"
   lane :assemble do
-    gradle(task: "assemble")
+    run_gradle_from_root(task: "assemble")
+  end
+
+  desc "Runs the main CI quality gates in order"
+  lane :ci do
+    lint
+    test
+    coverage
+    assemble
   end
 
   desc "Submit a new Beta Build to Crashlytics Beta"

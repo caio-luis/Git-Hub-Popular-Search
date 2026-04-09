@@ -22,4 +22,3 @@
 
 -keepattributes *Annotation*, InnerClasses
 -dontwarn java.lang.invoke.StringConcatFactory
-

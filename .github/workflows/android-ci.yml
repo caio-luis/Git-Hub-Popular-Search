@@ -5,9 +5,24 @@ on:
     branches: [ master ]
   pull_request:
 
+concurrency:
+  group: android-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  HOST_GRADLE_CACHE: /media/caio-luis/hdzao/.gradle
+  HOST_BUNDLE_CACHE: /media/caio-luis/hdzao/bundle
+  CONTAINER_GRADLE_CACHE: /root/.gradle
+  CONTAINER_BUNDLE_CACHE: /bundle
+
 jobs:
   assemble_and_test:
     runs-on: self-hosted
+    timeout-minutes: 90
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
 
     steps:
       # ── Fix permissions BEFORE checkout ────────────────────────────────
@@ -26,8 +41,8 @@ jobs:
       # No external BuildKit builder is created, so there is no socket lookup.
       - name: Ensure host cache directories exist
         run: |
-          mkdir -p /media/caio-luis/hdzao/.gradle
-          mkdir -p /media/caio-luis/hdzao/bundle
+          mkdir -p "${HOST_GRADLE_CACHE}"
+          mkdir -p "${HOST_BUNDLE_CACHE}"
 
       - name: Build CI Docker image
         run: |
@@ -41,21 +56,80 @@ jobs:
       #   /root/.gradle         – Gradle wrapper + dependency cache (persistent)
       #   /bundle               – Bundler gem cache (persistent)
       # BUNDLE_PATH=/bundle tells Bundler where to install / look for gems.
-      - name: Run CI inside Docker container
+      - name: Run Spotless checks inside Docker container
         run: |
           docker run --rm \
+            --init \
+            --tmpfs /tmp:exec,mode=1777 \
             -v "${{ github.workspace }}:/workspace" \
-            -v "/media/caio-luis/hdzao/.gradle:/root/.gradle" \
-            -v "/media/caio-luis/hdzao/bundle:/bundle" \
-            -e BUNDLE_PATH=/bundle \
+            -v "${HOST_GRADLE_CACHE}:${CONTAINER_GRADLE_CACHE}" \
+            -v "${HOST_BUNDLE_CACHE}:${CONTAINER_BUNDLE_CACHE}" \
+            -e GRADLE_USER_HOME="${CONTAINER_GRADLE_CACHE}" \
+            -e BUNDLE_PATH="${CONTAINER_BUNDLE_CACHE}" \
             -w /workspace \
             ci-android:latest \
             bash -c "
               set -euo pipefail
               chmod +x gradlew
-              bundle install --jobs 4 --retry 3
-              bundle exec fastlane assemble
-              bundle exec fastlane test
+              bundle check || bundle install --jobs 4 --retry 3
+              bundle exec fastlane android lint
+            "
+
+      - name: Run tests inside Docker container
+        run: |
+          docker run --rm \
+            --init \
+            --tmpfs /tmp:exec,mode=1777 \
+            -v "${{ github.workspace }}:/workspace" \
+            -v "${HOST_GRADLE_CACHE}:${CONTAINER_GRADLE_CACHE}" \
+            -v "${HOST_BUNDLE_CACHE}:${CONTAINER_BUNDLE_CACHE}" \
+            -e GRADLE_USER_HOME="${CONTAINER_GRADLE_CACHE}" \
+            -e BUNDLE_PATH="${CONTAINER_BUNDLE_CACHE}" \
+            -w /workspace \
+            ci-android:latest \
+            bash -c "
+              set -euo pipefail
+              chmod +x gradlew
+              bundle check || bundle install --jobs 4 --retry 3
+              bundle exec fastlane android test
+            "
+
+      - name: Run JaCoCo coverage verification inside Docker container
+        run: |
+          docker run --rm \
+            --init \
+            --tmpfs /tmp:exec,mode=1777 \
+            -v "${{ github.workspace }}:/workspace" \
+            -v "${HOST_GRADLE_CACHE}:${CONTAINER_GRADLE_CACHE}" \
+            -v "${HOST_BUNDLE_CACHE}:${CONTAINER_BUNDLE_CACHE}" \
+            -e GRADLE_USER_HOME="${CONTAINER_GRADLE_CACHE}" \
+            -e BUNDLE_PATH="${CONTAINER_BUNDLE_CACHE}" \
+            -w /workspace \
+            ci-android:latest \
+            bash -c "
+              set -euo pipefail
+              chmod +x gradlew
+              bundle check || bundle install --jobs 4 --retry 3
+              bundle exec fastlane android coverage
+            "
+
+      - name: Run assemble inside Docker container
+        run: |
+          docker run --rm \
+            --init \
+            --tmpfs /tmp:exec,mode=1777 \
+            -v "${{ github.workspace }}:/workspace" \
+            -v "${HOST_GRADLE_CACHE}:${CONTAINER_GRADLE_CACHE}" \
+            -v "${HOST_BUNDLE_CACHE}:${CONTAINER_BUNDLE_CACHE}" \
+            -e GRADLE_USER_HOME="${CONTAINER_GRADLE_CACHE}" \
+            -e BUNDLE_PATH="${CONTAINER_BUNDLE_CACHE}" \
+            -w /workspace \
+            ci-android:latest \
+            bash -c "
+              set -euo pipefail
+              chmod +x gradlew
+              bundle check || bundle install --jobs 4 --retry 3
+              bundle exec fastlane android assemble
             "
 
       # ── Fix permissions AFTER Docker ───────────────────────────────────
@@ -65,4 +139,15 @@ jobs:
           docker run --rm \
             -v "${{ github.workspace }}:/workspace" \
             alpine chown -R $(id -u):$(id -g) /workspace
+
+      - name: Upload test and coverage reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-ci-reports-${{ github.run_number }}
+          if-no-files-found: ignore
+          path: |
+            **/build/reports/tests/**
+            **/build/test-results/**
+            **/build/reports/jacoco/**
 
