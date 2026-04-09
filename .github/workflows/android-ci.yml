@@ -12,7 +12,10 @@ jobs:
     steps:
       # ── Fix permissions BEFORE checkout ────────────────────────────────
       - name: Fix workspace ownership (pre-checkout)
-        run: sudo chown -R $(id -u):$(id -g) "${{ github.workspace }}" || true
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}:/workspace" \
+            alpine chown -R $(id -u):$(id -g) /workspace || true
 
       - name: Checkout
         uses: actions/checkout@v4
@@ -58,5 +61,8 @@ jobs:
       # ── Fix permissions AFTER Docker ───────────────────────────────────
       - name: Fix workspace ownership (post-docker)
         if: always()
-        run: sudo chown -R $(id -u):$(id -g) "${{ github.workspace }}"
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}:/workspace" \
+            alpine chown -R $(id -u):$(id -g) /workspace
 
