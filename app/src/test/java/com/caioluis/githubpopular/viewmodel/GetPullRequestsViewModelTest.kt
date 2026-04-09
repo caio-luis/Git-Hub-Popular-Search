@@ -2,6 +2,7 @@ package com.caioluis.githubpopular.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.paging.PagingData
+import com.caioluis.githubpopular.core.common.exception.AppException
 import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.domain.bridge.usecase.GetPullRequestsUseCase
 import com.caioluis.githubpopular.githubpulls.mapper.PullRequestUiMapper
@@ -19,6 +20,7 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
@@ -116,5 +118,41 @@ class GetPullRequestsViewModelTest {
         }
 
         job.cancel()
+    }
+
+    @Test
+    fun `repository metadata should be initialized from saved state and repository id should update`() {
+        assertEquals("repo", viewModel.repositoryName)
+        assertEquals(Fixtures.REPOSITORY_ID, viewModel.currentRepositoryId)
+
+        viewModel.loadList(
+            pullUrl = "https://api.github.com/repos/user/new-repo/pulls",
+            repositoryId = 999,
+            repositoryName = "new-repo",
+        )
+
+        assertEquals(999, viewModel.currentRepositoryId)
+        assertEquals("repo", viewModel.repositoryName)
+    }
+
+    @Test
+    fun `mapToAppException should return same instance when throwable is already AppException`() {
+        val appException = AppException.TimeoutException(Throwable("timeout"))
+
+        val result = viewModel.mapToAppException(appException)
+
+        assertEquals(appException, result)
+    }
+
+    @Test
+    fun `mapToAppException should delegate to mapper for non app exceptions`() {
+        val throwable = IllegalArgumentException("invalid")
+        val mapped = AppException.UnknownException(throwable)
+        every { errorMapper.map(throwable) } returns mapped
+
+        val result = viewModel.mapToAppException(throwable)
+
+        assertEquals(mapped, result)
+        verify(exactly = 1) { errorMapper.map(throwable) }
     }
 }

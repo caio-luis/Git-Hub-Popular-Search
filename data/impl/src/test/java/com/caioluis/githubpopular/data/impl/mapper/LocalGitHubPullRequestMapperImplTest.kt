@@ -24,4 +24,18 @@ class LocalGitHubPullRequestMapperImplTest {
         assertEquals(2, mapped.orderInPage)
         assertEquals(domain.title, mapped.title)
     }
+
+    @Test
+    fun `local pull request mapper should map local to domain`() {
+        val local = Fixtures.createLocalGitHubPullRequest(id = 99L, repositoryId = 9)
+
+        val mapped = localGitHubPullRequestMapper.mapToDomain(local)
+
+        assertEquals(local.id, mapped.id)
+        assertEquals(local.htmlUrl, mapped.htmlUrl)
+        assertEquals(local.title, mapped.title)
+        assertEquals(local.body, mapped.body)
+        assertEquals(local.userName, mapped.userName)
+        assertEquals(local.avatarUrl, mapped.avatarUrl)
+    }
 }

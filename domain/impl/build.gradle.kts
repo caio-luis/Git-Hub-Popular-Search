@@ -1,5 +1,6 @@
 plugins {
     id("githubpopular.jvm.library")
+    id("githubpopular.jacoco")
     alias(libs.plugins.ksp.plugin)
 }
 

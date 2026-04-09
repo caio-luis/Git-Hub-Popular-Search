@@ -10,6 +10,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertThrows
 import org.junit.Before
 import org.junit.Test
 
@@ -101,8 +102,8 @@ class GithubReposRemoteSourceTest {
         }
     }
 
-    @Test(expected = Exception::class)
-    fun `fetchFromRemote should throw exception when service throws exception`() = runTest {
+    @Test
+    fun `fetchFromRemote should throw exception when service throws exception`() {
         coEvery {
             gitHubRepositoriesService.getGitHubRepositories(
                 language = any(),
@@ -111,6 +112,10 @@ class GithubReposRemoteSourceTest {
             )
         } throws Exception("Network error")
 
-        remoteSource.fetchFromRemote(Fixtures.STARTING_PAGE, Fixtures.DEFAULT_LANGUAGE)
+        assertThrows(Exception::class.java) {
+            runTest {
+                remoteSource.fetchFromRemote(Fixtures.STARTING_PAGE, Fixtures.DEFAULT_LANGUAGE)
+            }
+        }
     }
 }

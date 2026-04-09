@@ -2,6 +2,8 @@ package com.caioluis.githubpopular.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.paging.PagingData
+import com.caioluis.githubpopular.Constants
+import com.caioluis.githubpopular.core.common.exception.AppException
 import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.domain.bridge.usecase.GetRepositoriesUseCase
 import com.caioluis.githubpopular.githubrepos.mapper.UiGitHubRepoMapper
@@ -85,5 +87,31 @@ class GetRepositoriesViewModelTest {
         verify(exactly = 1) { getRepositoriesUseCase.loadRepositories(newLanguage) }
 
         job.cancel()
+    }
+
+    @Test
+    fun `mapToAppException should return same instance when throwable is already AppException`() {
+        val appException = AppException.NetworkException(Throwable("network"))
+
+        val result = viewModel.mapToAppException(appException)
+
+        assertEquals(appException, result)
+    }
+
+    @Test
+    fun `mapToAppException should delegate to ErrorMapper for non app exceptions`() {
+        val throwable = IllegalStateException("boom")
+        val mapped = AppException.UnknownException(throwable)
+        every { errorMapper.map(throwable) } returns mapped
+
+        val result = viewModel.mapToAppException(throwable)
+
+        assertEquals(mapped, result)
+        verify(exactly = 1) { errorMapper.map(throwable) }
+    }
+
+    @Test
+    fun `defaultLanguage should return first configured language`() {
+        assertEquals(Constants.languages.first(), viewModel.defaultLanguage())
     }
 }

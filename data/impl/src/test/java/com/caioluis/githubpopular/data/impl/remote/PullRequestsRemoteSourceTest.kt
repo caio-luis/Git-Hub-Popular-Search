@@ -7,6 +7,7 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Test
 
 class PullRequestsRemoteSourceTest {
@@ -29,8 +30,8 @@ class PullRequestsRemoteSourceTest {
         assertEquals(expected, result)
     }
 
-    @Test(expected = Exception::class)
-    fun `fetchPullRequests throws exception when service fails`() = runTest {
+    @Test
+    fun `fetchPullRequests throws exception when service fails`() {
         // Arrange
         val url = "https://api.github.com/repos/owner/repo/pulls"
         val page = 1
@@ -38,7 +39,11 @@ class PullRequestsRemoteSourceTest {
 
         coEvery { service.getPullRequests(url, page) } throws exception
 
-        // Act
-        remoteSource.fetchPullRequests(url, page)
+        // Act + Assert
+        assertThrows(Exception::class.java) {
+            runTest {
+                remoteSource.fetchPullRequests(url, page)
+            }
+        }
     }
 }
