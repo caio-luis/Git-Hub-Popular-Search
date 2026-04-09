@@ -10,10 +10,14 @@ jobs:
     runs-on: self-hosted
 
     steps:
+      # ── Fix permissions BEFORE checkout ────────────────────────────────
+      - name: Fix workspace ownership (pre-checkout)
+        run: sudo chown -R $(id -u):$(id -g) "${{ github.workspace }}" || true
+
       - name: Checkout
         uses: actions/checkout@v4
 
-      # ── Docker image ──────────────────────────────────────────────────────
+      # ── Docker image ───────────────────────────────────────────────────────
       # Plain `docker build` uses Docker's own overlay layer cache, which is
       # already persistent on the self-hosted machine between runs.
       # No external BuildKit builder is created, so there is no socket lookup.
@@ -28,7 +32,7 @@ jobs:
             --tag ci-android:latest \
             .github/docker
 
-      # ── CI steps (all run inside the container) ───────────────────────────
+      # ── CI steps (all run inside the container) ────────────────────────────
       # Volumes:
       #   /workspace            – project source (read/write)
       #   /root/.gradle         – Gradle wrapper + dependency cache (persistent)
@@ -50,3 +54,9 @@ jobs:
               bundle exec fastlane assemble
               bundle exec fastlane test
             "
+
+      # ── Fix permissions AFTER Docker ───────────────────────────────────
+      - name: Fix workspace ownership (post-docker)
+        if: always()
+        run: sudo chown -R $(id -u):$(id -g) "${{ github.workspace }}"
+
