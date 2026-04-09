@@ -17,4 +17,3 @@
 -keepclasseswithmembers class com.caioluis.githubpopular.data.bridge.remote.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
-
