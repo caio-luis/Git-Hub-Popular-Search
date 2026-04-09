@@ -4,6 +4,7 @@ import kotlinx.serialization.SerializationException
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import retrofit2.HttpException
@@ -26,7 +27,7 @@ class ErrorMapperTest {
     fun `map SocketTimeoutException to TimeoutException`() {
         val throwable = SocketTimeoutException("Timeout occurred")
         val result = errorMapper.map(throwable)
-        assert(result is AppException.TimeoutException)
+        assertTrue(result is AppException.TimeoutException)
         assertEquals(throwable, result.cause)
     }
 
@@ -34,7 +35,7 @@ class ErrorMapperTest {
     fun `map ConnectException to NetworkException`() {
         val throwable = ConnectException("Connection refused")
         val result = errorMapper.map(throwable)
-        assert(result is AppException.NetworkException)
+        assertTrue(result is AppException.NetworkException)
         assertEquals(throwable, result.cause)
     }
 
@@ -42,7 +43,7 @@ class ErrorMapperTest {
     fun `map UnknownHostException to NetworkException`() {
         val throwable = UnknownHostException("Unknown host")
         val result = errorMapper.map(throwable)
-        assert(result is AppException.NetworkException)
+        assertTrue(result is AppException.NetworkException)
         assertEquals(throwable, result.cause)
     }
 
@@ -50,7 +51,7 @@ class ErrorMapperTest {
     fun `map IOException to NetworkException`() {
         val throwable = IOException("IO error")
         val result = errorMapper.map(throwable)
-        assert(result is AppException.NetworkException)
+        assertTrue(result is AppException.NetworkException)
         assertEquals(throwable, result.cause)
     }
 
@@ -60,7 +61,7 @@ class ErrorMapperTest {
         for (statusCode in statusCodes) {
             val httpException = createHttpException(statusCode)
             val result = errorMapper.map(httpException)
-            assert(result is AppException.ServerException)
+            assertTrue(result is AppException.ServerException)
         }
     }
 
@@ -68,7 +69,7 @@ class ErrorMapperTest {
     fun `map SerializationException to ParsingException`() {
         val throwable = SerializationException("Invalid JSON")
         val result = errorMapper.map(throwable)
-        assert(result is AppException.ParsingException)
+        assertTrue(result is AppException.ParsingException)
         assertEquals(throwable, result.cause)
     }
 
@@ -76,7 +77,7 @@ class ErrorMapperTest {
     fun `map unknown exception to UnknownException`() {
         val throwable = RuntimeException("Some unknown error")
         val result = errorMapper.map(throwable)
-        assert(result is AppException.UnknownException)
+        assertTrue(result is AppException.UnknownException)
         assertEquals(throwable, result.cause)
     }
 
@@ -84,7 +85,7 @@ class ErrorMapperTest {
     fun `map null pointer exception to UnknownException`() {
         val throwable = NullPointerException("Null pointer")
         val result = errorMapper.map(throwable)
-        assert(result is AppException.UnknownException)
+        assertTrue(result is AppException.UnknownException)
         assertNotNull(result.cause)
     }
 
@@ -92,7 +93,7 @@ class ErrorMapperTest {
     fun `map IllegalArgumentException to UnknownException`() {
         val throwable = IllegalArgumentException("Invalid argument")
         val result = errorMapper.map(throwable)
-        assert(result is AppException.UnknownException)
+        assertTrue(result is AppException.UnknownException)
         assertEquals(throwable, result.cause)
     }
 

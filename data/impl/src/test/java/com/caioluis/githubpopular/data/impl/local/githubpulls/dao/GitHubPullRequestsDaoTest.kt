@@ -109,6 +109,23 @@ class GitHubPullRequestsDaoTest {
         assertEquals(listOf(pageOneFirstItem, pageOneSecondItem, pageTwoItem), result)
     }
 
+    @Test
+    fun `countPullRequestsByRepositoryId should return only items from selected repository`() = runTest {
+        val repo1Id = 1
+        val repo2Id = 2
+        dao.savePullRequests(
+            listOf(
+                Fixtures.createLocalGitHubPullRequest(id = 1L, repositoryId = repo1Id),
+                Fixtures.createLocalGitHubPullRequest(id = 2L, repositoryId = repo1Id),
+                Fixtures.createLocalGitHubPullRequest(id = 3L, repositoryId = repo2Id),
+            ),
+        )
+
+        val result = dao.countPullRequestsByRepositoryId(repo1Id)
+
+        assertEquals(2, result)
+    }
+
     private suspend fun loadPagedData(repositoryId: Int): List<LocalGitHubPullRequest> {
         val pagingSource = dao.getPagedPullRequests(repositoryId)
         val loadResult = pagingSource.load(

@@ -17,7 +17,7 @@ class StringExtensionsTest {
     }
 
     @Test
-    fun `truncate should return original string when length is equal to limit`() {
+    fun `truncate should append ellipsis when length is equal to limit`() {
         val input = "12345"
         val limit = 5
         val expected = "12345..."
@@ -36,5 +36,19 @@ class StringExtensionsTest {
         val result = input.truncate(limit)
 
         assertEquals(expected, result)
+    }
+
+    @Test
+    fun `truncate should return empty string when input is empty and limit is greater than zero`() {
+        val result = "".truncate(limit = 10)
+
+        assertEquals("", result)
+    }
+
+    @Test
+    fun `truncate should return ellipsis when limit is zero`() {
+        val result = "abc".truncate(limit = 0)
+
+        assertEquals("...", result)
     }
 }

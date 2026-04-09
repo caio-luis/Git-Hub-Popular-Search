@@ -1,5 +1,6 @@
 plugins {
     id("githubpopular.android.application")
+    id("githubpopular.jacoco")
     alias(libs.plugins.ksp.plugin)
     alias(libs.plugins.hilt.android)
     alias(libs.plugins.kotlin.compose)

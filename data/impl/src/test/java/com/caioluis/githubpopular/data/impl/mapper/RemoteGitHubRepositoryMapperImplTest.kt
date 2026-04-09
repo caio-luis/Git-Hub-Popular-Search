@@ -37,4 +37,27 @@ class RemoteGitHubRepositoryMapperImplTest {
         assertEquals(2, mapped.page)
         assertEquals("Java", mapped.language)
     }
+
+    @Test
+    fun `remote repository mapper should map all available fields`() {
+        val remote = Fixtures.createRemoteGitHubRepository(id = 77)
+
+        val mapped = remoteGitHubRepositoryMapper.mapToDomain(
+            remoteRepository = remote,
+            page = 4,
+            language = "Kotlin",
+        )
+
+        assertEquals(77, mapped.id)
+        assertEquals(remote.name, mapped.title)
+        assertEquals(remote.description, mapped.description)
+        assertEquals(remote.pullsUrl, mapped.pullsUrl)
+        assertEquals(remote.stargazersCount, mapped.stargazersCount)
+        assertEquals(remote.forksCount, mapped.forksCount)
+        assertEquals(remote.htmlUrl, mapped.htmlUrl)
+        assertEquals(remote.owner?.login, mapped.userName)
+        assertEquals(remote.owner?.avatarUrl, mapped.avatarUrl)
+        assertEquals(4, mapped.page)
+        assertEquals("Kotlin", mapped.language)
+    }
 }

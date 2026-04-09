@@ -1,5 +1,6 @@
 plugins {
     id("githubpopular.android.library")
+    id("githubpopular.jacoco")
     alias(libs.plugins.ksp.plugin)
     alias(libs.plugins.hilt.android)
 }
@@ -26,4 +27,6 @@ dependencies {
 
     testImplementation(libs.mockk)
     testImplementation(libs.junit)
+    testImplementation(libs.android.test.core)
+    testImplementation(libs.robolectric)
 }

@@ -26,4 +26,13 @@ class PullRequestUiMapperImplTest {
         assertEquals(203, mapped.body.length)
         assertTrue(mapped.body.endsWith("..."))
     }
+
+    @Test
+    fun mapToUiShouldKeepBodyWhenUnderLimit() {
+        val source = Fixtures.createDomainGitHubPullRequest().copy(body = "short body")
+
+        val mapped = mapper.mapToUi(source)
+
+        assertEquals("short body", mapped.body)
+    }
 }

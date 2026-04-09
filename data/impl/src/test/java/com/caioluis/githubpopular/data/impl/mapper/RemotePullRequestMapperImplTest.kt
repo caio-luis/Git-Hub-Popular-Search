@@ -27,4 +27,18 @@ class RemotePullRequestMapperImplTest {
         assertEquals("", mapped.userName)
         assertEquals("", mapped.avatarUrl)
     }
+
+    @Test
+    fun `remote pull request mapper should map all available fields`() {
+        val remote = Fixtures.createRemotePullRequest(id = 88L)
+
+        val mapped = remotePullRequestMapper.mapToDomain(remote)
+
+        assertEquals(88L, mapped.id)
+        assertEquals(remote.url, mapped.htmlUrl)
+        assertEquals(remote.title, mapped.title)
+        assertEquals(remote.body, mapped.body)
+        assertEquals(remote.user?.login, mapped.userName)
+        assertEquals(remote.user?.avatarUrl, mapped.avatarUrl)
+    }
 }

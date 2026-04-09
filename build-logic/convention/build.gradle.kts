@@ -25,5 +25,9 @@ gradlePlugin {
             id = "githubpopular.jvm.library"
             implementationClass = "JvmLibraryConventionPlugin"
         }
+        register("jacocoConvention") {
+            id = "githubpopular.jacoco"
+            implementationClass = "JacocoConventionPlugin"
+        }
     }
 }

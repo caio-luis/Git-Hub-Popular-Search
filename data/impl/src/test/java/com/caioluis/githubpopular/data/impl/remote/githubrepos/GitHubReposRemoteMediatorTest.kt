@@ -126,6 +126,44 @@ class GitHubReposRemoteMediatorTest {
     }
 
     @Test
+    fun `load APPEND with data should keep pagination open and persist mapped entities`() = runTest {
+        val nextPage = 2
+        val remoteKey = Fixtures.createRemoteKey(nextPage = nextPage)
+        val remoteRepository = Fixtures.createRemoteGitHubRepository(id = 7)
+
+        coEvery { remoteKeysDao.remoteKeyByQuery(Fixtures.DEFAULT_LANGUAGE) } returns remoteKey
+        coEvery {
+            remoteSource.fetchFromRemote(nextPage, Fixtures.DEFAULT_LANGUAGE)
+        } returns listOf(remoteRepository)
+
+        val result = mediator.load(LoadType.APPEND, pagingState)
+
+        assertTrue(result is RemoteMediator.MediatorResult.Success)
+        assertTrue(!(result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
+
+        coVerify { remoteKeysDao.insertOrReplace(Fixtures.createRemoteKey(nextPage = 3)) }
+        coVerify {
+            gitHubRepositoriesDao.saveRepositories(
+                listOf(
+                    LocalGitHubRepository(
+                        id = 7,
+                        title = "Repo 7",
+                        description = "Description",
+                        pullsUrl = "https://api.github.com/repos/user/repo7/pulls",
+                        stargazersCount = 100,
+                        forksCount = 10,
+                        repositoryUrl = "https://github.com/user/repo7",
+                        page = nextPage,
+                        language = Fixtures.DEFAULT_LANGUAGE,
+                        userName = "user",
+                        avatarUrl = "avatar",
+                    ),
+                ),
+            )
+        }
+    }
+
+    @Test
     fun `load REFRESH successfully should clear database and save new data`() = runTest {
         coEvery {
             remoteSource.fetchFromRemote(
@@ -143,6 +181,44 @@ class GitHubReposRemoteMediatorTest {
         coVerify { gitHubRepositoriesDao.clearRepositories(Fixtures.DEFAULT_LANGUAGE) }
         coVerify { remoteKeysDao.insertOrReplace(Fixtures.createRemoteKey(nextPage = null)) }
         coVerify { gitHubRepositoriesDao.saveRepositories(emptyList()) }
+    }
+
+    @Test
+    fun `load REFRESH with data should save mapped entities and set next page`() = runTest {
+        val remoteRepository = Fixtures.createRemoteGitHubRepository(id = 21)
+
+        coEvery {
+            remoteSource.fetchFromRemote(
+                Fixtures.STARTING_PAGE,
+                Fixtures.DEFAULT_LANGUAGE,
+            )
+        } returns listOf(remoteRepository)
+
+        val result = mediator.load(LoadType.REFRESH, pagingState)
+
+        assertTrue(result is RemoteMediator.MediatorResult.Success)
+        assertTrue(!(result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
+
+        coVerify { remoteKeysDao.insertOrReplace(Fixtures.createRemoteKey(nextPage = 2)) }
+        coVerify {
+            gitHubRepositoriesDao.saveRepositories(
+                listOf(
+                    LocalGitHubRepository(
+                        id = 21,
+                        title = "Repo 21",
+                        description = "Description",
+                        pullsUrl = "https://api.github.com/repos/user/repo21/pulls",
+                        stargazersCount = 100,
+                        forksCount = 10,
+                        repositoryUrl = "https://github.com/user/repo21",
+                        page = Fixtures.STARTING_PAGE,
+                        language = Fixtures.DEFAULT_LANGUAGE,
+                        userName = "user",
+                        avatarUrl = "avatar",
+                    ),
+                ),
+            )
+        }
     }
 
     @Test
