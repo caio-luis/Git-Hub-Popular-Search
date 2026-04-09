@@ -1,102 +1,60 @@
 package com.caioluis.githubpopular.data.impl.remote.githubrepos
 
+import androidx.paging.ExperimentalPagingApi
+import com.caioluis.githubpopular.data.bridge.mappers.LocalGitHubPullRequestMapper
 import com.caioluis.githubpopular.data.impl.Fixtures
-import com.caioluis.githubpopular.data.impl.local.githubpulls.PullRequestsLocalSource
-import com.caioluis.githubpopular.data.impl.remote.githubpullrequests.PullRequestsRemoteSource
-import com.caioluis.githubpopular.data.impl.remote.githubpullrequests.repository.GitHubPullRequestsRepositoryImpl
-import io.mockk.coEvery
-import io.mockk.coVerify
+import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
+import com.caioluis.githubpopular.data.impl.remote.githubpulls.GitHubPullRequestsRemoteMediator
+import com.caioluis.githubpopular.data.impl.remote.githubpulls.GithubPullRequestsRemoteMediatorFactory
+import com.caioluis.githubpopular.data.impl.remote.githubpulls.repository.GitHubPullRequestsRepositoryImpl
+import io.mockk.every
 import io.mockk.mockk
-import kotlinx.coroutines.test.runTest
-import org.junit.Assert
+import io.mockk.verify
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 
+@OptIn(ExperimentalPagingApi::class)
 class GitHubPullRequestsRepositoryTest {
 
-    private val remoteSource = mockk<PullRequestsRemoteSource>()
-    private val localSource = mockk<PullRequestsLocalSource>()
+    private val localDatabase = mockk<GitHubReposDataBase>()
+    private val remoteMediatorFactory = mockk<GithubPullRequestsRemoteMediatorFactory>()
+    private val localGitHubPullRequestMapper = mockk<LocalGitHubPullRequestMapper>()
+    private val remoteMediator = mockk<GitHubPullRequestsRemoteMediator>()
+
     private lateinit var repository: GitHubPullRequestsRepositoryImpl
 
     @Before
     fun setUp() {
-        repository = GitHubPullRequestsRepositoryImpl(remoteSource, localSource)
+        repository = GitHubPullRequestsRepositoryImpl(
+            localDatabase = localDatabase,
+            remoteMediatorFactory = remoteMediatorFactory,
+            localGitHubPullRequestMapper = localGitHubPullRequestMapper,
+        )
     }
 
     @Test
-    fun `getPullRequests returns data from remote and saves to local`() = runTest {
-        // Arrange
+    fun `getPullRequests should create paged flow using remote mediator factory`() {
         val pullUrl = "http://pull-url"
-        val repositoryId = 1
-        val page = 1
-        val remotePullRequest = Fixtures.createRemotePullRequest()
-        val domainPullRequest = Fixtures.domainGitHubPullRequest
-        val expected = listOf(domainPullRequest)
-        val remoteList = listOf(remotePullRequest)
+        val repositoryId = Fixtures.REPOSITORY_ID
 
-        coEvery { remoteSource.fetchPullRequests(pullUrl, page) } returns remoteList
-        coEvery { localSource.saveToLocalCache(any(), any()) } returns Unit
+        every {
+            remoteMediatorFactory.create(
+                pullUrl = pullUrl,
+                repositoryId = repositoryId,
+            )
+        } returns remoteMediator
+        every { localDatabase.gitHubPullRequestsDao() } returns mockk(relaxed = true)
 
-        // Act
-        val result = repository.getPullRequests(pullUrl, repositoryId, page)
+        val result = repository.getPullRequests(pullUrl, repositoryId)
 
-        // Assert
-        Assert.assertEquals(expected.first().id, result.first().id)
-        Assert.assertEquals(expected.first().title, result.first().title)
-        coVerify(exactly = 1) { remoteSource.fetchPullRequests(pullUrl, page) }
-        coVerify(exactly = 1) { localSource.saveToLocalCache(any(), repositoryId) }
-    }
+        assertNotNull(result)
 
-    @Test
-    fun `getPullRequests returns data from local when remote fails`() = runTest {
-        // Arrange
-        val pullUrl = "http://pull-url"
-        val repositoryId = 1
-        val page = 1
-        val expected = listOf(Fixtures.domainGitHubPullRequest)
-
-        coEvery { remoteSource.fetchPullRequests(pullUrl, page) } throws Exception("Remote error")
-        coEvery { localSource.getFromCache(repositoryId) } returns expected
-
-        // Act
-        val result = repository.getPullRequests(pullUrl, repositoryId, page)
-
-        // Assert
-        Assert.assertEquals(expected, result)
-        coVerify(exactly = 1) { remoteSource.fetchPullRequests(pullUrl, page) }
-        coVerify(exactly = 1) { localSource.getFromCache(repositoryId) }
-    }
-
-    @Test(expected = Exception::class)
-    fun `getPullRequests throws exception when both remote and local fail`() = runTest {
-        // Arrange
-        val pullUrl = "http://pull-url"
-        val repositoryId = 1
-        val page = 1
-        val exception = Exception("Remote error")
-
-        coEvery { remoteSource.fetchPullRequests(pullUrl, page) } throws exception
-        coEvery { localSource.getFromCache(repositoryId) } returns emptyList()
-
-        // Act
-        repository.getPullRequests(pullUrl, repositoryId, page)
-    }
-
-    @Test
-    fun `getPullRequests returns empty list when remote returns empty list`() = runTest {
-        // Arrange
-        val pullUrl = "http://pull-url"
-        val repositoryId = 1
-        val page = 1
-
-        coEvery { remoteSource.fetchPullRequests(pullUrl, page) } returns emptyList()
-
-        // Act
-        val result = repository.getPullRequests(pullUrl, repositoryId, page)
-
-        // Assert
-        Assert.assertTrue(result.isEmpty())
-        coVerify(exactly = 1) { remoteSource.fetchPullRequests(pullUrl, page) }
-        coVerify(exactly = 0) { localSource.getFromCache(any()) }
+        verify(exactly = 1) {
+            remoteMediatorFactory.create(
+                pullUrl = pullUrl,
+                repositoryId = repositoryId,
+            )
+        }
     }
 }

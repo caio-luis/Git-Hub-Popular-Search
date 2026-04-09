@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.data.bridge.remote.model
+package com.caioluis.githubpopular.data.bridge.remote.githubrepos.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

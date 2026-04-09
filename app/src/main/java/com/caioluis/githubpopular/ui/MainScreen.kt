@@ -11,6 +11,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -61,10 +62,21 @@ fun MainScreen(
                 .fillMaxSize(),
         ) {
             val refreshState = repositories.loadState.refresh
+            var stickyRefreshError by remember(selectedLanguage) { mutableStateOf<Throwable?>(null) }
 
-            if (refreshState is LoadState.Error && repositories.itemCount == 0) {
+            LaunchedEffect(refreshState, repositories.itemCount) {
+                stickyRefreshError = resolveStickyRefreshError(
+                    currentError = stickyRefreshError,
+                    refreshState = refreshState,
+                    itemCount = repositories.itemCount,
+                )
+            }
+
+            val errorToShow = (refreshState as? LoadState.Error)?.error ?: stickyRefreshError
+
+            if (repositories.itemCount == 0 && errorToShow != null) {
                 ErrorContent(
-                    error = refreshState.error,
+                    error = errorToShow,
                     onRetry = { repositories.retry() },
                 )
             } else {
@@ -76,5 +88,19 @@ fun MainScreen(
                 }
             }
         }
+    }
+}
+
+internal fun resolveStickyRefreshError(
+    currentError: Throwable?,
+    refreshState: LoadState,
+    itemCount: Int,
+): Throwable? {
+    if (itemCount > 0) return null
+
+    return when (refreshState) {
+        is LoadState.Error -> refreshState.error
+        is LoadState.NotLoading -> null
+        is LoadState.Loading -> currentError
     }
 }

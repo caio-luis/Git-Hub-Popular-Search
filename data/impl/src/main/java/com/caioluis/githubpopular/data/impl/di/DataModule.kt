@@ -4,16 +4,22 @@ import android.content.Context
 import com.caioluis.githubpopular.core.common.ServiceBuilder
 import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.core.common.exception.ErrorMapperImpl
+import com.caioluis.githubpopular.data.bridge.mappers.LocalGitHubPullRequestMapper
+import com.caioluis.githubpopular.data.bridge.mappers.LocalGitHubRepositoryMapper
+import com.caioluis.githubpopular.data.bridge.mappers.RemoteGitHubRepositoryMapper
+import com.caioluis.githubpopular.data.bridge.mappers.RemotePullRequestMapper
 import com.caioluis.githubpopular.data.impl.BuildConfig
 import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
-import com.caioluis.githubpopular.data.impl.local.githubpulls.PullRequestsLocalSource
-import com.caioluis.githubpopular.data.impl.local.githubpulls.PullRequestsLocalSourceImpl
 import com.caioluis.githubpopular.data.impl.local.githubpulls.dao.GitHubPullRequestsDao
 import com.caioluis.githubpopular.data.impl.local.githubrepos.dao.GitHubRepositoriesDao
+import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubPullRequestMapperImpl
+import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubRepositoryMapperImpl
+import com.caioluis.githubpopular.data.impl.mapper.RemoteGitHubRepositoryMapperImpl
+import com.caioluis.githubpopular.data.impl.mapper.RemotePullRequestMapperImpl
 import com.caioluis.githubpopular.data.impl.remote.githubpullrequests.PullRequestsRemoteSource
 import com.caioluis.githubpopular.data.impl.remote.githubpullrequests.PullRequestsRemoteSourceImpl
-import com.caioluis.githubpopular.data.impl.remote.githubpullrequests.repository.GitHubPullRequestsRepositoryImpl
-import com.caioluis.githubpopular.data.impl.remote.githubpullrequests.service.GitHubPullRequestsService
+import com.caioluis.githubpopular.data.impl.remote.githubpulls.repository.GitHubPullRequestsRepositoryImpl
+import com.caioluis.githubpopular.data.impl.remote.githubpulls.service.GitHubPullRequestsService
 import com.caioluis.githubpopular.data.impl.remote.githubrepos.GithubReposRemoteSource
 import com.caioluis.githubpopular.data.impl.remote.githubrepos.GithubReposRemoteSourceImpl
 import com.caioluis.githubpopular.data.impl.remote.githubrepos.repository.GitHubReposRepositoryImpl
@@ -35,9 +41,6 @@ interface DataModule {
     fun bindRemoteSource(impl: GithubReposRemoteSourceImpl): GithubReposRemoteSource
 
     @Binds
-    fun bindPullRequestsLocalSource(impl: PullRequestsLocalSourceImpl): PullRequestsLocalSource
-
-    @Binds
     fun bindPullRequestsRemoteSource(impl: PullRequestsRemoteSourceImpl): PullRequestsRemoteSource
 
     @Binds
@@ -48,6 +51,18 @@ interface DataModule {
 
     @Binds
     fun bindErrorMapper(impl: ErrorMapperImpl): ErrorMapper
+
+    @Binds
+    fun bindRemoteGitHubRepositoryMapper(impl: RemoteGitHubRepositoryMapperImpl): RemoteGitHubRepositoryMapper
+
+    @Binds
+    fun bindRemotePullRequestMapper(impl: RemotePullRequestMapperImpl): RemotePullRequestMapper
+
+    @Binds
+    fun bindLocalGitHubRepositoryMapper(impl: LocalGitHubRepositoryMapperImpl): LocalGitHubRepositoryMapper
+
+    @Binds
+    fun bindLocalGitHubPullRequestMapper(impl: LocalGitHubPullRequestMapperImpl): LocalGitHubPullRequestMapper
 
     companion object {
         @Provides

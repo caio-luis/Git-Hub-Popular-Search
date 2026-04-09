@@ -41,6 +41,7 @@ dependencies {
     testImplementation(libs.kotlin.coroutines.test)
     testImplementation(libs.junit)
     testImplementation(libs.androidx.junit.ktx)
+    testImplementation(libs.androidx.paging.testing)
     testImplementation(libs.robolectric)
 
     androidTestImplementation(libs.android.test.runner)

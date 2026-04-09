@@ -1,11 +1,12 @@
 package com.caioluis.githubpopular.domain.bridge.usecase
 
+import androidx.paging.PagingData
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubPullRequest
+import kotlinx.coroutines.flow.Flow
 
 interface GetPullRequestsUseCase {
-    suspend fun loadPullRequests(
-        page: Int,
+    fun loadPullRequests(
         pullUrl: String,
         repositoryId: Int,
-    ): List<DomainGitHubPullRequest>
+    ): Flow<PagingData<DomainGitHubPullRequest>>
 }

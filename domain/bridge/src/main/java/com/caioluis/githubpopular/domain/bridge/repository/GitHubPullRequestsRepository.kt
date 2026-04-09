@@ -1,11 +1,12 @@
 package com.caioluis.githubpopular.domain.bridge.repository
 
+import androidx.paging.PagingData
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubPullRequest
+import kotlinx.coroutines.flow.Flow
 
 interface GitHubPullRequestsRepository {
-    suspend fun getPullRequests(
+    fun getPullRequests(
         pullUrl: String,
         repositoryId: Int,
-        page: Int,
-    ): List<DomainGitHubPullRequest>
+    ): Flow<PagingData<DomainGitHubPullRequest>>
 }

@@ -1,6 +1,6 @@
 package com.caioluis.githubpopular.data.impl.remote.githubrepos.service
 
-import com.caioluis.githubpopular.data.bridge.remote.model.RemoteGitHubRepositories
+import com.caioluis.githubpopular.data.bridge.remote.githubrepos.model.RemoteGitHubRepositories
 import retrofit2.http.GET
 import retrofit2.http.Query
 

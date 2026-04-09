@@ -1,10 +1,10 @@
 package com.caioluis.githubpopular.data.bridge.mappers
 
-import com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubPullRequest
-import com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubRepository
-import com.caioluis.githubpopular.data.bridge.remote.model.RemoteGitHubRepository
-import com.caioluis.githubpopular.data.bridge.remote.model.RemotePullRequest
-import com.caioluis.githubpopular.data.bridge.remote.model.RemoteRepositoryOwner
+import com.caioluis.githubpopular.data.bridge.local.githubpulls.entity.LocalGitHubPullRequest
+import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.LocalGitHubRepository
+import com.caioluis.githubpopular.data.bridge.remote.githubpulls.model.RemotePullRequest
+import com.caioluis.githubpopular.data.bridge.remote.githubrepos.model.RemoteGitHubRepository
+import com.caioluis.githubpopular.data.bridge.remote.githubrepos.model.RemoteRepositoryOwner
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubPullRequest
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -79,6 +79,8 @@ object MappersFixtures {
         userName = "user",
         avatarUrl = "avatar",
         repositoryId = 123,
+        page = 1,
+        orderInPage = 0,
     )
 
     val domainGitHubRepository = DomainGitHubRepository(

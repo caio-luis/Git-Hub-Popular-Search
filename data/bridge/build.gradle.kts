@@ -15,9 +15,6 @@ android {
     testOptions {
         unitTests {
             isReturnDefaultValues = true
-            all {
-                it.useJUnitPlatform()
-            }
         }
     }
 }
@@ -38,4 +35,8 @@ dependencies {
     testImplementation(libs.junit.jupiter.params)
     testRuntimeOnly(libs.junit.jupiter.engine)
     testRuntimeOnly(libs.junit.platform.launcher)
+}
+
+tasks.withType<org.gradle.api.tasks.testing.Test>().configureEach {
+    useJUnitPlatform()
 }

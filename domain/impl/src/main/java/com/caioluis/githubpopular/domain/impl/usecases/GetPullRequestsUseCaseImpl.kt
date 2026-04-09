@@ -1,8 +1,10 @@
 package com.caioluis.githubpopular.domain.impl.usecases
 
+import androidx.paging.PagingData
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubPullRequest
 import com.caioluis.githubpopular.domain.bridge.repository.GitHubPullRequestsRepository
 import com.caioluis.githubpopular.domain.bridge.usecase.GetPullRequestsUseCase
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetPullRequestsUseCaseImpl
@@ -10,10 +12,9 @@ class GetPullRequestsUseCaseImpl
 constructor(
     private val gitHubPullRequestsRepository: GitHubPullRequestsRepository,
 ) : GetPullRequestsUseCase {
-    override suspend fun loadPullRequests(
-        page: Int,
+    override fun loadPullRequests(
         pullUrl: String,
         repositoryId: Int,
-    ): List<DomainGitHubPullRequest> = gitHubPullRequestsRepository
-        .getPullRequests(pullUrl = pullUrl, repositoryId = repositoryId, page = page)
+    ): Flow<PagingData<DomainGitHubPullRequest>> = gitHubPullRequestsRepository
+        .getPullRequests(pullUrl = pullUrl, repositoryId = repositoryId)
 }

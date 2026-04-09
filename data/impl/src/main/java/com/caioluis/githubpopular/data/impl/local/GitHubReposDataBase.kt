@@ -4,24 +4,30 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubPullRequest
-import com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubRepository
-import com.caioluis.githubpopular.data.bridge.local.model.RemoteKey
+import com.caioluis.githubpopular.data.bridge.local.githubpulls.entity.LocalGitHubPullRequest
+import com.caioluis.githubpopular.data.bridge.local.githubpulls.entity.PullRequestRemoteKey
+import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.GitHubReposRemoteKey
+import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.LocalGitHubRepository
 import com.caioluis.githubpopular.data.impl.local.githubpulls.dao.GitHubPullRequestsDao
 import com.caioluis.githubpopular.data.impl.local.githubrepos.dao.GitHubRepositoriesDao
-import com.caioluis.githubpopular.data.impl.local.githubrepos.dao.RemoteKeysDao
 
 const val DATABASE_FILE_NAME = "GitHubPopular.db"
 
 @Database(
-    entities = [LocalGitHubRepository::class, LocalGitHubPullRequest::class, RemoteKey::class],
+    entities = [
+        LocalGitHubRepository::class,
+        LocalGitHubPullRequest::class,
+        GitHubReposRemoteKey::class,
+        PullRequestRemoteKey::class,
+    ],
     version = 1,
     exportSchema = false,
 )
 abstract class GitHubReposDataBase : RoomDatabase() {
     abstract fun gitHubRepositoriesDao(): GitHubRepositoriesDao
     abstract fun gitHubPullRequestsDao(): GitHubPullRequestsDao
-    abstract fun remoteKeysDao(): RemoteKeysDao
+    abstract fun remoteKeysDao(): GitHubReposRemoteKeysDao
+    abstract fun pullRequestRemoteKeysDao(): PullRequestRemoteKeysDao
 
     companion object {
         private var dbInstance: GitHubReposDataBase? = null

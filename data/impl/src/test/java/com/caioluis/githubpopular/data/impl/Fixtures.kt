@@ -1,12 +1,13 @@
 package com.caioluis.githubpopular.data.impl
 
-import com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubPullRequest
-import com.caioluis.githubpopular.data.bridge.local.model.LocalGitHubRepository
-import com.caioluis.githubpopular.data.bridge.local.model.RemoteKey
-import com.caioluis.githubpopular.data.bridge.remote.model.RemoteGitHubRepositories
-import com.caioluis.githubpopular.data.bridge.remote.model.RemoteGitHubRepository
-import com.caioluis.githubpopular.data.bridge.remote.model.RemotePullRequest
-import com.caioluis.githubpopular.data.bridge.remote.model.RemoteRepositoryOwner
+import com.caioluis.githubpopular.data.bridge.local.githubpulls.entity.LocalGitHubPullRequest
+import com.caioluis.githubpopular.data.bridge.local.githubpulls.entity.PullRequestRemoteKey
+import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.GitHubReposRemoteKey
+import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.LocalGitHubRepository
+import com.caioluis.githubpopular.data.bridge.remote.githubpulls.model.RemotePullRequest
+import com.caioluis.githubpopular.data.bridge.remote.githubrepos.model.RemoteGitHubRepositories
+import com.caioluis.githubpopular.data.bridge.remote.githubrepos.model.RemoteGitHubRepository
+import com.caioluis.githubpopular.data.bridge.remote.githubrepos.model.RemoteRepositoryOwner
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubPullRequest
 
 object Fixtures {
@@ -32,11 +33,15 @@ object Fixtures {
         userName = "user",
         avatarUrl = "avatar",
         repositoryId = REPOSITORY_ID,
+        page = STARTING_PAGE,
+        orderInPage = 0,
     )
 
     fun createLocalGitHubPullRequest(
         id: Long = 1L,
         repositoryId: Int = REPOSITORY_ID,
+        page: Int = STARTING_PAGE,
+        orderInPage: Int = 0,
     ) = LocalGitHubPullRequest(
         id = id,
         htmlUrl = "http://example.com/$id",
@@ -45,6 +50,8 @@ object Fixtures {
         userName = "user$id",
         avatarUrl = "avatar$id",
         repositoryId = repositoryId,
+        page = page,
+        orderInPage = orderInPage,
     )
 
     fun createRemotePullRequest(
@@ -101,8 +108,16 @@ object Fixtures {
     fun createRemoteKey(
         language: String = DEFAULT_LANGUAGE,
         nextPage: Int? = 2,
-    ) = RemoteKey(
+    ) = GitHubReposRemoteKey(
         queryLanguage = language,
+        nextPage = nextPage,
+    )
+
+    fun createPullRequestRemoteKey(
+        repositoryId: Int = REPOSITORY_ID,
+        nextPage: Int? = 2,
+    ) = PullRequestRemoteKey(
+        repositoryId = repositoryId,
         nextPage = nextPage,
     )
 }
