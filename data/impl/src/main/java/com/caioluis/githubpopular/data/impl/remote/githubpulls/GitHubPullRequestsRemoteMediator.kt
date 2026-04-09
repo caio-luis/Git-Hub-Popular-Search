@@ -8,9 +8,9 @@ import androidx.room.withTransaction
 import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.data.bridge.local.githubpulls.entity.LocalGitHubPullRequest
 import com.caioluis.githubpopular.data.bridge.local.githubpulls.entity.PullRequestRemoteKey
-import com.caioluis.githubpopular.data.bridge.mappers.LocalGitHubPullRequestMapper
-import com.caioluis.githubpopular.data.bridge.mappers.RemotePullRequestMapper
 import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
+import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubPullRequestMapper
+import com.caioluis.githubpopular.data.impl.mapper.RemotePullRequestMapper
 import com.caioluis.githubpopular.data.impl.remote.githubpullrequests.PullRequestsRemoteSource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject

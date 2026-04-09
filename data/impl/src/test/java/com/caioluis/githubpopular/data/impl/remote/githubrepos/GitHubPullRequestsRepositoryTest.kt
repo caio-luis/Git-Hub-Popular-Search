@@ -1,9 +1,9 @@
 package com.caioluis.githubpopular.data.impl.remote.githubrepos
 
 import androidx.paging.ExperimentalPagingApi
-import com.caioluis.githubpopular.data.bridge.mappers.LocalGitHubPullRequestMapper
 import com.caioluis.githubpopular.data.impl.Fixtures
 import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
+import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubPullRequestMapper
 import com.caioluis.githubpopular.data.impl.remote.githubpulls.GitHubPullRequestsRemoteMediator
 import com.caioluis.githubpopular.data.impl.remote.githubpulls.GithubPullRequestsRemoteMediatorFactory
 import com.caioluis.githubpopular.data.impl.remote.githubpulls.repository.GitHubPullRequestsRepositoryImpl
