@@ -84,10 +84,12 @@ class GetRepositoriesViewModelTest {
     @Test
     fun `mapToAppException should return same instance when throwable is already AppException`() {
         val appException = AppException.NetworkException(Throwable("network"))
+        every { errorMapper.map(appException) } returns appException
 
         val result = viewModel.mapToAppException(appException)
 
         assertEquals(appException, result)
+        verify(exactly = 1) { errorMapper.map(appException) }
     }
 
     @Test

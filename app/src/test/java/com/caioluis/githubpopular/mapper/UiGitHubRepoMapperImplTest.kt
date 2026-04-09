@@ -10,10 +10,10 @@ class UiGitHubRepoMapperImplTest {
     private val mapper = UiGitHubRepoMapperImpl()
 
     @Test
-    fun mapToUiShouldTrimPullSuffixAndTruncateDescriptionWhenNeeded() {
+    fun `map to ui should trim pull suffix and truncate description when needed`() {
         val source = Fixtures.createDomainGitHubRepository().copy(
             description = "d".repeat(330),
-            pullsUrl = "https://api.github.com/repos/user/repo/pulls{/number}",
+            pullsUrl = "https://api.test.com/repos/user/repo/pulls{/number}",
         )
 
         val mapped = mapper.mapToUi(source)
@@ -25,16 +25,16 @@ class UiGitHubRepoMapperImplTest {
         assertEquals(source.userName, mapped.userName)
         assertEquals(source.avatarUrl, mapped.avatarUrl)
         assertEquals(source.htmlUrl, mapped.repositoryUrl)
-        assertEquals("https://api.github.com/repos/user/repo/pulls", mapped.pullsUrl)
+        assertEquals("https://api.test.com/repos/user/repo/pulls", mapped.pullsUrl)
         assertEquals(303, mapped.description.length)
         assertTrue(mapped.description.endsWith("..."))
     }
 
     @Test
-    fun mapToUiShouldKeepDescriptionWhenItIsUnderLimit() {
+    fun `map to ui should keep description when it is under limit`() {
         val source = Fixtures.createDomainGitHubRepository().copy(
             description = "Short",
-            pullsUrl = "https://api.github.com/repos/user/repo/pulls",
+            pullsUrl = "https://api.test.com/repos/user/repo/pulls",
         )
 
         val mapped = mapper.mapToUi(source)

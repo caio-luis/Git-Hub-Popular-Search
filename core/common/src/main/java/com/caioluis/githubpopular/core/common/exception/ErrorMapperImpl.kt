@@ -11,6 +11,7 @@ import javax.inject.Inject
 class ErrorMapperImpl @Inject constructor() : ErrorMapper {
 
     override fun map(throwable: Throwable): AppException = when (throwable) {
+        is AppException -> throwable
         is SocketTimeoutException -> AppException.TimeoutException(throwable)
         is ConnectException, is UnknownHostException -> AppException.NetworkException(throwable)
         is IOException -> AppException.NetworkException(throwable)

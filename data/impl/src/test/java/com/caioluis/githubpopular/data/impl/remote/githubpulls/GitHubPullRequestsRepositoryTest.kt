@@ -10,7 +10,7 @@ import com.caioluis.githubpopular.data.impl.remote.githubpulls.repository.GitHub
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.Assert
+import org.junit.Assert.assertNotNull
 import org.junit.Before
 import org.junit.Test
 
@@ -47,7 +47,7 @@ class GitHubPullRequestsRepositoryTest {
 
         val result = repository.getPullRequests(pullUrl, repositoryId)
 
-        Assert.assertNotNull(result)
+        assertNotNull(result)
 
         verify(exactly = 1) {
             remoteMediatorFactory.create(

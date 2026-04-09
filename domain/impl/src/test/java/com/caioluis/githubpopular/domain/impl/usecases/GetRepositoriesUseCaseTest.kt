@@ -3,6 +3,7 @@ package com.caioluis.githubpopular.domain.impl.usecases
 import androidx.paging.PagingData
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository
+import com.caioluis.githubpopular.domain.bridge.usecase.GetRepositoriesUseCase
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.flow.Flow
@@ -12,7 +13,8 @@ import org.junit.Test
 
 class GetRepositoriesUseCaseTest {
     private val gitHubReposRepository = mockk<GitHubReposRepository>()
-    private val getReposUseCase = GetRepositoriesUseCaseImpl(gitHubReposRepository)
+    private val getReposUseCase: GetRepositoriesUseCase =
+        GetRepositoriesUseCaseImpl(gitHubReposRepository)
 
     @Test
     fun `loadRepositories returns expected flow`() {

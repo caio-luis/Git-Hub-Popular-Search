@@ -38,7 +38,7 @@ class GetPullRequestsViewModelTest {
         viewModel = GetPullRequestsViewModel(
             savedStateHandle = SavedStateHandle(
                 mapOf(
-                    "pullUrl" to "https://api.github.com/repos/user/repo/pulls",
+                    "pullUrl" to "https://api.test.com/repos/user/repo/pulls",
                     "repositoryId" to Fixtures.REPOSITORY_ID,
                     "repositoryName" to "repo",
                 ),
@@ -50,8 +50,8 @@ class GetPullRequestsViewModelTest {
     }
 
     @Test
-    fun loadListShouldNotFetchAgainIfRepositoryRequestIsTheSame() = runTest(mainDispatcherRule.dispatcher) {
-        val pullUrl = "https://api.github.com/repos/user/repo/pulls"
+    fun `load list should not fetch again if repository request is the same`() = runTest(mainDispatcherRule.dispatcher) {
+        val pullUrl = "https://api.test.com/repos/user/repo/pulls"
         val repositoryId = Fixtures.REPOSITORY_ID
         every {
             getPullRequestsUseCase.loadPullRequests(
@@ -78,8 +78,8 @@ class GetPullRequestsViewModelTest {
     }
 
     @Test
-    fun loadListWithDifferentRepositoriesShouldFetchNewData() = runTest(mainDispatcherRule.dispatcher) {
-        val pullUrl = "https://api.github.com/repos/user/repo/pulls"
+    fun `load list with different repositories should fetch new data`() = runTest(mainDispatcherRule.dispatcher) {
+        val pullUrl = "https://api.test.com/repos/user/repo/pulls"
         val initialRepositoryId = 1
         val newRepositoryId = 2
         every {
@@ -113,27 +113,77 @@ class GetPullRequestsViewModelTest {
     }
 
     @Test
+    fun `load list should not emit mixed request state when url and id change together`() = runTest(mainDispatcherRule.dispatcher) {
+        val initialPullUrl = "https://api.test.com/repos/user/repo/pulls"
+        val initialRepositoryId = Fixtures.REPOSITORY_ID
+        val newPullUrl = "https://api.test.com/repos/user/new-repo/pulls"
+        val newRepositoryId = 999
+
+        every {
+            getPullRequestsUseCase.loadPullRequests(
+                pullUrl = any(),
+                repositoryId = any(),
+            )
+        } returns flowOf(PagingData.empty())
+
+        val job = backgroundScope.launch {
+            viewModel.pullRequests.collect {}
+        }
+
+        viewModel.loadList(newPullUrl, newRepositoryId)
+
+        verify(exactly = 1) {
+            getPullRequestsUseCase.loadPullRequests(
+                pullUrl = initialPullUrl,
+                repositoryId = initialRepositoryId,
+            )
+        }
+        verify(exactly = 1) {
+            getPullRequestsUseCase.loadPullRequests(
+                pullUrl = newPullUrl,
+                repositoryId = newRepositoryId,
+            )
+        }
+        verify(exactly = 0) {
+            getPullRequestsUseCase.loadPullRequests(
+                pullUrl = newPullUrl,
+                repositoryId = initialRepositoryId,
+            )
+        }
+        verify(exactly = 0) {
+            getPullRequestsUseCase.loadPullRequests(
+                pullUrl = initialPullUrl,
+                repositoryId = newRepositoryId,
+            )
+        }
+
+        job.cancel()
+    }
+
+    @Test
     fun `repository metadata should be initialized from saved state and repository id should update`() {
         assertEquals("repo", viewModel.repositoryName.value)
-        assertEquals(Fixtures.REPOSITORY_ID, viewModel.currentRepositoryId)
+        assertEquals(Fixtures.REPOSITORY_ID, viewModel.currentRepositoryId.value)
 
         viewModel.loadList(
-            pullUrl = "https://api.github.com/repos/user/new-repo/pulls",
+            pullUrl = "https://api.test.com/repos/user/new-repo/pulls",
             repositoryId = 999,
             repositoryName = "new-repo",
         )
 
-        assertEquals(999, viewModel.currentRepositoryId)
+        assertEquals(999, viewModel.currentRepositoryId.value)
         assertEquals("new-repo", viewModel.repositoryName.value)
     }
 
     @Test
     fun `mapToAppException should return same instance when throwable is already AppException`() {
         val appException = AppException.TimeoutException(Throwable("timeout"))
+        every { errorMapper.map(appException) } returns appException
 
         val result = viewModel.mapToAppException(appException)
 
         assertEquals(appException, result)
+        verify(exactly = 1) { errorMapper.map(appException) }
     }
 
     @Test

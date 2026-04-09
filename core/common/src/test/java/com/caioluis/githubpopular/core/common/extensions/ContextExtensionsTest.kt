@@ -18,7 +18,7 @@ import org.robolectric.shadows.ShadowToast
 class ContextExtensionsTest {
 
     @Test
-    fun showLongToastShouldDisplayMessage() {
+    fun `show long toast should display message`() {
         val context = ApplicationProvider.getApplicationContext<Context>()
 
         context.showLongToast("hello")
@@ -27,7 +27,7 @@ class ContextExtensionsTest {
     }
 
     @Test
-    fun openBrowserIntentShouldStartViewIntentWithUrl() {
+    fun `open browser intent should start view intent with url`() {
         val activity = Robolectric.buildActivity(Activity::class.java).setup().get()
 
         activity.openBrowserIntent("https://github.com")
@@ -39,7 +39,7 @@ class ContextExtensionsTest {
     }
 
     @Test
-    fun openBrowserIntentShouldShowToastWhenStartActivityFails() {
+    fun `open browser intent should show toast when start activity fails`() {
         val context = object : ContextWrapper(ApplicationProvider.getApplicationContext()) {
             override fun startActivity(intent: Intent?): Unit = throw IllegalStateException("cannot open")
         }
