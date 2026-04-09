@@ -8,10 +8,10 @@ import androidx.room.withTransaction
 import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.GitHubReposRemoteKey
 import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.LocalGitHubRepository
-import com.caioluis.githubpopular.data.bridge.mappers.LocalGitHubRepositoryMapper
-import com.caioluis.githubpopular.data.bridge.mappers.RemoteGitHubRepositoryMapper
 import com.caioluis.githubpopular.data.bridge.remote.githubrepos.model.RemoteGitHubRepository
 import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
+import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubRepositoryMapper
+import com.caioluis.githubpopular.data.impl.mapper.RemoteGitHubRepositoryMapper
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import retrofit2.HttpException
