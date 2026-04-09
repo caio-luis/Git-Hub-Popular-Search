@@ -14,4 +14,10 @@
     <string name="error_icon_unknown">Ícone de erro desconhecido</string>
     <string name="error_icon_parsing">Ícone de erro de leitura de dados</string>
     <string name="main_screen_language_selector_title">Linguagem</string>
+
+    <!-- Descrições de acessibilidade (content descriptions) -->
+    <string name="cd_owner_avatar">Foto de perfil de %s</string>
+    <string name="cd_navigate_back">Voltar</string>
+    <string name="cd_loading_indicator">Carregando</string>
+    <string name="cd_repository_stats">%1$d estrelas, %2$d forks</string>
 </resources>
