@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.data.impl.remote.githubrepos
+package com.caioluis.githubpopular.data.impl.remote.githubrepos.mediator
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -11,6 +11,7 @@ import com.caioluis.githubpopular.data.bridge.remote.githubrepos.model.RemoteGit
 import com.caioluis.githubpopular.data.impl.local.githubrepos.GithubReposLocalSource
 import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubRepositoryMapper
 import com.caioluis.githubpopular.data.impl.mapper.RemoteGitHubRepositoryMapper
+import com.caioluis.githubpopular.data.impl.remote.githubrepos.source.GithubReposRemoteSource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
 import kotlinx.coroutines.CancellationException
@@ -73,8 +74,23 @@ class GitHubReposRemoteMediator @AssistedInject constructor(
             MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: Exception) {
             if (exception is CancellationException) throw exception
-            MediatorResult.Error(errorMapper.map(exception))
+            handleLoadException(loadType, exception)
         }
+    }
+
+    private suspend fun handleLoadException(
+        loadType: LoadType,
+        exception: Exception,
+    ): MediatorResult {
+        if (loadType == LoadType.REFRESH) {
+            val cachedItems = localSource.countRepositoriesByLanguage(language)
+
+            if (cachedItems > 0) {
+                return MediatorResult.Success(endOfPaginationReached = false)
+            }
+        }
+
+        return MediatorResult.Error(errorMapper.map(exception))
     }
 
     companion object {

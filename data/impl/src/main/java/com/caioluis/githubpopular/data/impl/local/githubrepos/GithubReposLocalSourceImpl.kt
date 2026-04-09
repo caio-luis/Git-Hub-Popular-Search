@@ -25,6 +25,8 @@ class GithubReposLocalSourceImpl @Inject constructor(
 
     override suspend fun clearRepositories(language: String) = repositoriesDao.clearRepositories(language)
 
+    override suspend fun countRepositoriesByLanguage(language: String): Int = repositoriesDao.countRepositoriesByLanguage(language)
+
     override fun getPagedRepositories(language: String): PagingSource<Int, LocalGitHubRepository> = repositoriesDao.getPagedRepositories(language)
 
     override suspend fun <R> withTransaction(block: suspend () -> R): R = localDatabase.withTransaction { block() }

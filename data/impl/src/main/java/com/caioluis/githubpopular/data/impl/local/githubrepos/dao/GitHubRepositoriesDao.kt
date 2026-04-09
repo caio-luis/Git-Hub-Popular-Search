@@ -17,4 +17,7 @@ interface GitHubRepositoriesDao {
 
     @Query("DELETE FROM GitHubRepositories WHERE language = :language")
     suspend fun clearRepositories(language: String)
+
+    @Query("SELECT COUNT(*) FROM GitHubRepositories WHERE language = :language")
+    suspend fun countRepositoriesByLanguage(language: String): Int
 }

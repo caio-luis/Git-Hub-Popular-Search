@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.data.impl.remote.githubrepos
+package com.caioluis.githubpopular.data.impl.remote.githubrepos.source
 
 import com.caioluis.githubpopular.data.bridge.remote.githubrepos.model.RemoteGitHubRepository
 

@@ -3,6 +3,7 @@ package com.caioluis.githubpopular.data.impl.remote.githubrepos
 import com.caioluis.githubpopular.data.bridge.remote.githubrepos.model.RemoteGitHubRepository
 import com.caioluis.githubpopular.data.impl.Fixtures
 import com.caioluis.githubpopular.data.impl.remote.githubrepos.service.GitHubRepositoriesService
+import com.caioluis.githubpopular.data.impl.remote.githubrepos.source.GithubReposRemoteSourceImpl
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk

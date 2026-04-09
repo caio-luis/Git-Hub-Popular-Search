@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.data.impl.remote.githubrepos
+package com.caioluis.githubpopular.data.impl.remote.githubrepos.mediator
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
@@ -12,6 +12,7 @@ import com.caioluis.githubpopular.data.impl.Fixtures
 import com.caioluis.githubpopular.data.impl.local.githubrepos.GithubReposLocalSource
 import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubRepositoryMapperImpl
 import com.caioluis.githubpopular.data.impl.mapper.RemoteGitHubRepositoryMapperImpl
+import com.caioluis.githubpopular.data.impl.remote.githubrepos.source.GithubReposRemoteSource
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -21,8 +22,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.After
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import retrofit2.HttpException
@@ -73,8 +73,8 @@ class GitHubReposRemoteMediatorTest {
     fun `load PREPEND should return Success with endOfPaginationReached true`() = runTest {
         val result = mediator.load(LoadType.PREPEND, pagingState)
 
-        assertTrue(result is RemoteMediator.MediatorResult.Success)
-        assertTrue((result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
+        Assert.assertTrue(result is RemoteMediator.MediatorResult.Success)
+        Assert.assertTrue((result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
 
         coVerify(exactly = 0) { remoteSource.fetchFromRemote(any(), any()) }
     }
@@ -85,8 +85,8 @@ class GitHubReposRemoteMediatorTest {
 
         val result = mediator.load(LoadType.APPEND, pagingState)
 
-        assertTrue(result is RemoteMediator.MediatorResult.Success)
-        assertTrue((result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
+        Assert.assertTrue(result is RemoteMediator.MediatorResult.Success)
+        Assert.assertTrue((result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
         coVerify(exactly = 0) { remoteSource.fetchFromRemote(any(), any()) }
     }
 
@@ -105,8 +105,8 @@ class GitHubReposRemoteMediatorTest {
 
         val result = mediator.load(LoadType.APPEND, pagingState)
 
-        assertTrue(result is RemoteMediator.MediatorResult.Success)
-        assertTrue((result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
+        Assert.assertTrue(result is RemoteMediator.MediatorResult.Success)
+        Assert.assertTrue((result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
 
         coVerify(exactly = 1) { remoteSource.fetchFromRemote(nextPage, Fixtures.DEFAULT_LANGUAGE) }
         coVerify { localSource.insertRemoteKey(Fixtures.createRemoteKey(nextPage = null)) }
@@ -125,8 +125,8 @@ class GitHubReposRemoteMediatorTest {
 
         val result = mediator.load(LoadType.APPEND, pagingState)
 
-        assertTrue(result is RemoteMediator.MediatorResult.Success)
-        assertTrue(!(result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
+        Assert.assertTrue(result is RemoteMediator.MediatorResult.Success)
+        Assert.assertTrue(!(result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
 
         coVerify { localSource.insertRemoteKey(Fixtures.createRemoteKey(nextPage = 3)) }
         coVerify {
@@ -161,8 +161,8 @@ class GitHubReposRemoteMediatorTest {
 
         val result = mediator.load(LoadType.REFRESH, pagingState)
 
-        assertTrue(result is RemoteMediator.MediatorResult.Success)
-        assertTrue((result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
+        Assert.assertTrue(result is RemoteMediator.MediatorResult.Success)
+        Assert.assertTrue((result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
 
         coVerify { localSource.deleteRemoteKey(Fixtures.DEFAULT_LANGUAGE) }
         coVerify { localSource.clearRepositories(Fixtures.DEFAULT_LANGUAGE) }
@@ -183,8 +183,8 @@ class GitHubReposRemoteMediatorTest {
 
         val result = mediator.load(LoadType.REFRESH, pagingState)
 
-        assertTrue(result is RemoteMediator.MediatorResult.Success)
-        assertTrue(!(result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
+        Assert.assertTrue(result is RemoteMediator.MediatorResult.Success)
+        Assert.assertTrue(!(result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
 
         coVerify { localSource.insertRemoteKey(Fixtures.createRemoteKey(nextPage = 2)) }
         coVerify {
@@ -218,8 +218,11 @@ class GitHubReposRemoteMediatorTest {
 
         val result = mediator.load(LoadType.REFRESH, pagingState)
 
-        assertTrue(result is RemoteMediator.MediatorResult.Error)
-        assertEquals(mappedException, (result as RemoteMediator.MediatorResult.Error).throwable)
+        Assert.assertTrue(result is RemoteMediator.MediatorResult.Error)
+        Assert.assertEquals(
+            mappedException,
+            (result as RemoteMediator.MediatorResult.Error).throwable,
+        )
     }
 
     @Test
@@ -233,8 +236,11 @@ class GitHubReposRemoteMediatorTest {
 
         val result = mediator.load(LoadType.REFRESH, pagingState)
 
-        assertTrue(result is RemoteMediator.MediatorResult.Error)
-        assertEquals(mappedException, (result as RemoteMediator.MediatorResult.Error).throwable)
+        Assert.assertTrue(result is RemoteMediator.MediatorResult.Error)
+        Assert.assertEquals(
+            mappedException,
+            (result as RemoteMediator.MediatorResult.Error).throwable,
+        )
     }
 
     @Test
@@ -247,7 +253,67 @@ class GitHubReposRemoteMediatorTest {
 
         val result = mediator.load(LoadType.REFRESH, pagingState)
 
-        assertTrue(result is RemoteMediator.MediatorResult.Error)
-        assertEquals(mappedException, (result as RemoteMediator.MediatorResult.Error).throwable)
+        Assert.assertTrue(result is RemoteMediator.MediatorResult.Error)
+        Assert.assertEquals(
+            mappedException,
+            (result as RemoteMediator.MediatorResult.Error).throwable,
+        )
+    }
+
+    @Test
+    fun `load REFRESH should fallback to cache when exception occurs and cached data exists`() = runTest {
+        val exception = IOException("No internet")
+
+        coEvery { remoteSource.fetchFromRemote(any(), any()) } throws exception
+        coEvery { localSource.countRepositoriesByLanguage(Fixtures.DEFAULT_LANGUAGE) } returns 5
+
+        val result = mediator.load(LoadType.REFRESH, pagingState)
+
+        Assert.assertTrue(result is RemoteMediator.MediatorResult.Success)
+        Assert.assertTrue(!(result as RemoteMediator.MediatorResult.Success).endOfPaginationReached)
+    }
+
+    @Test
+    fun `load REFRESH should return Error when exception occurs and no cached data exists`() = runTest {
+        val exception = IOException("No internet")
+        val mappedException = AppException.NetworkException(exception)
+
+        coEvery { remoteSource.fetchFromRemote(any(), any()) } throws exception
+        coEvery { localSource.countRepositoriesByLanguage(Fixtures.DEFAULT_LANGUAGE) } returns 0
+        every { errorMapper.map(exception) } returns mappedException
+
+        val result = mediator.load(LoadType.REFRESH, pagingState)
+
+        Assert.assertTrue(result is RemoteMediator.MediatorResult.Error)
+        Assert.assertEquals(
+            mappedException,
+            (result as RemoteMediator.MediatorResult.Error).throwable,
+        )
+    }
+
+    @Test
+    fun `load APPEND should return Error when exception occurs even with cached data`() = runTest {
+        val nextPage = 2
+        val remoteKey = Fixtures.createRemoteKey(nextPage = nextPage)
+        val exception = IOException("No internet")
+        val mappedException = AppException.NetworkException(exception)
+
+        coEvery { localSource.getRemoteKey(Fixtures.DEFAULT_LANGUAGE) } returns remoteKey
+        coEvery {
+            remoteSource.fetchFromRemote(
+                nextPage,
+                Fixtures.DEFAULT_LANGUAGE,
+            )
+        } throws exception
+        coEvery { localSource.countRepositoriesByLanguage(Fixtures.DEFAULT_LANGUAGE) } returns 5
+        every { errorMapper.map(exception) } returns mappedException
+
+        val result = mediator.load(LoadType.APPEND, pagingState)
+
+        Assert.assertTrue(result is RemoteMediator.MediatorResult.Error)
+        Assert.assertEquals(
+            mappedException,
+            (result as RemoteMediator.MediatorResult.Error).throwable,
+        )
     }
 }

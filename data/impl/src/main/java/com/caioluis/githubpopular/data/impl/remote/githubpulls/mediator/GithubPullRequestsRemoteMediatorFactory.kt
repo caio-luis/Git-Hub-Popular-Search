@@ -1,4 +1,4 @@
-package com.caioluis.githubpopular.data.impl.remote.githubpulls
+package com.caioluis.githubpopular.data.impl.remote.githubpulls.mediator
 
 import dagger.assisted.AssistedFactory
 
