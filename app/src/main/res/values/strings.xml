@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Git Hub Popular Repositories</string>
-    <string name="no_items_to_display">Não há items para exibir</string>
-    <string name="no_more_items_to_display">Não há mais items para exibir</string>
+    <string name="app_name">Repositórios Populares do GitHub</string>
+    <string name="no_items_to_display">Não há itens para exibir</string>
+    <string name="no_more_items_to_display">Não há mais itens para exibir</string>
     <string name="error_network_message">Sem conexão. Verifique a sua internet.</string>
     <string name="error_timeout_message">Solicitação expirou. Tente novamente.</string>
     <string name="error_unknown_message">Ocorreu um erro inesperado. Tente novamente.</string>

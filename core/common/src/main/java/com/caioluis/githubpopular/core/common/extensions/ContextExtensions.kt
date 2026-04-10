@@ -7,7 +7,7 @@ import androidx.core.net.toUri
 import timber.log.Timber
 
 fun Context.showLongToast(message: String) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 }
 
 fun Context.openBrowserIntent(url: String) {

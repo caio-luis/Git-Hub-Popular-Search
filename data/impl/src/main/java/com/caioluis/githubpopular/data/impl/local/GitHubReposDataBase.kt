@@ -9,6 +9,8 @@ import com.caioluis.githubpopular.data.bridge.local.githubpulls.entity.PullReque
 import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.GitHubReposRemoteKey
 import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.LocalGitHubRepository
 import com.caioluis.githubpopular.data.impl.local.githubpulls.dao.GitHubPullRequestsDao
+import com.caioluis.githubpopular.data.impl.local.githubpulls.dao.PullRequestRemoteKeysDao
+import com.caioluis.githubpopular.data.impl.local.githubrepos.dao.GitHubReposRemoteKeysDao
 import com.caioluis.githubpopular.data.impl.local.githubrepos.dao.GitHubRepositoriesDao
 
 const val DATABASE_FILE_NAME = "GitHubPopular.db"

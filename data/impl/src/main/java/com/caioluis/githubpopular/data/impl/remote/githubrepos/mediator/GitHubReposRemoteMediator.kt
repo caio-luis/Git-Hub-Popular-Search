@@ -8,9 +8,9 @@ import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.GitHubReposRemoteKey
 import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.LocalGitHubRepository
 import com.caioluis.githubpopular.data.bridge.remote.githubrepos.model.RemoteGitHubRepository
-import com.caioluis.githubpopular.data.impl.local.githubrepos.GithubReposLocalSource
-import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubRepositoryMapper
-import com.caioluis.githubpopular.data.impl.mapper.RemoteGitHubRepositoryMapper
+import com.caioluis.githubpopular.data.impl.local.githubrepos.mapper.LocalGitHubRepositoryMapper
+import com.caioluis.githubpopular.data.impl.local.githubrepos.source.GithubReposLocalSource
+import com.caioluis.githubpopular.data.impl.remote.githubrepos.mapper.RemoteGitHubRepositoryMapper
 import com.caioluis.githubpopular.data.impl.remote.githubrepos.source.GithubReposRemoteSource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject

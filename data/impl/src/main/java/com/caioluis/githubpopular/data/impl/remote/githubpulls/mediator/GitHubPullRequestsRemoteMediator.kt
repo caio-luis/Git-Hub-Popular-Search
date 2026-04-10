@@ -7,9 +7,9 @@ import androidx.paging.RemoteMediator
 import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.data.bridge.local.githubpulls.entity.LocalGitHubPullRequest
 import com.caioluis.githubpopular.data.bridge.local.githubpulls.entity.PullRequestRemoteKey
-import com.caioluis.githubpopular.data.impl.local.githubpulls.GithubPullRequestsLocalSource
-import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubPullRequestMapper
-import com.caioluis.githubpopular.data.impl.mapper.RemotePullRequestMapper
+import com.caioluis.githubpopular.data.impl.local.githubpulls.mapper.LocalGitHubPullRequestMapper
+import com.caioluis.githubpopular.data.impl.local.githubpulls.source.GithubPullRequestsLocalSource
+import com.caioluis.githubpopular.data.impl.remote.githubpulls.mapper.RemotePullRequestMapper
 import com.caioluis.githubpopular.data.impl.remote.githubpulls.source.PullRequestsRemoteSource
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject

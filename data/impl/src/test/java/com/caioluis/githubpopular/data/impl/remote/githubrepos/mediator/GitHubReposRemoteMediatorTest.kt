@@ -9,9 +9,9 @@ import com.caioluis.githubpopular.core.common.exception.AppException
 import com.caioluis.githubpopular.core.common.exception.ErrorMapper
 import com.caioluis.githubpopular.data.bridge.local.githubrepos.entity.LocalGitHubRepository
 import com.caioluis.githubpopular.data.impl.Fixtures
-import com.caioluis.githubpopular.data.impl.local.githubrepos.GithubReposLocalSource
-import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubRepositoryMapperImpl
-import com.caioluis.githubpopular.data.impl.mapper.RemoteGitHubRepositoryMapperImpl
+import com.caioluis.githubpopular.data.impl.local.githubrepos.mapper.LocalGitHubRepositoryMapperImpl
+import com.caioluis.githubpopular.data.impl.local.githubrepos.source.GithubReposLocalSource
+import com.caioluis.githubpopular.data.impl.remote.githubrepos.mapper.RemoteGitHubRepositoryMapperImpl
 import com.caioluis.githubpopular.data.impl.remote.githubrepos.source.GithubReposRemoteSource
 import io.mockk.coEvery
 import io.mockk.coVerify
