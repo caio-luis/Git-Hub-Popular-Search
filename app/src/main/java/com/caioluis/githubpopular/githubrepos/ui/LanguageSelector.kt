@@ -3,6 +3,7 @@ package com.caioluis.githubpopular.githubrepos.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
@@ -33,6 +34,7 @@ fun LanguageSelector(
     Box(
         modifier = modifier
             .fillMaxWidth()
+            .statusBarsPadding()
             .padding(16.dp),
     ) {
         ExposedDropdownMenuBox(
