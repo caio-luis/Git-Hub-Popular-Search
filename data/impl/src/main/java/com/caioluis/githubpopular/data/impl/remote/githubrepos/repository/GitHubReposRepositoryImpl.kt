@@ -5,8 +5,8 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.caioluis.githubpopular.data.impl.local.githubrepos.GithubReposLocalSource
-import com.caioluis.githubpopular.data.impl.mapper.LocalGitHubRepositoryMapper
+import com.caioluis.githubpopular.data.impl.local.githubrepos.mapper.LocalGitHubRepositoryMapper
+import com.caioluis.githubpopular.data.impl.local.githubrepos.source.GithubReposLocalSource
 import com.caioluis.githubpopular.data.impl.remote.githubrepos.mediator.GithubReposRemoteMediatorFactory
 import com.caioluis.githubpopular.domain.bridge.entity.DomainGitHubRepository
 import com.caioluis.githubpopular.domain.bridge.repository.GitHubReposRepository

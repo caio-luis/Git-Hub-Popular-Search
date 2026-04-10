@@ -4,7 +4,6 @@ import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.caioluis.githubpopular.data.impl.Fixtures
 import com.caioluis.githubpopular.data.impl.local.GitHubReposDataBase
-import com.caioluis.githubpopular.data.impl.local.PullRequestRemoteKeysDao
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.After

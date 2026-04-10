@@ -246,15 +246,22 @@ cd Git-Hub-Popular-Search
 
 ## 🧪 Testes
 
-Os testes ficam organizados por módulo em `src/test/`, cobrindo ViewModels, Mappers, Navigation, UI, DAOs, RemoteMediators, Repositories, RemoteSources, Use Cases e utilitários do core.
+Os testes ficam em `src/test/` de cada módulo, totalizando **29 classes** distribuídas por todas as camadas:
 
-### Padrões de teste adotados
+| Módulo | Categorias cobertas |
+|---|---|
+| `:app` | ViewModels, Mappers UI, Navigation, UI Compose |
+| `:data:impl` | DAOs, Local/Remote Sources, RemoteMediators, Repositories, Mappers |
+| `:domain:impl` | Use Cases |
+| `:core:common` | Error Handling, Extensions |
 
-- **ViewModels**: `MainDispatcherRule` com `UnconfinedTestDispatcher` para substituir `Dispatchers.Main`.
-- **RemoteMediators**: Mock de `withTransaction` e DAOs diretamente — sem necessidade de instrumentação.
-- **Mappers**: Testes unitários puros, sem dependência de Android.
-- **Navigation**: Testes de serialização de rotas usando `kotlinx.serialization.json.Json` — sem APIs Android.
-- **Cobertura**: JaCoCo configurado com threshold mínimo de **90%** (excluindo classes geradas, DI, models, UI, etc.).
+### Padrões adotados
+
+- **ViewModels**: `MainDispatcherRule` com `UnconfinedTestDispatcher`.
+- **RemoteMediators**: mock de `withTransaction` e DAOs diretamente, sem instrumentação.
+- **UI (Compose)**: Robolectric + `createComposeRule`, cobrindo estados de `LoadState` (itens, vazio, fim de lista, erro).
+- **Fixtures**: dados compartilhados em `fixtures/` para reutilização entre testes.
+- **Cobertura**: JaCoCo com threshold mínimo de **90%**.
 
 ### Rodar testes
 
@@ -263,6 +270,7 @@ Os testes ficam organizados por módulo em `src/test/`, cobrindo ViewModels, Map
 ./gradlew test
 
 # Módulo específico
+./gradlew :app:test
 ./gradlew :data:impl:test
 ./gradlew :domain:impl:test
 ./gradlew :core:common:test

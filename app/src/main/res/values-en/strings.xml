@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">GitHub Popular Repositories</string>
+    <string name="no_items_to_display">No items to display</string>
+    <string name="no_more_items_to_display">No more items to display</string>
+    <string name="error_network_message">No connection. Check your internet.</string>
+    <string name="error_timeout_message">Request timed out. Please try again.</string>
+    <string name="error_unknown_message">An unexpected error occurred. Please try again.</string>
+    <string name="error_parsing_message">An error occurred while processing data. Please try again.</string>
+    <string name="error_retry_action">Try again</string>
+    <string name="error_server_message">Server unavailable. Please try again later.</string>
+    <string name="error_icon_network">Network error icon</string>
+    <string name="error_icon_timeout">Timeout error icon</string>
+    <string name="error_icon_server">Server error icon</string>
+    <string name="error_icon_unknown">Unknown error icon</string>
+    <string name="error_icon_parsing">Data parsing error icon</string>
+    <string name="main_screen_language_selector_title">Language</string>
+
+    <!-- Accessibility content descriptions -->
+    <string name="cd_owner_avatar">Profile picture of %s</string>
+    <string name="cd_navigate_back">Go back</string>
+    <string name="cd_loading_indicator">Loading</string>
+    <string name="cd_repository_stats">%1$d stars, %2$d forks</string>
+</resources>
+

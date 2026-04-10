@@ -53,14 +53,13 @@ dependencies {
     implementation(libs.timber)
 
     ksp(libs.androidx.lifecycle.common)
-    ksp(libs.bumptech.glide.compiler)
     ksp(libs.hilt.compiler)
     ksp(libs.kotlin.metadata.jvm)
 
     testRuntimeOnly(libs.android.test.core)
-    testRuntimeOnly(libs.robolectric)
     testRuntimeOnly(libs.android.test.runner)
 
+    testImplementation(libs.robolectric)
     testImplementation(libs.mockk)
     testImplementation(libs.android.core.testing)
     testImplementation(libs.kotlin.coroutines.test)
@@ -68,6 +67,7 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.androidx.paging.common)
     testImplementation(libs.androidx.paging.testing)
+    testImplementation(libs.androidx.ui.test.junit4)
 
     debugImplementation(libs.leakcanary.android)
     debugImplementation(libs.androidx.ui.tooling)

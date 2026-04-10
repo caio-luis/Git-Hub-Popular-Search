@@ -2,7 +2,7 @@ package com.caioluis.githubpopular
 
 object Constants {
     val languages =
-        setOf(
+        listOf(
             "Kotlin",
             "Swift",
             "Javascript",
@@ -27,5 +27,5 @@ object Constants {
             "Assembly",
             "Bash",
             "Java",
-        ).toList()
+        )
 }
